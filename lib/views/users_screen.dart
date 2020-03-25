@@ -9,7 +9,7 @@ class UsersScreen extends StatefulWidget {
   //String usada para dar nome á rota que leva a essa tela do app
   //Static const é para criarmos uma constante da classe, assim podemos referenciar a classe e não um objeto da classe
   static const String id = 'users_screen';
-  
+
   @override
   _UsersScreenState createState() => _UsersScreenState();
 //Esse State é pra você poder setar um status para os botões, não sei se vamos usar mas já fiz pensando nisso
@@ -66,26 +66,25 @@ class _UsersScreenState extends State<UsersScreen> {
                       children: <Widget>[
                         Positioned(
                             child: Hero(
-                              //Hero indica a transição de página dando foco no elemento com a tag
-                              tag: 'logo',
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: AssetImage("images/logo.png"),
-                                  ),
-                                ),
+                          //Hero indica a transição de página dando foco no elemento com a tag
+                          tag: 'logo',
+                          child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage("images/logo.png"),
                               ),
-                            ))
+                            ),
+                          ),
+                        ))
                       ],
                     ),
                   )
                 ]),
-              )
-          ),
+              )),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-            child:Container(
+            child: Container(
               child: Center(
                 child: Wrap(
                   alignment: WrapAlignment.center,
@@ -94,8 +93,8 @@ class _UsersScreenState extends State<UsersScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Padding(
-                          padding:
-                          EdgeInsets.symmetric(vertical: 100, horizontal: 10),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 100, horizontal: 10),
                           //Espaço entre a logo e o texto
                         ),
                       ],
@@ -105,93 +104,95 @@ class _UsersScreenState extends State<UsersScreen> {
                       children: <Widget>[
                         Padding(
                           padding:
-                          EdgeInsets.symmetric(vertical: 50, horizontal: 5),
+                              EdgeInsets.symmetric(vertical: 50, horizontal: 5),
                           child: Text(
-                            '"'
-                              +'O milagre não é dar vida ao corpo extinto,\n'
-                              + 'Ou luz ao cego, ou eloquência ao mundo...\n'
-                              + 'Nem mudar água pura em vinho tinto...\n'
-                              + 'Milagre é acreditarem nisso tudo.'
-                              + '"\n'
-                              + 'Mario Quintana\n',
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.black,
-                          ),
-                          textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                          child: ActionChip(
-                            //button google auth
-                            tooltip: 'Sou Deficiente Visual', //descrição do botão que o leitor de tela lê
-                            avatar: CircleAvatar(
-                              backgroundColor: Colors.blue,
-                              radius: 50.0,
+                            '"' +
+                                'O milagre não é dar vida ao corpo extinto,\n' +
+                                'Ou luz ao cego, ou eloquência ao mundo...\n' +
+                                'Nem mudar água pura em vinho tinto...\n' +
+                                'Milagre é acreditarem nisso tudo.' +
+                                '"\n' +
+                                'Mario Quintana\n',
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              letterSpacing: 1.0,
+                              fontSize: 15,
+                              color: Colors.black,
                             ),
-                            label: Text('Sou Deficiente Visual',
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.black,
-                              ),
-                            ),
-
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10.0,
-                              horizontal: 40.0,
-                            ),
-                            onPressed: (){
-                              //Tela para usuários com deficiência visual
-                              Navigator.pushNamed(context, DefVisualScreen.id);
-                            },
-                            backgroundColor: Colors.lightGreenAccent.shade100,
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       ],
                     ),
-                    Row(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                          child: ActionChip(
-                            //button facebook auth
-                            tooltip: 'Sou Votuntário', //descrição do botão que o leitor de tela lê
-                            avatar: CircleAvatar(
-                              backgroundColor: Colors.green,
-                              radius: 50.0,
-                            ),
-                            label: Text('Sou Voluntário',
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.black,
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Container(
+                          width: 250.0,
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
                               ),
+                              color: Colors.lightGreenAccent[100],
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Icon(Icons.visibility),
+                                  SizedBox(width: 10.0),
+                                  Text(
+                                    'Sou voluntário',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 15.0),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {},
                             ),
-
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10.0,
-                              horizontal: 40.0,
-                            ),
-                            onPressed: (){
-                              //Tela para voluntários
-                              Navigator.pushNamed(context, VoluntarioScreen.id);
-                            },
-                            backgroundColor: Colors.lightGreenAccent.shade100,
                           ),
                         ),
+                        Container(
+                          width: 250.0,
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              color: Colors.lightGreenAccent[100],
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Icon(Icons.visibility_off),
+                                  SizedBox(width: 10.0),
+                                  Text(
+                                    'Sou deficiente visual',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 15.0),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {},
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ],
                 ),
               ),
             ),
-          ) ,
+          ),
         ]),
       ),
     );

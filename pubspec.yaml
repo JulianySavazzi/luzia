@@ -27,6 +27,7 @@ dependencies:
   permission_handler: ^4.4.0+hotfix.2
   firebase_auth: ^0.15.5+3
   google_sign_in: ^4.2.0
+  firebase_core: ^0.4.4+3
 
 dev_dependencies:
   flutter_test:
@@ -48,9 +49,9 @@ flutter:
     - images/
 
   fonts:
-    - family: Pacifico
+    - family: Montserrat
       fonts:
-        - asset: fonts/Pacifico-Regular.ttf
+        - asset: fonts/Montserrat-Regular.ttf
 
     - family: LiuJianMaoCao
       fonts:

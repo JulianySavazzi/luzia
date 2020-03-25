@@ -115,7 +115,7 @@ class _UsersScreenState extends State<UsersScreen> {
                                 'Mario Quintana\n',
                             style: TextStyle(
                               fontFamily: 'Montserrat',
-                              letterSpacing: 1.0,
+                              //letterSpacing: 1.0,
                               fontSize: 15,
                               color: Colors.black,
                             ),
@@ -154,7 +154,10 @@ class _UsersScreenState extends State<UsersScreen> {
                                   )
                                 ],
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                //tela do voluntário
+                                Navigator.pushNamed(context, VoluntarioScreen.id);
+                              },
                             ),
                           ),
                         ),
@@ -182,7 +185,10 @@ class _UsersScreenState extends State<UsersScreen> {
                                   )
                                 ],
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                //tela do deficiente visual
+                                Navigator.pushNamed(context, DefVisualScreen.id);
+                              },
                             ),
                           ),
                         )

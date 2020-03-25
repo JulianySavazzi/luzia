@@ -115,7 +115,6 @@ class _UsersScreenState extends State<UsersScreen> {
                                 'Mario Quintana\n',
                             style: TextStyle(
                               fontFamily: 'Montserrat',
-                              //letterSpacing: 1.0,
                               fontSize: 15,
                               color: Colors.black,
                             ),
@@ -140,13 +139,12 @@ class _UsersScreenState extends State<UsersScreen> {
                               ),
                               color: Colors.lightGreenAccent[100],
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Icon(Icons.visibility),
                                   SizedBox(width: 10.0),
                                   Text(
                                     'Sou voluntário',
-                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontFamily: 'Montserrat',
@@ -156,7 +154,8 @@ class _UsersScreenState extends State<UsersScreen> {
                               ),
                               onPressed: () {
                                 //tela do voluntário
-                                Navigator.pushNamed(context, VoluntarioScreen.id);
+                                Navigator.pushNamed(
+                                    context, VoluntarioScreen.id);
                               },
                             ),
                           ),
@@ -171,13 +170,12 @@ class _UsersScreenState extends State<UsersScreen> {
                               ),
                               color: Colors.lightGreenAccent[100],
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Icon(Icons.visibility_off),
                                   SizedBox(width: 10.0),
                                   Text(
                                     'Sou deficiente visual',
-                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontFamily: 'Montserrat',
@@ -187,7 +185,8 @@ class _UsersScreenState extends State<UsersScreen> {
                               ),
                               onPressed: () {
                                 //tela do deficiente visual
-                                Navigator.pushNamed(context, DefVisualScreen.id);
+                                Navigator.pushNamed(
+                                    context, DefVisualScreen.id);
                               },
                             ),
                           ),

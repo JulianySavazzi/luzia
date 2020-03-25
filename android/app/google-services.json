@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "483795942512",
+    "firebase_url": "https://luzia-c3222.firebaseio.com",
+    "project_id": "luzia-c3222",
+    "storage_bucket": "luzia-c3222.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:483795942512:android:e7b8287ef7ec83d16ac8b5",
+        "android_client_info": {
+          "package_name": "com.luziadevelopers.luzia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "483795942512-ai8lu09rmhpuov5rt61v5hqs3g2lvv1v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.luziadevelopers.luzia",
+            "certificate_hash": "db922e7b21be47ea2a0cd9da049e3e5dcc389cb1"
+          }
+        },
+        {
+          "client_id": "483795942512-51i3ffqhmqn2pc1jjge9rtqcdv5gasmj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnF-MudIWzp2TwYyxNXgDqlGzD0MBAiXU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "483795942512-51i3ffqhmqn2pc1jjge9rtqcdv5gasmj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -98,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.symmetric(
-                              vertical: 100, horizontal: 10),
+                              vertical: 120, horizontal: 10),
                           //Espaço entre a logo e a Imagem
                         ),
                       ],
@@ -121,80 +121,93 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
-                    Row(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Padding(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                          child: ActionChip(
-                            //button google auth
-                            tooltip:
-                                'Entrar com o Google', //descrição do botão que o leitor de tela lê
-                            avatar: CircleAvatar(
-                              backgroundColor: Colors.lightGreenAccent.shade100,
-                              backgroundImage: AssetImage("images/google.png"),
-                              radius: 50.0,
-                            ),
-                            label: Text(
-                              'Entrar com o Google',
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.black,
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Container(
+                          width: 250.0,
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
                               ),
+                              color: Colors.lightGreenAccent[100],
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                 // Icon(Icons.visibility),
+                                  CircleAvatar(
+                                    backgroundColor:
+                                    Colors.lightGreenAccent.shade100,
+                                    backgroundImage:
+                                    AssetImage("images/google.png"),
+                                    radius: 10.0,
+                                  ),
+                                  SizedBox(width: 10.0),
+                                  Text(
+                                    'Entrar com o Google',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 15.0),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {
+                                //colocar alert para termos de uso
+                                //se aceitar termos de uso, chamar autenticação
+                                //se autenticação ok
+                                //ir para a tela do usuário
+                                Navigator.pushNamed(
+                                    context, UsersScreen.id);
+                              },
                             ),
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10.0,
-                              horizontal: 40.0,
-                            ),
-                            onPressed: () {
-                              //alert para aceitar os termos de uso
-                              //autenticação do firebase
-                              //se autenticação ok, ir para a tela de diferenciar usuário
-                              Navigator.pushNamed(context, UsersScreen.id);
-                            },
-                            backgroundColor: Colors.lightGreenAccent.shade100,
                           ),
                         ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                          child: ActionChip(
-                            //button facebook auth
-                            tooltip:
-                                'Entrar com o Facebook', //descrição do botão que o leitor de tela lê
-                            avatar: CircleAvatar(
-                              backgroundColor: Colors.lightGreenAccent.shade100,
-                              backgroundImage:
-                                  AssetImage("images/facebook.png"),
-                              radius: 50.0,
-                            ),
-                            label: Text(
-                              'Entrar com o Facebook',
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.black,
+                        Container(
+                          width: 250.0,
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
                               ),
+                              color: Colors.lightGreenAccent[100],
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  CircleAvatar(
+                                    backgroundColor:
+                                    Colors.lightGreenAccent.shade100,
+                                    backgroundImage:
+                                    AssetImage("images/facebook.png"),
+                                    radius: 10.0,
+                                  ),
+                                  SizedBox(width: 10.0),
+                                  Text(
+                                    'Entrar com o Facebook',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 15.0),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {
+                                //colocar alert para termos de uso
+                                //se aceitar termos de uso, chamar autenticação
+                                //se autenticação ok
+                                //ir para a tela do usuário
+                                Navigator.pushNamed(
+                                    context, UsersScreen.id);
+                              },
                             ),
-
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10.0,
-                              horizontal: 40.0,
-                            ),
-                            onPressed: () {
-                              //alert para aceitar os termos de uso
-                              //autenticação do firebase
-                              //se autenticação ok, ir para a tela de diferenciar usuário
-                              Navigator.pushNamed(context, UsersScreen.id);
-                            },
-                            backgroundColor: Colors.lightGreenAccent.shade100,
                           ),
-                        ),
+                        )
                       ],
                     ),
                     Row(
@@ -207,7 +220,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             //Onde será o link para o site
                             'Termos de uso e Política de Privacidade',
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 12,
+                              fontFamily: 'Montserrat',
                               fontStyle: FontStyle.italic,
                               color: Colors.black,
                             ),

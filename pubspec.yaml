@@ -29,6 +29,7 @@ dependencies:
   google_sign_in: ^4.2.0
   firebase_core: ^0.4.4+3
   agora_rtc_engine: ^1.0.8
+  fluttertoast: ^4.0.1
 
 dev_dependencies:
   flutter_test:

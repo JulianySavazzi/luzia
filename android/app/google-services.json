@@ -38,6 +38,13 @@
             {
               "client_id": "483795942512-51i3ffqhmqn2pc1jjge9rtqcdv5gasmj.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "483795942512-f7essseo2tisf33n9ucfe8t91phbk37d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.luziadevelopers.luzia"
+              }
             }
           ]
         }

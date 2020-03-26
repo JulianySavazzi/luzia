@@ -1,7 +1,9 @@
 import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:luzia/utils/firebase_repository.dart';
 import 'users_screen.dart';
 
 //Tela de login/sig in por autenticação do google e facebook pelo firebase
@@ -13,7 +15,7 @@ class LoginScreen extends StatefulWidget {
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
-  //Esse State é pra você poder setar um status para os botões, não sei se vamos usar mas já fiz pensando nisso
+//Esse State é pra você poder setar um status para os botões, não sei se vamos usar mas já fiz pensando nisso
 }
 
 //OBS: o app não está muito responsivo, fui testar ele com a tela virada no celular e não deu pra navegar, mas no modo retrato funcionou
@@ -21,6 +23,9 @@ class LoginScreen extends StatefulWidget {
 //o link do tutorial está no fichamento
 
 class _LoginScreenState extends State<LoginScreen> {
+  //FIREBASE FUNCTIONS
+  FirebaseRepository _repository = FirebaseRepository();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,12 +144,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                 // Icon(Icons.visibility),
+                                  // Icon(Icons.visibility),
                                   CircleAvatar(
                                     backgroundColor:
-                                    Colors.lightGreenAccent.shade100,
+                                        Colors.lightGreenAccent.shade100,
                                     backgroundImage:
-                                    AssetImage("images/google.png"),
+                                        AssetImage("images/google.png"),
                                     radius: 10.0,
                                   ),
                                   SizedBox(width: 10.0),
@@ -158,12 +163,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ],
                               ),
                               onPressed: () {
-                                //colocar alert para termos de uso
-                                //se aceitar termos de uso, chamar autenticação
-                                //se autenticação ok
-                                //ir para a tela do usuário
-                                Navigator.pushNamed(
-                                    context, UsersScreen.id);
+                                createDialog(context);
+                                //Navigator.pushNamed(context, UsersScreen.id);
                               },
                             ),
                           ),
@@ -182,9 +183,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 children: <Widget>[
                                   CircleAvatar(
                                     backgroundColor:
-                                    Colors.lightGreenAccent.shade100,
+                                        Colors.lightGreenAccent.shade100,
                                     backgroundImage:
-                                    AssetImage("images/facebook.png"),
+                                        AssetImage("images/facebook.png"),
                                     radius: 10.0,
                                   ),
                                   SizedBox(width: 10.0),
@@ -202,8 +203,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 //se aceitar termos de uso, chamar autenticação
                                 //se autenticação ok
                                 //ir para a tela do usuário
-                                Navigator.pushNamed(
-                                    context, UsersScreen.id);
+                                Navigator.pushNamed(context, UsersScreen.id);
                               },
                             ),
                           ),
@@ -237,5 +237,57 @@ class _LoginScreenState extends State<LoginScreen> {
         ]),
       ),
     );
+  }
+
+  // ********************************************************************************** //
+
+  //Método para mostrar o diálogo
+  createDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Atenção"),
+            content: Text("Você aceita os termos de política e privacidade?"),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Não aceito"),
+                onPressed: () {},
+              ),
+              FlatButton(
+                child: Text("Aceito"),
+                onPressed: () => performLogin(),
+              ),
+            ],
+            elevation: 24.0,
+          );
+        });
+  }
+
+  //Método para realizar o log in com o google. Caso dê erro, um toast aparece com a mensagem.
+  void performLogin() {}
+
+  //Método usado para controlar autenticação de usuários:
+  //Se o usuário é novo, passa para tela tipo de usuario,
+  //caso contrário para sua respectiva tela. Pois o usuário pode
+  //desinstalar o app etc. Só que.. onde que eu passo o tipo gente?
+  void authenticateUser(FirebaseUser user) {
+    try {
+      _repository.authenticateUser(user).then((isNewUser) {
+        if (isNewUser) {
+          _repository.addDataToDb(user).then((value) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return UsersScreen();
+            }));
+          });
+        } else {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return UsersScreen();
+          }));
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 }

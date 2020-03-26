@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'users_screen.dart';
 
@@ -252,7 +253,9 @@ class _LoginScreenState extends State<LoginScreen> {
             actions: <Widget>[
               FlatButton(
                 child: Text("Não aceito"),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
               ),
               FlatButton(
                 child: Text("Aceito"),
@@ -265,29 +268,33 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   //Método para realizar o log in com o google. Caso dê erro, um toast aparece com a mensagem.
-  void performLogin() {}
+  void performLogin() {
+    _repository.signIn().then((FirebaseUser user) {
+      if (user != null) {
+        authenticateUser(user);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Houve um erro ao efetuar o log-in",
+            toastLength: Toast.LENGTH_LONG,
+            textColor: Colors.red[300],
+            gravity: ToastGravity.CENTER);
+      }
+    });
+  }
 
   //Método usado para controlar autenticação de usuários:
   //Se o usuário é novo, passa para tela tipo de usuario,
   //caso contrário para sua respectiva tela. Pois o usuário pode
   //desinstalar o app etc. Só que.. onde que eu passo o tipo gente?
   void authenticateUser(FirebaseUser user) {
-    try {
-      _repository.authenticateUser(user).then((isNewUser) {
-        if (isNewUser) {
-          _repository.addDataToDb(user).then((value) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return UsersScreen();
-            }));
-          });
-        } else {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return UsersScreen();
-          }));
-        }
-      });
-    } catch (e) {
-      print(e);
-    }
+    _repository.authenticateUser(user).then((isNewUser) {
+      if (isNewUser) {
+        _repository.addDataToDb(user).then((value) {
+          Navigator.pushNamed(context, UsersScreen.id);
+        });
+      } else {
+        Navigator.pushNamed(context, UsersScreen.id);
+      }
+    });
   }
 }

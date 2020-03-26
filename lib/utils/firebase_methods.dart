@@ -5,7 +5,7 @@ import 'package:luzia/model/users.dart';
 
 class FirebaseMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  GoogleSignIn _googleSignIn = new GoogleSignIn();
+  GoogleSignIn _googleSignIn = GoogleSignIn();
   static final Firestore firestore = Firestore.instance;
 
   //Users class

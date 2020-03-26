@@ -30,9 +30,6 @@ class _MyAppState extends State<LuziaApp> {
               return LoginScreen();
             }
           }),
-      theme: ThemeData(
-        primarySwatch: Colors.cyan.shade300,
-      ),
       //tela inicial do app
       //id é uma constante da classe, então não se coloca ()
       routes: {

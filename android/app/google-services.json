@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "483795942512-0apgsvmrb35pjipmrrg0adpdfjkdo5vt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.luziadevelopers.luzia",
+            "certificate_hash": "c09a4c1cfd14c569d0e38ab20d2c402611d5082c"
+          }
+        },
+        {
           "client_id": "483795942512-ai8lu09rmhpuov5rt61v5hqs3g2lvv1v.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -31,6 +31,7 @@ dependencies:
   agora_rtc_engine: ^1.0.8
   fluttertoast: ^4.0.1
   firebase_analytics: ^5.0.11
+  link: ^1.0.0
 
 dev_dependencies:
   flutter_test:

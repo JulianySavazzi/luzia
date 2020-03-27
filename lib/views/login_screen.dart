@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'users_screen.dart';
+import 'package:link/link.dart';
 
 //Tela de login/sig in por autenticação do google e facebook pelo firebase
 
@@ -28,6 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
   FirebaseRepository _repository = FirebaseRepository();
 
   bool isLoginPressed = false;
+
+  bool isLinkPressed = false;
 
   //Route previousRoute = LoginScreen.id as Route;
 
@@ -135,6 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
+                        //Barra de progresso
                         isLoginPressed
                             ? Center(
                                 child: CircularProgressIndicator(
@@ -226,18 +230,31 @@ class _LoginScreenState extends State<LoginScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
+                        isLinkPressed
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.lightGreenAccent),
+                                ),
+                              )
+                            : SizedBox(
+                                height: 10.0,
+                              ),
                         Padding(
                           padding:
                               EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                          child: Text(
-                            //Onde será o link para o site
-                            'Termos de uso e Política de Privacidade',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: 'Montserrat',
-                              fontStyle: FontStyle.italic,
-                              color: Colors.black,
+                          child: Link(
+                            child: Text(
+                              //Onde será o link para o site
+                              'Termos de uso e Política de Privacidade',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'Montserrat',
+                                fontStyle: FontStyle.italic,
+                                color: Colors.black,
+                              ),
                             ),
+                            url: 'http://www.google.com',
                           ),
                         ),
                       ],
@@ -308,13 +325,13 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       if (isNewUser) {
         _repository.addDataToDb(user).then((value) {
-            Navigator.pushNamed(context, UsersScreen.id);
-            //didChangePrevious(previousRoute);
-            //NÃO CONSEGUI USAR, DA ERRO PRA PASSAR A ROTA
-        });
-      } else {
           Navigator.pushNamed(context, UsersScreen.id);
           //didChangePrevious(previousRoute);
+          //NÃO CONSEGUI USAR, DA ERRO PRA PASSAR A ROTA
+        });
+      } else {
+        Navigator.pushNamed(context, UsersScreen.id);
+        //didChangePrevious(previousRoute);
         //NÃO CONSEGUI USAR, DA ERRO PRA PASSAR A ROTA
       }
     });
@@ -322,6 +339,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @protected
   @mustCallSuper
-  void didChangePrevious(Route previousRoute){}
+  void didChangePrevious(Route previousRoute) {}
   //ERA PRA NÃO DEIXAR VOLTAR PRA TELA ANTERIOR
 }

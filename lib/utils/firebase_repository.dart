@@ -13,4 +13,13 @@ class FirebaseRepository {
 
   Future<void> addDataToDb(FirebaseUser user) =>
       _firebaseMethods.addDataToDb(user);
+
+  //Adicionando tipo
+  Future<void> addVolunteer(FirebaseUser user) =>
+      _firebaseMethods.addVolunteer(user);
+
+  Future<void> addDv(FirebaseUser user) => _firebaseMethods.addDv(user);
+
+  Future<void> searchVolunteer(FirebaseUser user) =>
+      _firebaseMethods.searchVolunteer(user);
 }

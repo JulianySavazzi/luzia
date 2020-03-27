@@ -20,84 +20,84 @@ class VoluntarioScreen extends StatefulWidget {
 class _VoluntarioScreenState extends State<VoluntarioScreen> {
   @override
   Widget build(BuildContext context) {
-        return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            backgroundColor: Colors.transparent,
-            elevation: 0.0,
-            title: Text(
-              'Luzia',
-              style: TextStyle(
-                fontFamily: 'LiuJianMaoCao',
-                color: Colors.black,
-                fontSize: 50.0,
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        title: Text(
+          'Luzia',
+          style: TextStyle(
+            fontFamily: 'LiuJianMaoCao',
+            color: Colors.black,
+            fontSize: 50.0,
+          ),
+        ),
+      ),
+      backgroundColor: Colors.cyan.shade200,
+      body: SafeArea(
+        child: Stack(children: <Widget>[
+          Positioned(
+            top: 85.0,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50.0),
+                  topRight: Radius.circular(50.0),
+                ),
+                color: Colors.white,
+              ),
+            ),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+          ),
+          Positioned(
+              top: 30.0,
+              left: (MediaQuery.of(context).size.width / 2) - 85,
+              child: Container(
+                height: 200,
+                child: Stack(children: <Widget>[
+                  Container(
+                    height: 180,
+                    width: 180,
+                    child: Stack(
+                      children: <Widget>[
+                        Positioned(
+                            child: Hero(
+                          //Hero indica a transição de página dando foco no elemento com a tag
+                          tag: 'logo',
+                          child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage("images/logo.png"),
+                              ),
+                            ),
+                          ),
+                        ))
+                      ],
+                    ),
+                  )
+                ]),
+              )),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+            child: Container(
+              child: Center(
+                child: Text(
+                  'Sou voluntário',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 15,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
-          backgroundColor: Colors.cyan.shade300,
-          body: SafeArea(
-            child: Stack(children: <Widget>[
-              Positioned(
-                top: 85.0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50.0),
-                      topRight: Radius.circular(50.0),
-                    ),
-                    color: Colors.white,
-                  ),
-                ),
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-              ),
-              Positioned(
-                  top: 30.0,
-                  left: (MediaQuery.of(context).size.width / 2) - 85,
-                  child: Container(
-                    height: 200,
-                    child: Stack(children: <Widget>[
-                      Container(
-                        height: 180,
-                        width: 180,
-                        child: Stack(
-                          children: <Widget>[
-                            Positioned(
-                                child: Hero( //Hero indica a transição de página dando foco no elemento com a tag
-                                  tag: 'logo',
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: AssetImage("images/logo.png"),
-                                      ),
-                                    ),
-                                  ),
-                                ))
-                          ],
-                        ),
-                      )
-                    ]),
-                  )
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: Container(
-                  child: Center(
-                    child: Text(
-                      'Sou voluntário',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 15,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ),
-            ]),
-          ),
-        );
+        ]),
+      ),
+    );
   }
 }

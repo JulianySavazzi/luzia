@@ -60,4 +60,45 @@ class FirebaseMethods {
         .document(currentUser.uid)
         .setData(user.toMap(user));
   }
+
+  //Adicionando tipo ao usuário
+  Future<void> addVolunteer(FirebaseUser currentUser) async {
+    user = Users(
+      uid: currentUser.uid,
+      nome: currentUser.displayName,
+      email: currentUser.email,
+      tipo: "V",
+      photo: currentUser.photoUrl,
+      ajuda: 0,
+    );
+    firestore
+        .collection("users")
+        .document(currentUser.uid)
+        .setData(user.toMap(user));
+  }
+
+  Future<void> addDv(FirebaseUser currentUser) async {
+    user = Users(
+      uid: currentUser.uid,
+      nome: currentUser.displayName,
+      email: currentUser.email,
+      tipo: "D",
+      photo: currentUser.photoUrl,
+      ajuda: user.ajuda,
+    );
+    firestore
+        .collection("users")
+        .document(currentUser.uid)
+        .setData(user.toMap(user));
+  }
+
+  //NAO SEI SE FUNCIONA
+  Future<void> searchVolunteer(FirebaseUser currentUser) async {
+    QuerySnapshot querySnapshot = await firestore
+        .collection("users")
+        .where("tipo", isEqualTo: "V")
+        .getDocuments();
+
+    return querySnapshot;
+  }
 }

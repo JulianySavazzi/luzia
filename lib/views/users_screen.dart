@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'dv_screen.dart';
 import 'v_screen.dart';
@@ -24,6 +26,8 @@ class _UsersScreenState extends State<UsersScreen> {
 //FIREBASE FUNCTIONS
   FirebaseRepository _repository = FirebaseRepository();
 
+  bool isLoginPressed = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +44,7 @@ class _UsersScreenState extends State<UsersScreen> {
           ),
         ),
       ),
-      backgroundColor: Colors.cyan.shade300,
+      backgroundColor: Colors.cyan.shade200,
       body: SafeArea(
         child: Stack(children: <Widget>[
           Positioned(
@@ -130,9 +134,16 @@ class _UsersScreenState extends State<UsersScreen> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        SizedBox(
-                          height: 10.0,
-                        ),
+                        isLoginPressed
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.lightGreenAccent),
+                                ),
+                              )
+                            : SizedBox(
+                                height: 10.0,
+                              ),
                         Container(
                           width: 250.0,
                           child: Align(
@@ -159,7 +170,7 @@ class _UsersScreenState extends State<UsersScreen> {
                               ),
                               onPressed: () {
                                 //tela do deficiente visual
-                                Navigator.pushNamed( context, DefVisualScreen.id);
+                                addDv();
                               },
                             ),
                           ),
@@ -190,7 +201,7 @@ class _UsersScreenState extends State<UsersScreen> {
                               ),
                               onPressed: () {
                                 //tela do voluntário
-                                Navigator.pushNamed( context, VoluntarioScreen.id);
+                                addVolunteer();
                               },
                             ),
                           ),
@@ -207,6 +218,81 @@ class _UsersScreenState extends State<UsersScreen> {
     );
   }
 
+  // ***************************************************************** //
+
+//Método para adicionar voluntário
+  void addVolunteer() {
+    setState(() {
+      isLoginPressed = true;
+    });
+    _repository.getCurrentUser().then((FirebaseUser user) {
+      if (user != null) {
+        authenticateVolunteer(user);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Houve um erro",
+            toastLength: Toast.LENGTH_LONG,
+            textColor: Colors.red[300],
+            gravity: ToastGravity.CENTER);
+      }
+    });
+  }
+
+  void authenticateVolunteer(FirebaseUser user) {
+    _repository.authenticateUser(user).then((isNewUser) {
+      setState(() {
+        isLoginPressed = false;
+      });
+      if (!isNewUser) {
+        _repository.addVolunteer(user).then((value) {
+          Navigator.pushNamed(context, VoluntarioScreen.id);
+        });
+      } else {
+        Fluttertoast.showToast(
+            msg: "Erro ao adicionar tipo de usuário",
+            toastLength: Toast.LENGTH_LONG,
+            textColor: Colors.red[300],
+            gravity: ToastGravity.CENTER);
+      }
+    });
+  }
+  // ***************************************************************** //
+
+  //Método para adicionar Dv
+
+  void addDv() {
+    setState(() {
+      isLoginPressed = true;
+    });
+    _repository.getCurrentUser().then((FirebaseUser user) {
+      if (user != null) {
+        authenticateDv(user);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Houve um erro",
+            toastLength: Toast.LENGTH_LONG,
+            textColor: Colors.red[300],
+            gravity: ToastGravity.CENTER);
+      }
+    });
+  }
+
+  void authenticateDv(FirebaseUser user) {
+    _repository.authenticateUser(user).then((isNewUser) {
+      setState(() {
+        isLoginPressed = false;
+      });
+      if (!isNewUser) {
+        _repository.addDv(user).then((value) {
+          Navigator.pushNamed(context, DefVisualScreen.id);
+        });
+      } else {
+        Fluttertoast.showToast(
+            msg: "Erro ao adicionar tipo de usuário",
+            toastLength: Toast.LENGTH_LONG,
+            textColor: Colors.red[300],
+            gravity: ToastGravity.CENTER);
+      }
+    });
+  }
 }
-
-

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -10,7 +11,7 @@ class DefVisualScreen extends StatefulWidget {
 
   @override
   _DefVisualScreenState createState() => _DefVisualScreenState();
-  //Esse State é pra você poder setar um status para os botões, não sei se vamos usar mas já fiz pensando nisso
+//Esse State é pra você poder setar um status para os botões, não sei se vamos usar mas já fiz pensando nisso
 }
 
 //OBS: o app não está muito responsivo, fui testar ele com a tela virada no celular e não deu pra navegar, mas no modo retrato funcionou
@@ -20,84 +21,90 @@ class DefVisualScreen extends StatefulWidget {
 class _DefVisualScreenState extends State<DefVisualScreen> {
   @override
   Widget build(BuildContext context) {
-       return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            backgroundColor: Colors.transparent,
-            elevation: 0.0,
-            title: Text(
-              'Luzia',
-              style: TextStyle(
-                fontFamily: 'LiuJianMaoCao',
-                color: Colors.black,
-                fontSize: 50.0,
-              ),
+    return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          title: Text(
+            'Luzia',
+            style: TextStyle(
+              fontFamily: 'LiuJianMaoCao',
+              color: Colors.black,
+              fontSize: 50.0,
             ),
           ),
-          backgroundColor: Colors.cyan.shade300,
-          body: SafeArea(
+        ),
+        backgroundColor: Colors.cyan.shade200,
+        body: SafeArea(
             child: Stack(children: <Widget>[
-              Positioned(
-                top: 85.0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50.0),
-                      topRight: Radius.circular(50.0),
-                    ),
-                    color: Colors.white,
-                  ),
+          Positioned(
+            top: 85.0,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50.0),
+                  topRight: Radius.circular(50.0),
                 ),
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
+                color: Colors.white,
               ),
-              Positioned(
-                  top: 30.0,
-                  left: (MediaQuery.of(context).size.width / 2) - 85,
-                  child: Container(
-                    height: 200,
-                    child: Stack(children: <Widget>[
-                      Container(
-                        height: 180,
-                        width: 180,
-                        child: Stack(
-                          children: <Widget>[
-                            Positioned(
-                                child: Hero( //Hero indica a transição de página dando foco no elemento com a tag
-                                  tag: 'logo',
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: AssetImage("images/logo.png"),
-                                      ),
-                                    ),
-                                  ),
-                                ))
-                          ],
-                        ),
-                      )
-                    ]),
-                  )
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: Container(
-                  child: Center(
-                    child: Text(
-                      'Sou deficiente visual',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 15,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ),
-            ]),
+            ),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
           ),
-        );
+          Positioned(
+              top: 30.0,
+              left: (MediaQuery.of(context).size.width / 2) - 85,
+              child: Container(
+                height: 200,
+                child: Stack(children: <Widget>[
+                  Container(
+                    height: 180,
+                    width: 180,
+                    child: Stack(
+                      children: <Widget>[
+                        Positioned(
+                            child: Hero(
+                          //Hero indica a transição de página dando foco no elemento com a tag
+                          tag: 'logo',
+                          child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage("images/logo.png"),
+                              ),
+                            ),
+                          ),
+                        ))
+                      ],
+                    ),
+                  )
+                ]),
+              )),
+          Container(
+              child: Center(
+            child: RaisedButton(
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+                //DEFICIENTE VISUAL
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                color: Colors.lightGreenAccent[100],
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    //SizedBox(width: 10.0),
+                    Text(
+                      'Ligar para voluntário',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'Montserrat',
+                          fontSize: 20.0),
+                    )
+                  ],
+                ),
+                onPressed: () {}),
+          ))
+        ])));
   }
 }

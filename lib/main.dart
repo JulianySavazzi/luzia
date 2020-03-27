@@ -16,6 +16,18 @@ class LuziaApp extends StatefulWidget {
 
 class _MyAppState extends State<LuziaApp> {
   FirebaseRepository _repository = FirebaseRepository();
+  FirebaseUser type;
+
+  @override
+  void initState() {
+    super.initState();
+    _repository.getCurrentUser().then((FirebaseUser currentUser) {
+      _repository.searchVolunteer(currentUser);
+      setState(() {
+        type = currentUser; // NAO FUNCIONA
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +37,16 @@ class _MyAppState extends State<LuziaApp> {
           future: _repository.getCurrentUser(),
           builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
             if (snapshot.hasData) {
-              return UsersScreen();
+              if (type != null) {
+                // NAO FUNCIONA
+                return VoluntarioScreen();
+              } else {
+                return DefVisualScreen();
+              }
             } else {
               return LoginScreen();
-            }}),
+            }
+          }),
       //tela inicial do app
       //id é uma constante da classe, então não se coloca ()
       routes: {

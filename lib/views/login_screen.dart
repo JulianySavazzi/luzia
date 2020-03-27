@@ -27,6 +27,8 @@ class _LoginScreenState extends State<LoginScreen> {
   //FIREBASE FUNCTIONS
   FirebaseRepository _repository = FirebaseRepository();
 
+  bool isLoginPressed = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-      backgroundColor: Colors.cyan.shade300,
+      backgroundColor: Colors.cyan.shade200,
       body: SafeArea(
         child: Stack(children: <Widget>[
           Positioned(
@@ -130,9 +132,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        SizedBox(
-                          height: 10.0,
-                        ),
+                        isLoginPressed
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.lightGreenAccent),
+                                ),
+                              )
+                            : SizedBox(
+                                height: 10.0,
+                              ),
                         Container(
                           width: 250.0,
                           child: Align(
@@ -269,6 +278,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //Método para realizar o log in com o google. Caso dê erro, um toast aparece com a mensagem.
   void performLogin() {
+    setState(() {
+      isLoginPressed = true;
+    });
     _repository.signIn().then((FirebaseUser user) {
       if (user != null) {
         authenticateUser(user);
@@ -288,6 +300,9 @@ class _LoginScreenState extends State<LoginScreen> {
   //desinstalar o app etc. Só que.. onde que eu passo o tipo gente?
   void authenticateUser(FirebaseUser user) {
     _repository.authenticateUser(user).then((isNewUser) {
+      setState(() {
+        isLoginPressed = false;
+      });
       if (isNewUser) {
         _repository.addDataToDb(user).then((value) {
           Navigator.pushNamed(context, UsersScreen.id);

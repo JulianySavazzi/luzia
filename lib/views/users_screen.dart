@@ -138,6 +138,37 @@ class _UsersScreenState extends State<UsersScreen> {
                           child: Align(
                             alignment: Alignment.bottomCenter,
                             child: RaisedButton(
+                              //DEFICIENTE VISUAL
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              color: Colors.lightGreenAccent[100],
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(Icons.visibility_off),
+                                  SizedBox(width: 10.0),
+                                  Text(
+                                    'Sou deficiente visual',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 15.0),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {
+                                //tela do deficiente visual
+                                Navigator.pushNamed( context, DefVisualScreen.id);
+                              },
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 250.0,
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: RaisedButton(
                               //VOLUNTÁRIO
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.0),
@@ -164,37 +195,6 @@ class _UsersScreenState extends State<UsersScreen> {
                             ),
                           ),
                         ),
-                        Container(
-                          width: 250.0,
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: RaisedButton(
-                              //DEFICIENTE VISUAL
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              color: Colors.lightGreenAccent[100],
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(Icons.visibility_off),
-                                  SizedBox(width: 10.0),
-                                  Text(
-                                    'Sou deficiente visual',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 15.0),
-                                  )
-                                ],
-                              ),
-                              onPressed: () {
-                                //tela do deficiente visual
-                                Navigator.pushNamed( context, DefVisualScreen.id);
-                              },
-                            ),
-                          ),
-                        )
                       ],
                     ),
                   ],

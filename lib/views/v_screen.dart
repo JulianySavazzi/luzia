@@ -80,6 +80,22 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
                     ]),
                   )
               ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                child: Container(
+                  child: Center(
+                    child: Text(
+                      'Sou voluntário',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
             ]),
           ),
         );

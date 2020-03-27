@@ -80,6 +80,22 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                     ]),
                   )
               ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                child: Container(
+                  child: Center(
+                    child: Text(
+                      'Sou deficiente visual',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
             ]),
           ),
         );

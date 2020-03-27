@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:luzia/utils/firebase_repository.dart';
 import 'dv_screen.dart';
 import 'v_screen.dart';
 
@@ -20,6 +21,9 @@ class UsersScreen extends StatefulWidget {
 //o link do tutorial está no fichamento
 
 class _UsersScreenState extends State<UsersScreen> {
+//FIREBASE FUNCTIONS
+  FirebaseRepository _repository = FirebaseRepository();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,6 +138,7 @@ class _UsersScreenState extends State<UsersScreen> {
                           child: Align(
                             alignment: Alignment.bottomCenter,
                             child: RaisedButton(
+                              //VOLUNTÁRIO
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
@@ -154,8 +159,7 @@ class _UsersScreenState extends State<UsersScreen> {
                               ),
                               onPressed: () {
                                 //tela do voluntário
-                                Navigator.pushNamed(
-                                    context, VoluntarioScreen.id);
+                                Navigator.pushNamed( context, VoluntarioScreen.id);
                               },
                             ),
                           ),
@@ -165,6 +169,7 @@ class _UsersScreenState extends State<UsersScreen> {
                           child: Align(
                             alignment: Alignment.bottomCenter,
                             child: RaisedButton(
+                              //DEFICIENTE VISUAL
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
@@ -185,8 +190,7 @@ class _UsersScreenState extends State<UsersScreen> {
                               ),
                               onPressed: () {
                                 //tela do deficiente visual
-                                Navigator.pushNamed(
-                                    context, DefVisualScreen.id);
+                                Navigator.pushNamed( context, DefVisualScreen.id);
                               },
                             ),
                           ),
@@ -202,4 +206,7 @@ class _UsersScreenState extends State<UsersScreen> {
       ),
     );
   }
+
 }
+
+

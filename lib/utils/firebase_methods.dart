@@ -50,7 +50,9 @@ class FirebaseMethods {
       uid: currentUser.uid,
       nome: currentUser.displayName,
       email: currentUser.email,
+      tipo: user.tipo,
       photo: currentUser.photoUrl,
+      ajuda: user.ajuda,
     );
 
     firestore

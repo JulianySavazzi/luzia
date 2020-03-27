@@ -25,11 +25,10 @@ class _MyAppState extends State<LuziaApp> {
           future: _repository.getCurrentUser(),
           builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
             if (snapshot.hasData) {
-              return VoluntarioScreen();
+              return UsersScreen();
             } else {
               return LoginScreen();
-            }
-          }),
+            }}),
       //tela inicial do app
       //id é uma constante da classe, então não se coloca ()
       routes: {

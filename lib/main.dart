@@ -1,15 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:luzia/model/users.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/views/dv_screen.dart';
 import 'package:luzia/views/v_screen.dart';
 import 'package:luzia/views/login_screen.dart';
 import 'package:luzia/views/users_screen.dart';
+import 'package:luzia/utils/firebase_methods.dart';
 
 void main() => runApp(LuziaApp());
 
 class LuziaApp extends StatefulWidget {
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -17,6 +21,11 @@ class LuziaApp extends StatefulWidget {
 class _MyAppState extends State<LuziaApp> {
   FirebaseRepository _repository = FirebaseRepository();
   FirebaseUser type;
+  FirebaseMethods _firebaseMethods = FirebaseMethods();
+  Users users;
+  Firestore firestore;
+  //resultado do voluntario
+  bool result = false;
 
   @override
   void initState() {
@@ -29,6 +38,23 @@ class _MyAppState extends State<LuziaApp> {
     });
   }
 
+  //pegar voluntário
+  //NÃO FUNCIONOU, SE EU CONSEGUISSE COMPARAR O ID DO USUÁRIO LOGADO COM O DO VOLUNTÁRIO ACHO QUE DARIA
+  void getVoluntario() async {
+    final voluntario = await firestore.collection('users').where('tipo', isEqualTo: 'V').getDocuments();
+    if(voluntario != null && _repository.getCurrentUser() != null){
+      if(type.uid == _repository.getCurrentUser()){
+        setState(() {
+          result = true;
+        });
+      }
+    } else{
+      setState(() {
+        result = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -37,8 +63,8 @@ class _MyAppState extends State<LuziaApp> {
           future: _repository.getCurrentUser(),
           builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
             if (snapshot.hasData) {
-              if (type != null) {
-                // NAO FUNCIONA
+              if (result = true) {
+                //se pegou o voluntário
                 return VoluntarioScreen();
               } else {
                 return DefVisualScreen();
@@ -47,6 +73,9 @@ class _MyAppState extends State<LuziaApp> {
               return LoginScreen();
             }
           }),
+      theme: ThemeData(
+        primaryColor: Colors.cyan,
+      ),
       //tela inicial do app
       //id é uma constante da classe, então não se coloca ()
       routes: {
@@ -58,4 +87,5 @@ class _MyAppState extends State<LuziaApp> {
       },
     );
   }
+
 }

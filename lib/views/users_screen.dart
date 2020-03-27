@@ -13,6 +13,7 @@ class UsersScreen extends StatefulWidget {
   //Static const é para criarmos uma constante da classe, assim podemos referenciar a classe e não um objeto da classe
   static const String id = 'users_screen';
 
+
   @override
   _UsersScreenState createState() => _UsersScreenState();
 //Esse State é pra você poder setar um status para os botões, não sei se vamos usar mas já fiz pensando nisso
@@ -27,6 +28,9 @@ class _UsersScreenState extends State<UsersScreen> {
   FirebaseRepository _repository = FirebaseRepository();
 
   bool isLoginPressed = false;
+  bool voluntario = false;
+
+  //Route previousRoute = UsersScreen() as Route;
 
   @override
   Widget build(BuildContext context) {
@@ -246,6 +250,11 @@ class _UsersScreenState extends State<UsersScreen> {
       if (!isNewUser) {
         _repository.addVolunteer(user).then((value) {
           Navigator.pushNamed(context, VoluntarioScreen.id);
+          //didChangePrevious(previousRoute); DÁ ERRO PRA PASSAR A ROTA
+          setState(() {
+            voluntario = true;
+          });
+          //return VoluntarioScreen(); não funciona
         });
       } else {
         Fluttertoast.showToast(
@@ -267,6 +276,9 @@ class _UsersScreenState extends State<UsersScreen> {
     _repository.getCurrentUser().then((FirebaseUser user) {
       if (user != null) {
         authenticateDv(user);
+        setState(() {
+          voluntario = false;
+        });
       } else {
         Fluttertoast.showToast(
             msg: "Houve um erro",
@@ -285,6 +297,8 @@ class _UsersScreenState extends State<UsersScreen> {
       if (!isNewUser) {
         _repository.addDv(user).then((value) {
           Navigator.pushNamed(context, DefVisualScreen.id);
+          //didChangePrevious(previousRoute); DÁ ERRO PRA PASSAR A ROTA
+          //return DefVisualScreen(); não funciona
         });
       } else {
         Fluttertoast.showToast(
@@ -295,4 +309,8 @@ class _UsersScreenState extends State<UsersScreen> {
       }
     });
   }
+
+  @protected
+  @mustCallSuper
+  void didChangePrevious(Route previousRoute){}
 }

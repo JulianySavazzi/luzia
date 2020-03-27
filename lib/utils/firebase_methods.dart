@@ -10,7 +10,7 @@ class FirebaseMethods {
 
   //Users class
   Users user = Users();
-
+  
   //CurrentUser
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser currentUser;
@@ -98,7 +98,6 @@ class FirebaseMethods {
         .collection("users")
         .where("tipo", isEqualTo: "V")
         .getDocuments();
-
     return querySnapshot;
   }
 }

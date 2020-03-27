@@ -81,30 +81,36 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                   )
                 ]),
               )),
-          Container(
-              child: Center(
-            child: RaisedButton(
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-                //DEFICIENTE VISUAL
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                color: Colors.lightGreenAccent[100],
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    //SizedBox(width: 10.0),
-                    Text(
-                      'Ligar para voluntário',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Montserrat',
-                          fontSize: 20.0),
-                    )
-                  ],
-                ),
-                onPressed: () {}),
-          ))
+          Padding(
+            padding:
+            EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            child: Container(
+
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: RaisedButton(
+                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+                      //DEFICIENTE VISUAL
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      color: Colors.lightGreenAccent[100],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          //SizedBox(width: 10.0),
+                          Text(
+                            'Ligar para voluntário',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Montserrat',
+                                fontSize: 20.0),
+                          )
+                        ],
+                      ),
+                      onPressed: () {}),
+                )),
+          )
         ])));
   }
 }

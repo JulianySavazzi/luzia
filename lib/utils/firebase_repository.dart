@@ -7,6 +7,9 @@ class FirebaseRepository {
   Future<FirebaseUser> getCurrentUser() => _firebaseMethods.getCurrentUser();
 
   Future<FirebaseUser> signIn() => _firebaseMethods.signIn();
+  
+  // adding the same method in firebase repository as well
+  Future<User> getUserDetails(String uid) => _firebaseMethods.getUserDetails(uid);
 
   Future<bool> authenticateUser(FirebaseUser user) =>
       _firebaseMethods.authenticateUser(user);

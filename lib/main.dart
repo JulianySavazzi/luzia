@@ -63,12 +63,21 @@ class _MyAppState extends State<LuziaApp> {
           future: _repository.getCurrentUser(),
           builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
             if (snapshot.hasData) {
-              if (result = true) {
-                //se pegou o voluntário
-                return VoluntarioScreen();
-              } else {
-                return DefVisualScreen();
-              }
+              // initializing firebase user
+              FirebaseUser firebaseUser = snapshot.data;
+              
+              // retrieving User details
+               User user = await _repository.getUserDetails(firebaseUser.uid);
+              
+              // This line is responsible for checking the user type and returning the nced
+              return user.tipo == "V" ? VoluntarioScreen() : DefVisualScreen();
+              
+//               if (result = true) {
+//                 //se pegou o voluntário
+//                 return VoluntarioScreen();
+//               } else {
+//                 return DefVisualScreen();
+//               }
             } else {
               return LoginScreen();
             }

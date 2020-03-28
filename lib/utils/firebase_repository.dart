@@ -1,5 +1,6 @@
 import 'package:luzia/utils/firebase_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:luzia/model/users.dart';
 
 class FirebaseRepository {
   FirebaseMethods _firebaseMethods = FirebaseMethods();
@@ -9,7 +10,7 @@ class FirebaseRepository {
   Future<FirebaseUser> signIn() => _firebaseMethods.signIn();
   
   // adding the same method in firebase repository as well
-  Future<User> getUserDetails(String uid) => _firebaseMethods.getUserDetails(uid);
+  Future<Users> getUserDetails(String uid) => _firebaseMethods.getUserDetails(uid);
 
   Future<bool> authenticateUser(FirebaseUser user) =>
       _firebaseMethods.authenticateUser(user);

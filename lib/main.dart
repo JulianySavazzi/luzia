@@ -22,7 +22,7 @@ class _MyAppState extends State<LuziaApp> {
   FirebaseRepository _repository = FirebaseRepository();
   FirebaseUser type;
   FirebaseMethods _firebaseMethods = FirebaseMethods();
-  Users users;
+  Users user;
   Firestore firestore;
   //resultado do voluntario
   bool result = false;
@@ -55,33 +55,37 @@ class _MyAppState extends State<LuziaApp> {
     }
   }
 
+  Future<FirebaseUser> userDetails(firebaseUser) async {
+    // retrieving User details
+    user = await _repository.getUserDetails(firebaseUser.uid);
+    return user = firebaseUser;
+}
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Luzia',
       home: FutureBuilder(
           future: _repository.getCurrentUser(),
-          builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
+          builder: (context, AsyncSnapshot<FirebaseUser> snapshot)  {
             if (snapshot.hasData) {
               // initializing firebase user
               FirebaseUser firebaseUser = snapshot.data;
-              
-              // retrieving User details
-               User user = await _repository.getUserDetails(firebaseUser.uid);
-              
+              //retrieving User details
+              userDetails(firebaseUser);
               // This line is responsible for checking the user type and returning the nced
-              return user.tipo == "V" ? VoluntarioScreen() : DefVisualScreen();
-              
-//               if (result = true) {
-//                 //se pegou o voluntário
-//                 return VoluntarioScreen();
-//               } else {
-//                 return DefVisualScreen();
-//               }
+//              return user.tipo == "V" ? VoluntarioScreen() : DefVisualScreen();
+               if (user.tipo == "V") {
+                 return VoluntarioScreen();
+               } else {
+                 return DefVisualScreen();
+               }
+
             } else {
               return LoginScreen();
             }
-          }),
+          }
+          ),
       theme: ThemeData(
         primaryColor: Colors.cyan,
       ),

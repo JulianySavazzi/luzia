@@ -32,8 +32,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool isLinkPressed = false;
 
-  //Route previousRoute = LoginScreen.id as Route;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -230,16 +228,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        isLinkPressed
-                            ? Center(
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.lightGreenAccent),
-                                ),
-                              )
-                            : SizedBox(
-                                height: 10.0,
-                              ),
                         Padding(
                           padding:
                               EdgeInsets.symmetric(vertical: 10, horizontal: 5),
@@ -256,6 +244,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             url: 'http://www.google.com',
                           ),
+                        ),
+                        isLinkPressed
+                            ? Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.lightGreenAccent),
+                          ),
+                        )
+                            : SizedBox(
+                          height: 10.0,
                         ),
                       ],
                     ),
@@ -331,14 +329,8 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       } else {
         Navigator.pushNamed(context, UsersScreen.id);
-        //didChangePrevious(previousRoute);
-        //NÃO CONSEGUI USAR, DA ERRO PRA PASSAR A ROTA
       }
     });
   }
 
-  @protected
-  @mustCallSuper
-  void didChangePrevious(Route previousRoute) {}
-  //ERA PRA NÃO DEIXAR VOLTAR PRA TELA ANTERIOR
 }

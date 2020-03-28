@@ -19,6 +19,9 @@ class DefVisualScreen extends StatefulWidget {
 //o link do tutorial está no fichamento
 
 class _DefVisualScreenState extends State<DefVisualScreen> {
+
+  Route previousRoute;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,4 +116,8 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
           )
         ])));
   }
+
+  @protected
+  @mustCallSuper
+  void didChangePrevious(Route previousRoute){}
 }

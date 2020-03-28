@@ -30,7 +30,8 @@ class _UsersScreenState extends State<UsersScreen> {
   bool isLoginPressed = false;
   bool voluntario = false;
 
-  //Route previousRoute = UsersScreen() as Route;
+  //Route previousRoute = 'login_screen' as Route;
+  Route previousRoute;
 
   @override
   Widget build(BuildContext context) {
@@ -250,7 +251,7 @@ class _UsersScreenState extends State<UsersScreen> {
       if (!isNewUser) {
         _repository.addVolunteer(user).then((value) {
           Navigator.pushNamed(context, VoluntarioScreen.id);
-          //didChangePrevious(previousRoute); DÁ ERRO PRA PASSAR A ROTA
+          didChangePrevious(previousRoute);
           setState(() {
             voluntario = true;
           });
@@ -297,7 +298,7 @@ class _UsersScreenState extends State<UsersScreen> {
       if (!isNewUser) {
         _repository.addDv(user).then((value) {
           Navigator.pushNamed(context, DefVisualScreen.id);
-          //didChangePrevious(previousRoute); DÁ ERRO PRA PASSAR A ROTA
+          didChangePrevious(previousRoute); //não sei se realemte funcionou
           //return DefVisualScreen(); não funciona
         });
       } else {

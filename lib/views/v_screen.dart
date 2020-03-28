@@ -18,6 +18,9 @@ class VoluntarioScreen extends StatefulWidget {
 //o link do tutorial está no fichamento
 
 class _VoluntarioScreenState extends State<VoluntarioScreen> {
+
+  Route previousRoute;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,4 +103,8 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
       ),
     );
   }
+
+  @protected
+  @mustCallSuper
+  void didChangePrevious(Route previousRoute){}
 }

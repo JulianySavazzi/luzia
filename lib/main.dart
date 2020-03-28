@@ -55,10 +55,9 @@ class _MyAppState extends State<LuziaApp> {
     }
   }
 
-  Future<FirebaseUser> userDetails(firebaseUser) async {
+   void userDetails() async {
     // retrieving User details
-    user = await _repository.getUserDetails(firebaseUser.uid);
-    return user = firebaseUser;
+    user = await _repository.getUserDetails(type.uid);
 }
 
   @override
@@ -72,14 +71,15 @@ class _MyAppState extends State<LuziaApp> {
               // initializing firebase user
               FirebaseUser firebaseUser = snapshot.data;
               //retrieving User details
-              userDetails(firebaseUser);
+              userDetails();
               // This line is responsible for checking the user type and returning the nced
-//              return user.tipo == "V" ? VoluntarioScreen() : DefVisualScreen();
-               if (user.tipo == "V") {
-                 return VoluntarioScreen();
-               } else {
-                 return DefVisualScreen();
-               }
+             return user.tipo == "V" ? VoluntarioScreen() : DefVisualScreen();
+
+ //              if (user.tipo == "V") {
+ //                return VoluntarioScreen();
+ //              } else {
+//               return DefVisualScreen();
+//               }
 
             } else {
               return LoginScreen();

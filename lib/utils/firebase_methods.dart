@@ -17,6 +17,13 @@ class FirebaseMethods {
     currentUser = await _auth.currentUser();
     return currentUser;
   }
+  
+  // Adding this method to retrieve user details from firebase using just uid
+  Future<User> getUserDetails(String uid) async {
+    DocumentSnapshot documentSnapshot =
+        await firestore.collection("users").document(uid).get();
+    return User.fromMap(documentSnapshot.data);
+  }
 
   //Google Sign-in
   Future<FirebaseUser> signIn() async {

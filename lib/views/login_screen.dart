@@ -7,6 +7,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'users_screen.dart';
 import 'package:link/link.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as JSON;
 
 //Tela de login/sig in por autenticação do google e facebook pelo firebase
 
@@ -218,7 +221,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 //se aceitar termos de uso, chamar autenticação
                                 //se autenticação ok
                                 //ir para a tela do usuário
-                                Navigator.pushNamed(context, UsersScreen.id);
+                                //Navigator.pushNamed(context, UsersScreen.id);
+                                createDialog(context);
                               },
                             ),
                           ),
@@ -324,13 +328,46 @@ class _LoginScreenState extends State<LoginScreen> {
       if (isNewUser) {
         _repository.addDataToDb(user).then((value) {
           Navigator.pushNamed(context, UsersScreen.id);
-          //didChangePrevious(previousRoute);
-          //NÃO CONSEGUI USAR, DA ERRO PRA PASSAR A ROTA
         });
       } else {
         Navigator.pushNamed(context, UsersScreen.id);
       }
     });
+  }
+
+  //**************** Facebook Login *******************
+  //Copiado do tutorial do codesundar
+  //Criei o app no facebook developers e configurei em Android e IOS
+
+  Map userProfile;
+  final facebookLogin = FacebookLogin();
+
+  _loginWithFB() async{
+
+
+    //final result = await facebookLogin.logInWithReadPermissions(['email']); //DAVA ERRO NO MÉTODO
+    final result = await facebookLogin.logIn(['email']) ;
+    
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final token = result.accessToken.token;
+        final graphResponse = await http.get('https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=${token}');
+        final profile = JSON.jsonDecode(graphResponse.body);
+        print(profile);
+        setState(() {
+          userProfile = profile;
+          isLoginPressed = true;
+        });
+        break;
+
+      case FacebookLoginStatus.cancelledByUser:
+        setState(() => isLoginPressed = false );
+        break;
+      case FacebookLoginStatus.error:
+        setState(() => isLoginPressed = false );
+        break;
+    }
+
   }
 
 }

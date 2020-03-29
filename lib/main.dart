@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,32 +34,41 @@ class _MyAppState extends State<LuziaApp> {
     super.initState();
     _repository.getCurrentUser().then((FirebaseUser currentUser) {
       _repository.searchVolunteer(currentUser);
-      setState(() {
-        type = currentUser; // NAO FUNCIONA
-      });
+        type = currentUser;
     });
   }
 
   //pegar voluntário
   //NÃO FUNCIONOU, SE EU CONSEGUISSE COMPARAR O ID DO USUÁRIO LOGADO COM O DO VOLUNTÁRIO ACHO QUE DARIA
-  void getVoluntario() async {
-    final voluntario = await firestore.collection('users').where('tipo', isEqualTo: 'V').getDocuments();
-    if(voluntario != null && _repository.getCurrentUser() != null){
-      if(type.uid == _repository.getCurrentUser()){
-        setState(() {
-          result = true;
-        });
-      }
-    } else{
+//  void getVoluntario() async {
+//    final voluntario = await firestore.collection('users').where('tipo', isEqualTo: 'V').getDocuments();
+//    if(voluntario != null && _repository.getCurrentUser() != null){
+//      if(type.uid == _repository.getCurrentUser()){
+//        setState(() {
+//          result = true;
+//        });
+//      }
+//    } else{
+//      setState(() {
+//        result = false;
+//      });
+//    }
+//  }
+
+   Future<Users> userDetails(firebaseUser) async {
+    // retrieving User details
+     //firebaseUser = user;
+    user = await _repository.getUserDetails(firebaseUser.uid);
+    if(user.tipo == "V"){
       setState(() {
-        result = false;
+        result = true; //voluntário
+      });
+    } else {
+      setState(() {
+        result = false; //deficiente visual
       });
     }
-  }
-
-   void userDetails() async {
-    // retrieving User details
-    user = await _repository.getUserDetails(type.uid);
+    return user;
 }
 
   @override
@@ -71,16 +82,9 @@ class _MyAppState extends State<LuziaApp> {
               // initializing firebase user
               FirebaseUser firebaseUser = snapshot.data;
               //retrieving User details
-              userDetails();
+              userDetails(firebaseUser);
               // This line is responsible for checking the user type and returning the nced
-             return user.tipo == "V" ? VoluntarioScreen() : DefVisualScreen();
-
- //              if (user.tipo == "V") {
- //                return VoluntarioScreen();
- //              } else {
-//               return DefVisualScreen();
-//               }
-
+                return result == true ? VoluntarioScreen() : DefVisualScreen();
             } else {
               return LoginScreen();
             }

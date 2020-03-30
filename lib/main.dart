@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,38 +8,26 @@ import 'package:luzia/views/dv_screen.dart';
 import 'package:luzia/views/v_screen.dart';
 import 'package:luzia/views/login_screen.dart';
 import 'package:luzia/views/users_screen.dart';
-import 'package:luzia/utils/firebase_methods.dart';
 
 void main() => runApp(LuziaApp());
 
 class LuziaApp extends StatefulWidget {
-
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<LuziaApp> {
   FirebaseRepository _repository = FirebaseRepository();
-  FirebaseUser type;
   Users user;
   Firestore firestore;
   //resultado do voluntario
   bool result = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _repository.getCurrentUser().then((FirebaseUser currentUser) {
-      _repository.searchVolunteer(currentUser);
-      type = currentUser;
-    });
-  }
-
   Future<Users> userDetails(firebaseUser) async {
     // retrieving User details
     //firebaseUser = user;
     user = await _repository.getUserDetails(firebaseUser.uid);
-    if(user.tipo == "V"){
+    if (user.tipo == "V") {
       setState(() {
         result = true; //voluntário
       });
@@ -59,7 +45,7 @@ class _MyAppState extends State<LuziaApp> {
       title: 'Luzia',
       home: FutureBuilder(
           future: _repository.getCurrentUser(),
-          builder: (context, AsyncSnapshot<FirebaseUser> snapshot)  {
+          builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
             if (snapshot.hasData) {
               // initializing firebase user
               FirebaseUser firebaseUser = snapshot.data;
@@ -70,8 +56,7 @@ class _MyAppState extends State<LuziaApp> {
             } else {
               return LoginScreen();
             }
-          }
-      ),
+          }),
       theme: ThemeData(
         primaryColor: Colors.cyan,
       ),

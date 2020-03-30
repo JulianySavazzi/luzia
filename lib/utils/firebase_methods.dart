@@ -10,14 +10,14 @@ class FirebaseMethods {
 
   //Users class
   Users user = Users();
-  
+
   //CurrentUser
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser currentUser;
     currentUser = await _auth.currentUser();
     return currentUser;
   }
-  
+
   // Adding this method to retrieve user details from firebase using just uid
   Future<Users> getUserDetails(String uid) async {
     DocumentSnapshot documentSnapshot =
@@ -97,14 +97,5 @@ class FirebaseMethods {
         .collection("users")
         .document(currentUser.uid)
         .setData(user.toMap(user));
-  }
-
-  //NAO SEI SE FUNCIONA
-  Future<void> searchVolunteer(FirebaseUser currentUser) async {
-    QuerySnapshot querySnapshot = await firestore
-        .collection("users")
-        .where("tipo", isEqualTo: "V")
-        .getDocuments();
-    return querySnapshot;
   }
 }

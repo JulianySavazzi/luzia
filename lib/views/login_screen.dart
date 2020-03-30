@@ -225,37 +225,42 @@ class _LoginScreenState extends State<LoginScreen> {
                         )
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                          child: Link(
-                            child: Text(
-                              //Onde será o link para o site
-                              'Termos de uso e Política de Privacidade',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: 'Montserrat',
-                                fontStyle: FontStyle.italic,
-                                color: Colors.black,
+                    isLinkPressed
+                        ? Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.lightGreenAccent),
+                      ),
+                    )
+                        : SizedBox(
+                      height: 10.0,
+                    ),
+                    Container(
+                      width: 250,
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Link(
+                                child: Text(
+                                  //Onde será o link para o site
+                                  'Termos de uso e Política de Privacidade',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: 'Montserrat',
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                url: 'http://www.google.com',
                               ),
-                            ),
-                            url: 'http://www.google.com',
+                            ],
                           ),
                         ),
-                        isLinkPressed
-                            ? Center(
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.lightGreenAccent),
-                          ),
-                        )
-                            : SizedBox(
-                          height: 10.0,
-                        ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
@@ -324,8 +329,6 @@ class _LoginScreenState extends State<LoginScreen> {
       if (isNewUser) {
         _repository.addDataToDb(user).then((value) {
           Navigator.pushNamed(context, UsersScreen.id);
-          //didChangePrevious(previousRoute);
-          //NÃO CONSEGUI USAR, DA ERRO PRA PASSAR A ROTA
         });
       } else {
         Navigator.pushNamed(context, UsersScreen.id);

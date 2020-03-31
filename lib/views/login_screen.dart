@@ -7,9 +7,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'users_screen.dart';
 import 'package:link/link.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as JSON;
 
 //Tela de login/sig in por autenticação do google e facebook pelo firebase
 
@@ -30,6 +27,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   //FIREBASE FUNCTIONS
   FirebaseRepository _repository = FirebaseRepository();
+
+  FirebaseUser myUser;
 
   bool isLoginPressed = false;
 
@@ -222,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 //se autenticação ok
                                 //ir para a tela do usuário
                                 //Navigator.pushNamed(context, UsersScreen.id);
-                                createDialog(context);
+                                facebookDialog(context);
                               },
                             ),
                           ),
@@ -251,14 +250,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         isLinkPressed
                             ? Center(
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.lightGreenAccent),
-                          ),
-                        )
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.lightGreenAccent),
+                                ),
+                              )
                             : SizedBox(
-                          height: 10.0,
-                        ),
+                                height: 10.0,
+                              ),
                       ],
                     ),
                   ],
@@ -273,14 +272,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // ********************************************************************************** //
 
-  //Método para mostrar o diálogo
+  //Método para mostrar o diálogo ao logar com o google
   createDialog(BuildContext context) {
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             title: Text("Atenção"),
-            content: Text("Você aceita os termos de política e privacidade?"),
+            content: Text("Você aceita os termos de política de uso e privacidade?"),
             actions: <Widget>[
               FlatButton(
                 child: Text("Não aceito"),
@@ -336,38 +335,49 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   //**************** Facebook Login *******************
-  //Copiado do tutorial do codesundar
-  //Criei o app no facebook developers e configurei em Android e IOS
 
-  Map userProfile;
-  final facebookLogin = FacebookLogin();
-
-  _loginWithFB() async{
-
-
-    //final result = await facebookLogin.logInWithReadPermissions(['email']); //DAVA ERRO NO MÉTODO
-    final result = await facebookLogin.logIn(['email']) ;
-    
-    switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        final token = result.accessToken.token;
-        final graphResponse = await http.get('https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=${token}');
-        final profile = JSON.jsonDecode(graphResponse.body);
-        print(profile);
-        setState(() {
-          userProfile = profile;
-          isLoginPressed = true;
+  //Método para mostrar o diálogo ao logar com facebook
+  facebookDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Atenção"),
+            content: Text("Você aceita os termos de política de uso e privacidade?"),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Não aceito"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text("Aceito"),
+                onPressed: () =>
+                    logIn(), //login com facebook
+              ),
+            ],
+            elevation: 24.0,
+          );
         });
-        break;
-
-      case FacebookLoginStatus.cancelledByUser:
-        setState(() => isLoginPressed = false );
-        break;
-      case FacebookLoginStatus.error:
-        setState(() => isLoginPressed = false );
-        break;
-    }
-
   }
 
+  //login com o facebook
+  void logIn(){
+    _repository.loginWithFacebook().then((response){
+      if(response != null){
+        myUser = response;
+        authenticateUser(myUser); //autenticação de usuário do firebase
+        setState(() {
+          isLoginPressed = true;
+        });
+      } else {
+        Fluttertoast.showToast(
+            msg: "Houve um erro ao efetuar o log-in",
+            toastLength: Toast.LENGTH_LONG,
+            textColor: Colors.red[300],
+            gravity: ToastGravity.CENTER);
+      }
+    });
+  }
 }

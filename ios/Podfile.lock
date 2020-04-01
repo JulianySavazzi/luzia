@@ -167,6 +167,12 @@ PODS:
     - AppAuth/ExternalUserAgent (= 1.3.0)
   - AppAuth/Core (1.3.0)
   - AppAuth/ExternalUserAgent (1.3.0)
+  - Bolts (1.9.0):
+    - Bolts/AppLinks (= 1.9.0)
+    - Bolts/Tasks (= 1.9.0)
+  - Bolts/AppLinks (1.9.0):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.9.0)
   - BoringSSL-GRPC (0.0.3):
     - BoringSSL-GRPC/Implementation (= 0.0.3)
     - BoringSSL-GRPC/Interface (= 0.0.3)
@@ -179,6 +185,10 @@ PODS:
     - Flutter
   - cloud_firestore_web (0.1.0):
     - Flutter
+  - FBSDKCoreKit (4.39.1):
+    - Bolts (~> 1.9)
+  - FBSDKLoginKit (4.39.1):
+    - FBSDKCoreKit
   - Firebase/Analytics (6.21.0):
     - Firebase/Core
   - Firebase/Auth (6.21.0):
@@ -253,6 +263,10 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 6.5)
     - PromisesObjC (~> 1.2)
   - Flutter (1.0.0)
+  - flutter_facebook_login (0.0.1):
+    - FBSDKCoreKit (= 4.39.1)
+    - FBSDKLoginKit (= 4.39.1)
+    - Flutter
   - fluttertoast (0.0.2):
     - Flutter
   - google_sign_in (0.0.1):
@@ -342,6 +356,7 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_core_web (from `.symlinks/plugins/firebase_core_web/ios`)
   - Flutter (from `Flutter`)
+  - flutter_facebook_login (from `.symlinks/plugins/flutter_facebook_login/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
   - google_sign_in_web (from `.symlinks/plugins/google_sign_in_web/ios`)
@@ -355,7 +370,10 @@ SPEC REPOS:
     - abseil
     - AgoraRtcEngine_iOS
     - AppAuth
+    - Bolts
     - BoringSSL-GRPC
+    - FBSDKCoreKit
+    - FBSDKLoginKit
     - Firebase
     - FirebaseAnalytics
     - FirebaseAuth
@@ -397,6 +415,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core_web/ios"
   Flutter:
     :path: Flutter
+  flutter_facebook_login:
+    :path: ".symlinks/plugins/flutter_facebook_login/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   google_sign_in:
@@ -417,9 +437,12 @@ SPEC CHECKSUMS:
   agora_rtc_engine: 481d11cbbee6728aa192ba42ab8981abba9f09a5
   AgoraRtcEngine_iOS: b2eedd8f9ab47b71163f3285e836bd23feb43fff
   AppAuth: 73574f3013a1e65b9601a3ddc8b3158cce68c09d
+  Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
   cloud_firestore: 31454d48df21f3e1a900015e36143c0d46a304b7
   cloud_firestore_web: 9ec3dc7f5f98de5129339802d491c1204462bfec
+  FBSDKCoreKit: f442aa96179cc9b382bb4abeb7e340a47cca8f91
+  FBSDKLoginKit: c3079d9a4db27c492287b1eed7a4272b28cf8a59
   Firebase: f378c80340dd41c0ad0914af740c021eb282a04b
   firebase_analytics: dacdcfc524d722fff13dcff942f0dfa47e6be567
   firebase_auth: 4ee3a54d3f09434c508c284a62f895a741a30637
@@ -435,6 +458,7 @@ SPEC CHECKSUMS:
   FirebaseFirestore: 71925e62a5d1cbfaff46aa4d5107e525cc48356a
   FirebaseInstallations: acb3216eb9784d3b1d2d2d635ff74fa892cc0c44
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_facebook_login: be61e24a4b7d621515353c6b4583d1981bdaa3d6
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   google_sign_in: f32920a589fdf4ab2918ec6dc5e5b0d5b8040ff5
   google_sign_in_web: 52deb24929ac0992baff65c57956031c44ed44c3

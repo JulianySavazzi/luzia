@@ -47,7 +47,8 @@ class FirebaseMethods {
   //Facebook Sig-in
   Future<FirebaseUser> loginWithFacebook() async {
     var facebookLogin = FacebookLogin();
-    var result = await facebookLogin.logIn(['email']);
+    //var result = await facebookLogin.logIn(['email']);
+    var result = await facebookLogin.logInWithReadPermissions(['email']);
 
     debugPrint(result.status.toString());//ver status do login
 

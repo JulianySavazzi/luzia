@@ -10,7 +10,6 @@ class FirebaseMethods {
   GoogleSignIn _googleSignIn = GoogleSignIn();
   static final Firestore firestore = Firestore.instance;
 
-
   //Users class
   Users user = Users();
   

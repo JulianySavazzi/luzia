@@ -8,7 +8,6 @@ import 'package:luzia/views/dv_screen.dart';
 import 'package:luzia/views/v_screen.dart';
 import 'package:luzia/views/login_screen.dart';
 import 'package:luzia/views/users_screen.dart';
-import 'package:luzia/utils/firebase_methods.dart';
 
 void main() => runApp(LuziaApp());
 
@@ -21,7 +20,7 @@ class LuziaApp extends StatefulWidget {
 class _MyAppState extends State<LuziaApp> {
   FirebaseRepository _repository = FirebaseRepository();
   FirebaseUser type;
-  FirebaseMethods _firebaseMethods = FirebaseMethods();
+  //FirebaseMethods _firebaseMethods = FirebaseMethods();
   Users user;
   Firestore firestore;
   //resultado do voluntario
@@ -32,34 +31,25 @@ class _MyAppState extends State<LuziaApp> {
     super.initState();
     _repository.getCurrentUser().then((FirebaseUser currentUser) {
       _repository.searchVolunteer(currentUser);
-      setState(() {
-        type = currentUser; // NAO FUNCIONA
-      });
+      type = currentUser;
     });
   }
 
-  //pegar voluntário
-  //NÃO FUNCIONOU, SE EU CONSEGUISSE COMPARAR O ID DO USUÁRIO LOGADO COM O DO VOLUNTÁRIO ACHO QUE DARIA
-  void getVoluntario() async {
-    final voluntario = await firestore.collection('users').where('tipo', isEqualTo: 'V').getDocuments();
-    if(voluntario != null && _repository.getCurrentUser() != null){
-      if(type.uid == _repository.getCurrentUser()){
-        setState(() {
-          result = true;
-        });
-      }
-    } else{
+  Future<Users> userDetails(firebaseUser) async {
+    // retrieving User details
+    //firebaseUser = user;
+    user = await _repository.getUserDetails(firebaseUser.uid);
+    if(user.tipo == "V"){
       setState(() {
-        result = false;
+        result = true; //voluntário
+      });
+    } else {
+      setState(() {
+        result = false; //deficiente visual
       });
     }
+    return user;
   }
-
-  Future<FirebaseUser> userDetails(firebaseUser) async {
-    // retrieving User details
-    user = await _repository.getUserDetails(firebaseUser.uid);
-    return user = firebaseUser;
-}
 
   @override
   Widget build(BuildContext context) {
@@ -74,18 +64,12 @@ class _MyAppState extends State<LuziaApp> {
               //retrieving User details
               userDetails(firebaseUser);
               // This line is responsible for checking the user type and returning the nced
-//              return user.tipo == "V" ? VoluntarioScreen() : DefVisualScreen();
-               if (user.tipo == "V") {
-                 return VoluntarioScreen();
-               } else {
-                 return DefVisualScreen();
-               }
-
+              return result == true ? VoluntarioScreen() : DefVisualScreen();
             } else {
               return LoginScreen();
             }
           }
-          ),
+      ),
       theme: ThemeData(
         primaryColor: Colors.cyan,
       ),
@@ -100,5 +84,4 @@ class _MyAppState extends State<LuziaApp> {
       },
     );
   }
-
 }

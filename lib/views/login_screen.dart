@@ -125,7 +125,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                           child: Image(
                             //Imagem sobre voluntariado da tela de login
-                            //Precisa etiquetar a imagem, ainda não vi como faz
                             image: AssetImage('images/loginscreen.jpg'),
                             semanticLabel:
                                 'Pessoas felizes fazendo voluntariado',
@@ -181,7 +180,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               onPressed: () {
                                 createDialog(context);
-                                //Navigator.pushNamed(context, UsersScreen.id);
+                                //alert dialog de termos de uso
+                                //se aceitar termos de uso, autenticação de usuário
+                                //Google sign
                               },
                             ),
                           ),
@@ -216,11 +217,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ],
                               ),
                               onPressed: () {
-                                //colocar alert para termos de uso
+                                //alert para termos de uso
                                 //se aceitar termos de uso, chamar autenticação
                                 //se autenticação ok
                                 //ir para a tela do usuário
-                                //Navigator.pushNamed(context, UsersScreen.id);
                                 facebookDialog(context);
                               },
                             ),
@@ -323,7 +323,7 @@ class _LoginScreenState extends State<LoginScreen> {
   //Método usado para controlar autenticação de usuários:
   //Se o usuário é novo, passa para tela tipo de usuario,
   //caso contrário para sua respectiva tela. Pois o usuário pode
-  //desinstalar o app etc. Só que.. onde que eu passo o tipo gente?
+  //desinstalar o app etc.
   void authenticateUser(FirebaseUser user) {
     _repository.authenticateUser(user).then((isNewUser) {
       setState(() {
@@ -341,7 +341,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //**************** Facebook Login *******************
 
-  //Método para mostrar o diálogo ao logar com facebook
+  //Método para mostrar o diálogo de termos de uso ao logar com facebook
   facebookDialog(BuildContext context) {
     return showDialog(
         context: context,

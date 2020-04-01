@@ -336,7 +336,7 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
-  - "permission_handler (4.4.0+hotfix.2)":
+  - "permission_handler (4.4.0+hotfix.4)":
     - Flutter
   - PromisesObjC (1.2.8)
   - url_launcher (0.0.1):
@@ -471,7 +471,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: cea130bbfe5a7edc8d06d3f0d17288c32ffe9925
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
-  permission_handler: d5d46b2ca93671e8dcf870b949e304c7ddb65ad0
+  permission_handler: 8278954f2382902f63f00dd8828769c0bd6d511b
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
   url_launcher: a1c0cc845906122c4784c542523d8cacbded5626
   url_launcher_macos: fd7894421cd39320dce5f292fc99ea9270b2a313

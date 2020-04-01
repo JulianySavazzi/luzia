@@ -32,6 +32,8 @@ dependencies:
   fluttertoast: ^4.0.1
   firebase_analytics: ^5.0.11
   link: ^1.0.0
+  flutter_facebook_login: ^3.0.0
+  http: ^0.12.0+4
 
 dev_dependencies:
   flutter_test:

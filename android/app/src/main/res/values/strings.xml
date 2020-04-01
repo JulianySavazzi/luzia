@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Luzia</string>
+    <string name="facebook_app_id">499625290943155</string>
+    <string name="fb_login_protocol_scheme">fb499625290943155</string>
+</resources>
+

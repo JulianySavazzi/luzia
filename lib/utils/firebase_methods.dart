@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:luzia/model/users.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 class FirebaseMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   GoogleSignIn _googleSignIn = GoogleSignIn();
   static final Firestore firestore = Firestore.instance;
+
 
   //Users class
   Users user = Users();
@@ -41,6 +44,22 @@ class FirebaseMethods {
     return user;
   }
 
+  //Facebook Sig-in
+  Future<FirebaseUser> loginWithFacebook() async {
+    var facebookLogin = FacebookLogin();
+    var result = await facebookLogin.logIn(['email']);
+
+    debugPrint(result.status.toString());//ver status do login
+
+    if(result.status == FacebookLoginStatus.loggedIn){
+      final AuthCredential credential = FacebookAuthProvider.getCredential(accessToken: result.accessToken.token);
+      FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+      return user;
+    }
+    return null;
+  }
+
+  //Autenticação de usuário
   Future<bool> authenticateUser(FirebaseUser user) async {
     QuerySnapshot result = await firestore
         .collection("users")

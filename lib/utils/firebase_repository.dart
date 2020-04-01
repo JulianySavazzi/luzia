@@ -9,6 +9,9 @@ class FirebaseRepository {
 
   Future<FirebaseUser> signIn() => _firebaseMethods.signIn();
 
+
+  Future<FirebaseUser> loginWithFacebook() => _firebaseMethods.loginWithFacebook();
+
   // adding the same method in firebase repository as well
   Future<Users> getUserDetails(String uid) =>
       _firebaseMethods.getUserDetails(uid);
@@ -24,4 +27,7 @@ class FirebaseRepository {
       _firebaseMethods.addVolunteer(user);
 
   Future<void> addDv(FirebaseUser user) => _firebaseMethods.addDv(user);
+
+  Future<void> searchVolunteer(FirebaseUser user) =>
+      _firebaseMethods.searchVolunteer(user);
 }

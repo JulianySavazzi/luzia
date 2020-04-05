@@ -24,14 +24,14 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   cloud_firestore: ^0.13.4+2
-  permission_handler: ^4.4.0+hotfix.2
+  permission_handler: ^5.0.0+hotfix.3
   firebase_auth: ^0.15.5+3
-  google_sign_in: ^4.2.0
+  google_sign_in: ^4.4.0
   firebase_core: ^0.4.4+3
   agora_rtc_engine: ^1.0.8
   fluttertoast: ^4.0.1
   firebase_analytics: ^5.0.11
-  link: ^1.0.0
+  link: ^1.1.0
   flutter_facebook_login: ^3.0.0
   http: ^0.12.0+4
 

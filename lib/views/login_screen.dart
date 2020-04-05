@@ -1,12 +1,14 @@
 import 'dart:ui';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:luzia/utils/firebase_repository.dart';
-import 'users_screen.dart';
 import 'package:link/link.dart';
+import 'package:luzia/utils/firebase_repository.dart';
+
+import 'users_screen.dart';
 
 //Tela de login/sig in por autenticação do google e facebook pelo firebase
 
@@ -125,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                           child: Image(
                             //Imagem sobre voluntariado da tela de login
-                            image: AssetImage('images/loginscreen.jpg'),
+                            image: AssetImage('images/loginscreen.png'),
                             semanticLabel:
                                 'Pessoas felizes fazendo voluntariado',
                             width: 300,
@@ -243,7 +245,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Align(
                         alignment: Alignment.bottomCenter,
                         child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                          padding:
+                          EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
@@ -284,7 +287,8 @@ class _LoginScreenState extends State<LoginScreen> {
         builder: (context) {
           return AlertDialog(
             title: Text("Atenção"),
-            content: Text("Você aceita os termos de política de uso e privacidade?"),
+            content:
+            Text("Você aceita os termos de política de uso e privacidade?"),
             actions: <Widget>[
               FlatButton(
                 child: Text("Não aceito"),
@@ -348,7 +352,8 @@ class _LoginScreenState extends State<LoginScreen> {
         builder: (context) {
           return AlertDialog(
             title: Text("Atenção"),
-            content: Text("Você aceita os termos de política de uso e privacidade?"),
+            content:
+            Text("Você aceita os termos de política de uso e privacidade?"),
             actions: <Widget>[
               FlatButton(
                 child: Text("Não aceito"),
@@ -358,8 +363,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               FlatButton(
                 child: Text("Aceito"),
-                onPressed: () =>
-                    logIn(), //login com facebook
+                onPressed: () => logIn(), //login com facebook
               ),
             ],
             elevation: 24.0,
@@ -368,9 +372,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   //login com o facebook
-  void logIn(){
-    _repository.loginWithFacebook().then((response){
-      if(response != null){
+  void logIn() {
+    _repository.loginWithFacebook().then((response) {
+      if (response != null) {
         myUser = response;
         authenticateUser(myUser); //autenticação de usuário do firebase
         setState(() {

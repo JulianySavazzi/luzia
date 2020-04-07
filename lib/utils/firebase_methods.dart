@@ -10,7 +10,6 @@ class FirebaseMethods {
   GoogleSignIn _googleSignIn = GoogleSignIn();
   static final Firestore firestore = Firestore.instance;
 
-
   //Users class
   Users user = Users();
 
@@ -30,18 +29,22 @@ class FirebaseMethods {
 
   //Google Sign-in
   Future<FirebaseUser> signIn() async {
-    GoogleSignInAccount _signInAccount = await _googleSignIn.signIn();
-    GoogleSignInAuthentication _signInAuthentication =
-        await _signInAccount.authentication;
+    try {
+      GoogleSignInAccount _signInAccount = await _googleSignIn.signIn();
+      GoogleSignInAuthentication _signInAuthentication =
+      await _signInAccount.authentication;
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-        accessToken: _signInAuthentication.accessToken,
-        idToken: _signInAuthentication.idToken);
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
+          accessToken: _signInAuthentication.accessToken ,
+          idToken: _signInAuthentication.idToken );
 
-    final FirebaseUser user =
-        (await _auth.signInWithCredential(credential)).user;
+      final FirebaseUser user =
+          (await _auth.signInWithCredential( credential )).user;
 
-    return user;
+      return user;
+    } catch (error) {
+      print(error);
+    }
   }
 
   //Facebook Sig-in

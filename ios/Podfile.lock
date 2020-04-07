@@ -158,10 +158,10 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
-  - agora_rtc_engine (1.0.8):
-    - AgoraRtcEngine_iOS (= 2.9.1)
+  - agora_rtc_engine (1.0.10):
+    - AgoraRtcEngine_iOS_Crypto (= 2.9.1)
     - Flutter
-  - AgoraRtcEngine_iOS (2.9.1)
+  - AgoraRtcEngine_iOS_Crypto (2.9.1)
   - AppAuth (1.3.0):
     - AppAuth/Core (= 1.3.0)
     - AppAuth/ExternalUserAgent (= 1.3.0)
@@ -336,7 +336,7 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
-  - "permission_handler (4.4.0+hotfix.4)":
+  - "permission_handler (5.0.0+hotfix.3)":
     - Flutter
   - PromisesObjC (1.2.8)
   - url_launcher (0.0.1):
@@ -368,7 +368,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - abseil
-    - AgoraRtcEngine_iOS
+    - AgoraRtcEngine_iOS_Crypto
     - AppAuth
     - BoringSSL-GRPC
     - FBSDKCoreKit
@@ -433,8 +433,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   abseil: 18063d773f5366ff8736a050fe035a28f635fd27
-  agora_rtc_engine: 481d11cbbee6728aa192ba42ab8981abba9f09a5
-  AgoraRtcEngine_iOS: b2eedd8f9ab47b71163f3285e836bd23feb43fff
+  agora_rtc_engine: 0b7ba4930034ab5fb6fe2c9c64bb1739feea2551
+  AgoraRtcEngine_iOS_Crypto: c2bca616406c6dda9ae254d59637a18ba0fae8f0
   AppAuth: 73574f3013a1e65b9601a3ddc8b3158cce68c09d
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
   cloud_firestore: 31454d48df21f3e1a900015e36143c0d46a304b7
@@ -471,7 +471,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: cea130bbfe5a7edc8d06d3f0d17288c32ffe9925
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
-  permission_handler: 8278954f2382902f63f00dd8828769c0bd6d511b
+  permission_handler: 4a985b5448897c27fdeadde84f7452520c0e6c58
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
   url_launcher: a1c0cc845906122c4784c542523d8cacbded5626
   url_launcher_macos: fd7894421cd39320dce5f292fc99ea9270b2a313

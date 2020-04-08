@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:luzia/constants/strings.dart';
 import 'package:luzia/model/users.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 class FirebaseMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -51,7 +51,7 @@ class FirebaseMethods {
   //Facebook Sig-in
   Future<FirebaseUser> loginWithFacebook() async {
     var facebookLogin = FacebookLogin();
-    var result = await facebookLogin.logIn([EMAIL_COLLECTION]);
+    var result = await facebookLogin.logIn([EMAIL_FIELD]);
 
     debugPrint(result.status.toString()); //ver status do login
 
@@ -68,7 +68,7 @@ class FirebaseMethods {
   Future<bool> authenticateUser(FirebaseUser user) async {
     QuerySnapshot result = await firestore
         .collection(USERS_COLLECTION)
-        .where(EMAIL_COLLECTION, isEqualTo: user.email)
+        .where(EMAIL_FIELD, isEqualTo: user.email)
         .getDocuments();
 
     final List<DocumentSnapshot> docs = result.documents;

@@ -122,4 +122,19 @@ class FirebaseMethods {
         .document(currentUser.uid)
         .setData(user.toMap(user));
   }
+
+  //Search all Volunteers
+  Future<List<Users>> searchAllVolunteers() async {
+    List<Users> volunteerList = List<Users>();
+
+    QuerySnapshot querySnapshot = await firestore
+        .collection(USERS_COLLECTION)
+        .where(user.tipo = "V")
+        .getDocuments();
+    for (var i = 0; i < querySnapshot.documents.length; i++) {
+      volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
+    }
+
+    return volunteerList;
+  }
 }

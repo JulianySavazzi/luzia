@@ -125,16 +125,17 @@ class FirebaseMethods {
 
   //Search all Volunteers
   Future<List<Users>> searchAllVolunteers() async {
+    final usersRef = Firestore.instance.collection(USERS_COLLECTION);
     List<Users> volunteerList = List<Users>();
+    final QuerySnapshot querySnapshot = await usersRef
+        .where("tipo", isEqualTo: "V")
+        .where("ajuda", isLessThan: 1)
+        .getDocuments(); //onde ajuda é menor que 1 ; 0, talvez criar uma query para sempre essa ajuda for menor que o maximo valor
 
-    QuerySnapshot querySnapshot = await firestore
-        .collection(USERS_COLLECTION)
-        .where(user.tipo = "V")
-        .getDocuments();
     for (var i = 0; i < querySnapshot.documents.length; i++) {
       volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
+      print(volunteerList);
     }
-
     return volunteerList;
   }
 }

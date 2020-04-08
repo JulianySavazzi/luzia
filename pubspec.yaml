@@ -23,6 +23,7 @@ dependencies:
   link: ^1.1.0
   flutter_facebook_login: ^3.0.0
   http: ^0.12.0+4
+  random_string: ^2.0.1
 
 dev_dependencies:
   flutter_test:

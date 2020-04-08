@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:link/link.dart';
 import 'package:luzia/utils/firebase_repository.dart';
-
 import 'users_screen.dart';
 
 //Tela de login/sig in por autenticação do google e facebook pelo firebase
@@ -232,21 +230,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     isLinkPressed
                         ? Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.lightGreenAccent),
-                      ),
-                    )
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.lightGreenAccent),
+                            ),
+                          )
                         : SizedBox(
-                      height: 10.0,
-                    ),
+                            height: 10.0,
+                          ),
                     Container(
                       width: 250,
                       child: Align(
                         alignment: Alignment.bottomCenter,
                         child: Padding(
                           padding:
-                          EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                              EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
@@ -288,7 +286,7 @@ class _LoginScreenState extends State<LoginScreen> {
           return AlertDialog(
             title: Text("Atenção"),
             content:
-            Text("Você aceita os termos de política de uso e privacidade?"),
+                Text("Você aceita os termos de política de uso e privacidade?"),
             actions: <Widget>[
               FlatButton(
                 child: Text("Não aceito"),
@@ -319,7 +317,7 @@ class _LoginScreenState extends State<LoginScreen> {
             msg: "Houve um erro ao efetuar o log-in",
             toastLength: Toast.LENGTH_LONG,
             textColor: Colors.red[300],
-            gravity: ToastGravity.CENTER);
+            gravity: ToastGravity.BOTTOM);
       }
     });
   }
@@ -353,7 +351,7 @@ class _LoginScreenState extends State<LoginScreen> {
           return AlertDialog(
             title: Text("Atenção"),
             content:
-            Text("Você aceita os termos de política de uso e privacidade?"),
+                Text("Você aceita os termos de política de uso e privacidade?"),
             actions: <Widget>[
               FlatButton(
                 child: Text("Não aceito"),
@@ -385,7 +383,7 @@ class _LoginScreenState extends State<LoginScreen> {
             msg: "Houve um erro ao efetuar o log-in",
             toastLength: Toast.LENGTH_LONG,
             textColor: Colors.red[300],
-            gravity: ToastGravity.CENTER);
+            gravity: ToastGravity.BOTTOM);
       }
     });
   }

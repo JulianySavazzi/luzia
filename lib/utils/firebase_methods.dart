@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:luzia/constants/strings.dart';
 import 'package:luzia/model/users.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
@@ -23,7 +24,7 @@ class FirebaseMethods {
   // Adding this method to retrieve user details from firebase using just uid
   Future<Users> getUserDetails(String uid) async {
     DocumentSnapshot documentSnapshot =
-        await firestore.collection("users").document(uid).get();
+        await firestore.collection(USERS_COLLECTION).document(uid).get();
     return Users.fromMap(documentSnapshot.data);
   }
 
@@ -32,14 +33,14 @@ class FirebaseMethods {
     try {
       GoogleSignInAccount _signInAccount = await _googleSignIn.signIn();
       GoogleSignInAuthentication _signInAuthentication =
-      await _signInAccount.authentication;
+          await _signInAccount.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.getCredential(
-          accessToken: _signInAuthentication.accessToken ,
-          idToken: _signInAuthentication.idToken );
+          accessToken: _signInAuthentication.accessToken,
+          idToken: _signInAuthentication.idToken);
 
       final FirebaseUser user =
-          (await _auth.signInWithCredential( credential )).user;
+          (await _auth.signInWithCredential(credential)).user;
 
       return user;
     } catch (error) {
@@ -50,12 +51,13 @@ class FirebaseMethods {
   //Facebook Sig-in
   Future<FirebaseUser> loginWithFacebook() async {
     var facebookLogin = FacebookLogin();
-    var result = await facebookLogin.logIn(['email']);
+    var result = await facebookLogin.logIn([EMAIL_COLLECTION]);
 
-    debugPrint(result.status.toString());//ver status do login
+    debugPrint(result.status.toString()); //ver status do login
 
-    if(result.status == FacebookLoginStatus.loggedIn){
-      final AuthCredential credential = FacebookAuthProvider.getCredential(accessToken: result.accessToken.token);
+    if (result.status == FacebookLoginStatus.loggedIn) {
+      final AuthCredential credential = FacebookAuthProvider.getCredential(
+          accessToken: result.accessToken.token);
       FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
       return user;
     }
@@ -65,8 +67,8 @@ class FirebaseMethods {
   //Autenticação de usuário
   Future<bool> authenticateUser(FirebaseUser user) async {
     QuerySnapshot result = await firestore
-        .collection("users")
-        .where("email", isEqualTo: user.email)
+        .collection(USERS_COLLECTION)
+        .where(EMAIL_COLLECTION, isEqualTo: user.email)
         .getDocuments();
 
     final List<DocumentSnapshot> docs = result.documents;
@@ -85,7 +87,7 @@ class FirebaseMethods {
     );
 
     firestore
-        .collection("users")
+        .collection(USERS_COLLECTION)
         .document(currentUser.uid)
         .setData(user.toMap(user));
   }
@@ -101,7 +103,7 @@ class FirebaseMethods {
       ajuda: 0,
     );
     firestore
-        .collection("users")
+        .collection(USERS_COLLECTION)
         .document(currentUser.uid)
         .setData(user.toMap(user));
   }
@@ -116,7 +118,7 @@ class FirebaseMethods {
       ajuda: user.ajuda,
     );
     firestore
-        .collection("users")
+        .collection(USERS_COLLECTION)
         .document(currentUser.uid)
         .setData(user.toMap(user));
   }

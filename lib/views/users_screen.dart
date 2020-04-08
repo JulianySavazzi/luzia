@@ -284,7 +284,7 @@ class _UsersScreenState extends State<UsersScreen> {
             msg: "Houve um erro",
             toastLength: Toast.LENGTH_LONG,
             textColor: Colors.red[300],
-            gravity: ToastGravity.CENTER);
+            gravity: ToastGravity.BOTTOM);
       }
     });
   }
@@ -305,7 +305,7 @@ class _UsersScreenState extends State<UsersScreen> {
             msg: "Erro ao adicionar tipo de usuário",
             toastLength: Toast.LENGTH_LONG,
             textColor: Colors.red[300],
-            gravity: ToastGravity.CENTER);
+            gravity: ToastGravity.BOTTOM);
       }
     });
   }

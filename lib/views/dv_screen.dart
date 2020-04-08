@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:luzia/utils/firebase_repository.dart';
 
 //Tela para usuários com deficiência visual
 
@@ -19,8 +20,8 @@ class DefVisualScreen extends StatefulWidget {
 //o link do tutorial está no fichamento
 
 class _DefVisualScreenState extends State<DefVisualScreen> {
-
   Route previousRoute;
+  FirebaseRepository _repository = FirebaseRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -85,39 +86,40 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                 ]),
               )),
           Padding(
-            padding:
-            EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             child: Container(
-
                 child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: RaisedButton(
-                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-                      //DEFICIENTE VISUAL
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      color: Colors.lightGreenAccent[100],
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          //SizedBox(width: 10.0),
-                          Text(
-                            'Ligar para voluntário',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Montserrat',
-                                fontSize: 20.0),
-                          )
-                        ],
-                      ),
-                      onPressed: () {}),
-                )),
+              alignment: Alignment.bottomCenter,
+              child: RaisedButton(
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+                  //DEFICIENTE VISUAL
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  color: Colors.lightGreenAccent[100],
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      //SizedBox(width: 10.0),
+                      Text(
+                        'Ligar para voluntário',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Montserrat',
+                            fontSize: 20.0),
+                      )
+                    ],
+                  ),
+                  onPressed: () {
+                    _repository
+                        .searchAllVolunteers(); // teste buscar voluntario
+                  }),
+            )),
           )
         ])));
   }
 
   @protected
   @mustCallSuper
-  void didChangePrevious(Route previousRoute){}
+  void didChangePrevious(Route previousRoute) {}
 }

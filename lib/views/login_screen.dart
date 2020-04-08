@@ -259,7 +259,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     color: Colors.black,
                                   ),
                                 ),
-                                url: 'http://www.google.com',
+                                url: "https://www.globo.com",
                               ),
                             ],
                           ),

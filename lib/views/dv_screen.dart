@@ -113,6 +113,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                   onPressed: () {
                     _repository
                         .searchAllVolunteers(); // teste buscar voluntario
+                    _repository.getMaxHelp(); //teste buscar ajuda máxima
                   }),
             )),
           )

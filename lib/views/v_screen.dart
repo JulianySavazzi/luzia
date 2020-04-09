@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:luzia/call_views/pickup/pickup_screen.dart';
+import 'package:luzia/utils/firebase_repository.dart';
 
 //Tela para voluntários
 
@@ -20,6 +22,7 @@ class VoluntarioScreen extends StatefulWidget {
 class _VoluntarioScreenState extends State<VoluntarioScreen> {
 
   Route previousRoute;
+  FirebaseRepository _repository = FirebaseRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -87,14 +90,31 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
             child: Container(
               child: Center(
-                child: Text(
-                  'Sou voluntário',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontSize: 15,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.center,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: RaisedButton(
+                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+                      //DEFICIENTE VISUAL
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      color: Colors.lightGreenAccent[100],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          //SizedBox(width: 10.0),
+                          Text(
+                            'Sou voluntário',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Montserrat',
+                                fontSize: 20.0),
+                          )
+                        ],
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, PickupScreen.id);
+                      }),
                 ),
               ),
             ),

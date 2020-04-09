@@ -28,6 +28,6 @@ class FirebaseRepository {
 
   Future<void> addDv(FirebaseUser user) => _firebaseMethods.addDv(user);
 
-  Future<List<Users>> searchAllVolunteers() =>
-      _firebaseMethods.searchAllVolunteers();
+  Future<List<Users>> searchAllVolunteers(FirebaseUser currentUser) =>
+      _firebaseMethods.searchAllVolunteers(currentUser);
 }

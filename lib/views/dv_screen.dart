@@ -1,6 +1,10 @@
+import 'dart:math';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:luzia/model/users.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 
 //Tela para usuários com deficiência visual
@@ -22,6 +26,22 @@ class DefVisualScreen extends StatefulWidget {
 class _DefVisualScreenState extends State<DefVisualScreen> {
   Route previousRoute;
   FirebaseRepository _repository = FirebaseRepository();
+
+  List<Users> volunteers;
+  Users oneVolunteer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _repository.getCurrentUser().then((FirebaseUser currentUser) {
+      _repository.searchAllVolunteers(currentUser).then((List<Users> list) {
+        setState(() {
+          volunteers = list;
+        });
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,8 +131,8 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                     ],
                   ),
                   onPressed: () {
-                    _repository
-                        .searchAllVolunteers(); // teste buscar voluntario
+                    selectingVolunteers();
+                    // teste buscar voluntario
                   }),
             )),
           )
@@ -122,4 +142,24 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
   @protected
   @mustCallSuper
   void didChangePrevious(Route previousRoute) {}
+
+  ////////////////******************************************/////////////////
+
+  //Método que faz a escolha aleatória da lista de voluntarios e salva um voluntário toda vez que é chamado;
+  selectingVolunteers() {
+    final random = new Random();
+    var i = random.nextInt(volunteers.length);
+    oneVolunteer = Users(
+        uid: volunteers[i].uid,
+        nome: volunteers[i].nome,
+        ajuda: volunteers[i].ajuda,
+        tipo: volunteers[i].tipo);
+
+    print(oneVolunteer.nome);
+    print(oneVolunteer.uid);
+    print(oneVolunteer.ajuda);
+    print(oneVolunteer.tipo);
+
+    return oneVolunteer;
+  }
 }

@@ -134,7 +134,8 @@ class FirebaseMethods {
 
     for (var i = 0; i < querySnapshot.documents.length; i++) {
       volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
-      print(volunteerList);
+      print(volunteerList[i].nome);
+      print(volunteerList[i].tipo);
     }
     return volunteerList;
   }

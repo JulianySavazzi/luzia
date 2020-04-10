@@ -7,6 +7,7 @@ import '../call_screen.dart';
 class PickupScreen extends StatelessWidget {
   final Call call;
   final CallMethods callMethods = CallMethods();
+  static const String id = 'pickup_screen';
 
   PickupScreen({
     @required this.call,

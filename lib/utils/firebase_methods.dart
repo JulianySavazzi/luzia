@@ -12,6 +12,10 @@ class FirebaseMethods {
   GoogleSignIn _googleSignIn = GoogleSignIn();
   static final Firestore firestore = Firestore.instance;
   Users oneVolunteer;
+  List<Users> volunteerList = List<Users>();
+  Users volunteer = Users();
+  final usersRef = Firestore.instance.collection(USERS_COLLECTION);
+  int maxhelp;
 
   //Users class
   Users user = Users();
@@ -146,4 +150,28 @@ class FirebaseMethods {
 //    var i = random.nextInt(volunteerList.length);
 //    receiver = volunteerList[i]; //<<-- return 01 volunteer from the list
 //  }
+
+  //Search max help number
+  Future<List<Users>> getMaxHelp() async {
+    final QuerySnapshot querySnapshot = await usersRef
+        .where("tipo", isEqualTo: "V")
+        .orderBy("ajuda", descending: true)
+        .getDocuments(); //ordena a ajuda da maior para a menor
+    //o primeiro voluntário que ele salva na lista é o que tem o número de ajuda maior
+    for (var i = 0; i < querySnapshot.documents.length; i++) {
+      volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
+      maxhelp = volunteerList[0].ajuda; //salva ajuda máxima na variável
+      print('---------');
+      print('ajuda máxima:'); //mostra ajuda máxima
+      print(maxhelp); //mostra valor da ajuda máxima
+      print('---------');
+      print('voluntário:');
+      print(volunteerList[i].nome);
+      print(volunteerList[i].ajuda);
+      print(volunteerList[i].tipo);
+      print('---------');
+    }
+    return volunteerList;
+  }
+
 }

@@ -26,10 +26,13 @@ class _CallScreenState extends State<CallScreen> { //animações
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text("Ligação efetuada",
-              style: TextStyle(
-                  fontSize: 25,
-                  fontFamily: 'Montserrat',
+            Hero(
+              tag: 'text',
+              child: Text("Ligação efetuada",
+                style: TextStyle(
+                    fontSize: 25,
+                    fontFamily: 'Montserrat',
+                ),
               ),
             ),
             SizedBox(

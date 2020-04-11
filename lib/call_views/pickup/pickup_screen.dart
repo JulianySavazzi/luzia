@@ -24,20 +24,27 @@ class PickupScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                "Você tem uma ligação do Luzia!",
-                style: TextStyle(
-                    fontSize: 25,
-                    fontFamily: 'Montserrat',
-                    fontStyle: FontStyle.italic),
+              Hero(
+                tag: 'text',
+                child: Text(
+                  "Você tem uma ligação do Luzia!",
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontFamily: 'Montserrat',
+                      fontStyle: FontStyle.italic),
+                ),
               ),
               SizedBox(
                 height: 50,
               ),
-              Image.asset(
-                "images/logo.png",
-                height: 100,
-                width: 100,
+              Hero(
+                //Hero animation with tag
+                tag: 'logo',
+                child: Image.asset(
+                  "images/logo.png",
+                  height: 100,
+                  width: 100,
+                ),
               ),
               SizedBox(height: 75),
               Row(

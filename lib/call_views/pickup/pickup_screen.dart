@@ -3,8 +3,8 @@ import 'package:luzia/model/call.dart';
 import 'package:luzia/utils/call_methods.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:flare_flutter/flare_actor.dart';
-import 'package:splashscreen/splashscreen.dart';
+//import 'package:flare_flutter/flare_actor.dart';
+//import 'package:splashscreen/splashscreen.dart';
 
 import '../call_screen.dart';
 
@@ -55,25 +55,6 @@ class PickupScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 75),
-              Container(
-                  height: 100,
-                  width: 100,
-                  child: FlareActor(
-                    "animations/endcall.flr",
-                    animation: "endcall",
-                    fit: BoxFit.contain,
-                  )
-              ),
-              SizedBox(height: 75),
-              Container(
-                  height: 100,
-                  width: 100,
-                  child: FlareActor(
-                    "animations/call.flr",
-                    animation: "call",
-                    fit: BoxFit.contain,
-                  ),
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

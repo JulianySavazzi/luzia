@@ -14,7 +14,7 @@ class CallScreen extends StatefulWidget {
   _CallScreenState createState() => _CallScreenState();
 }
 
-class _CallScreenState extends State<CallScreen> {
+class _CallScreenState extends State<CallScreen> { //animações
   final CallMethods callMethods = CallMethods();
 
   @override
@@ -26,10 +26,22 @@ class _CallScreenState extends State<CallScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text("Ligação efetuada"),
+            Text("Ligação efetuada",
+              style: TextStyle(
+                  fontSize: 25,
+                  fontFamily: 'Montserrat',
+              ),
+            ),
+            SizedBox(
+              height: 50,
+            ),
             MaterialButton(
               color: Colors.red,
-              child: Icon(Icons.call_end, color: Colors.white),
+              child: Icon(
+                Icons.call_end,
+                color: Colors.white,
+                size: 50,),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
               onPressed: () {
                 callMethods.endCall(call: widget.call);
                 Navigator.pop(context);

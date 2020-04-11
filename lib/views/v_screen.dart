@@ -94,7 +94,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
                   alignment: Alignment.bottomCenter,
                   child: RaisedButton(
                       padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-                      //DEFICIENTE VISUAL
+                      //VOLUNTÁRIO
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
                       ),

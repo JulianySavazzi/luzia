@@ -45,6 +45,7 @@ class PickupScreen extends StatelessWidget {
                   IconButton(
                     icon: Icon(Icons.call_end),
                     color: Colors.redAccent,
+                    iconSize: 50,
                     onPressed: () async {
                       await callMethods.endCall(call: call);
                     },
@@ -52,6 +53,7 @@ class PickupScreen extends StatelessWidget {
                   SizedBox(width: 25),
                   IconButton(
                     icon: Icon(Icons.call),
+                    iconSize: 50,
                     color: Colors.green,
                     onPressed: () => Navigator.push(
                         context,

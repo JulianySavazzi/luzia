@@ -19,6 +19,7 @@ class PickupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.cyan.shade100,
         body: Container(
           alignment: Alignment.center,
           padding: EdgeInsets.symmetric(vertical: 100),

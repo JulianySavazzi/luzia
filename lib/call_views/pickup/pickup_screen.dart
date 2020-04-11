@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:luzia/model/call.dart';
 import 'package:luzia/utils/call_methods.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../call_screen.dart';
 
@@ -47,6 +48,11 @@ class PickupScreen extends StatelessWidget {
                     color: Colors.redAccent,
                     iconSize: 50,
                     onPressed: () async {
+                      Fluttertoast.showToast(
+                          msg: "Chamada encerrada!",
+                          toastLength: Toast.LENGTH_LONG,
+                          textColor: Colors.white,
+                          gravity: ToastGravity.CENTER);
                       await callMethods.endCall(call: call);
                     },
                   ),

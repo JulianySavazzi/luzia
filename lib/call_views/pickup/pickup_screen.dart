@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:luzia/model/call.dart';
 import 'package:luzia/utils/call_methods.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 import '../call_screen.dart';
 
@@ -26,9 +27,9 @@ class PickupScreen extends StatelessWidget {
             children: <Widget>[
               Hero(
                 tag: 'text',
-                child: Text(
-                  "Você tem uma ligação do Luzia!",
-                  style: TextStyle(
+                child: ScaleAnimatedTextKit(
+                  text: ["Você tem uma ligação do Luzia!"],
+                  textStyle: TextStyle(
                       fontSize: 25,
                       fontFamily: 'Montserrat',
                       fontStyle: FontStyle.italic),

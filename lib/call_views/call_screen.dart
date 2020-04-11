@@ -21,7 +21,7 @@ class _CallScreenState extends State<CallScreen> { //animações
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.cyan.shade100,
+          backgroundColor: Colors.cyan.shade50,
       body: Container(
         alignment: Alignment.center,
         child: Column(

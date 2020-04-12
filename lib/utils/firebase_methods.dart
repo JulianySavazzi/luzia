@@ -113,7 +113,7 @@ class FirebaseMethods {
         .document(currentUser.uid)
         .setData(user.toMap(user));
   }
-
+  //Adicionando tipo ao usuário
   Future<void> addDv(FirebaseUser currentUser) async {
     user = Users(
       uid: currentUser.uid,

@@ -1,10 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:luzia/model/call.dart';
+import 'package:luzia/model/users.dart';
 import 'package:luzia/utils/call_methods.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:luzia/utils/firebase_methods.dart';
+import 'package:luzia/utils/firebase_repository.dart';
+import 'package:luzia/constants/strings.dart';
 //import 'package:flare_flutter/flare_actor.dart';
-//import 'package:splashscreen/splashscreen.dart';
 
 import '../call_screen.dart';
 
@@ -12,7 +16,45 @@ class PickupScreen extends StatelessWidget {
   final Call call;
   final CallMethods callMethods = CallMethods();
   static const String id = 'pickup_screen';
-  //bool buttonIsPressed = false;
+  //FIREBASE FUNCTIONS
+  FirebaseRepository _repository = FirebaseRepository();
+  var ajuda;
+
+  //Adicionar ajuda ao voluntário que atende ligação
+  void addHelp(){
+    _repository.getCurrentUser().then((FirebaseUser user) async {
+      if(user != null){
+        Users volunteer = await _repository.getUserDetails(user.uid);
+        ajuda = volunteer.ajuda;
+        addHelpToVolunteer(user);
+        print(user.email);
+        print(ajuda);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Houve um erro",
+            toastLength: Toast.LENGTH_LONG,
+            textColor: Colors.red[300],
+            gravity: ToastGravity.BOTTOM);
+      }
+    });
+  }
+
+//Adicionando numero de ajudas ao voluntário
+  Future<void> addHelpToVolunteer(FirebaseUser currentUser) async {
+    Users user = Users(
+      uid: currentUser.uid,
+      nome: currentUser.displayName,
+      email: currentUser.email,
+      tipo: "V",
+      photo: currentUser.photoUrl,
+      ajuda: ajuda+1,
+    );
+    FirebaseMethods.firestore
+        .collection(USERS_COLLECTION)
+        .document(currentUser.uid)
+        .setData(user.toMap(user));
+    print(user.ajuda); //mostrar ajuda
+  }
 
   PickupScreen({
     @required this.call,
@@ -29,7 +71,7 @@ class PickupScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Hero(
+              Hero( //hero animation with tag
                 tag: 'text',
                 child: ScaleAnimatedTextKit(
                   text: ["Você tem uma ligação do Luzia!"],
@@ -69,7 +111,6 @@ class PickupScreen extends StatelessWidget {
                           toastLength: Toast.LENGTH_LONG,
                           textColor: Colors.white,
                           gravity: ToastGravity.CENTER);
-                      //buttonIsPressed = true;
                       await callMethods.endCall(call: call);
                     },
                   ),
@@ -80,7 +121,9 @@ class PickupScreen extends StatelessWidget {
                     iconSize: 50,
                     color: Colors.green,
                     onPressed: () {
-                      //buttonIsPressed = true;
+                      //Adicionar ajuda
+                      //ajuda++;
+                      addHelp(); //adiciona ajuda ao voluntário que atende a ligação
                       Navigator.push(
                           context,
                           MaterialPageRoute(

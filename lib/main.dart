@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:luzia/call_views/pickup/pickup_screen.dart';
 import 'package:luzia/model/users.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/views/dv_screen.dart';
@@ -68,7 +67,7 @@ class _MyAppState extends State<LuziaApp> {
         UsersScreen.id: (context) => UsersScreen(),
         DefVisualScreen.id: (context) => DefVisualScreen(),
         VoluntarioScreen.id: (context) => VoluntarioScreen(),
-        PickupScreen.id: (context) => PickupScreen(),
+        //PickupScreen.id: (context) => PickupScreen(),
       },
     );
   }

@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -52,6 +51,7 @@ class FirebaseMethods {
     } catch (error) {
       print(error);
     }
+    return null;
   }
 
   //Facebook Sig-in
@@ -99,35 +99,36 @@ class FirebaseMethods {
   }
 
   //Adicionando tipo ao usuário
-  Future<void> addVolunteer(FirebaseUser currentUser) async {
+  Future<void> addType(FirebaseUser currentUser, String tipo, int ajuda) async {
     user = Users(
       uid: currentUser.uid,
       nome: currentUser.displayName,
       email: currentUser.email,
-      tipo: "V",
+      tipo: tipo,
       photo: currentUser.photoUrl,
-      ajuda: 0,
+      ajuda: ajuda,
     );
     firestore
         .collection(USERS_COLLECTION)
         .document(currentUser.uid)
         .setData(user.toMap(user));
   }
-  //Adicionando tipo ao usuário
-  Future<void> addDv(FirebaseUser currentUser) async {
-    user = Users(
-      uid: currentUser.uid,
-      nome: currentUser.displayName,
-      email: currentUser.email,
-      tipo: "D",
-      photo: currentUser.photoUrl,
-      ajuda: user.ajuda,
-    );
-    firestore
-        .collection(USERS_COLLECTION)
-        .document(currentUser.uid)
-        .setData(user.toMap(user));
-  }
+
+//  //Adicionando tipo ao usuário
+//  Future<void> addDv(FirebaseUser currentUser, String tipo) async {
+//    user = Users(
+//      uid: currentUser.uid,
+//      nome: currentUser.displayName,
+//      email: currentUser.email,
+//      tipo: tipo,
+//      photo: currentUser.photoUrl,
+//      ajuda: user.ajuda,
+//    );
+//    firestore
+//        .collection(USERS_COLLECTION)
+//        .document(currentUser.uid)
+//        .setData(user.toMap(user));
+//  }
 
   //Search all Volunteers
   Future<List<Users>> searchAllVolunteers(FirebaseUser currentUser) async {
@@ -144,12 +145,6 @@ class FirebaseMethods {
     }
     return volunteerList;
   }
-
-//  selectOneVolunteer() {
-//    final random = new Random();
-//    var i = random.nextInt(volunteerList.length);
-//    receiver = volunteerList[i]; //<<-- return 01 volunteer from the list
-//  }
 
   //Search max help number
   Future<List<Users>> getMaxHelp() async {
@@ -173,5 +168,4 @@ class FirebaseMethods {
     }
     return volunteerList;
   }
-
 }

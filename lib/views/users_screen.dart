@@ -29,6 +29,10 @@ class _UsersScreenState extends State<UsersScreen> {
   bool isLoginPressed = false;
   bool voluntario = false;
 
+  //Variáveis para o tipo e número de ajuda do usuário
+  String tipo = "";
+  int ajuda = 0;
+
   //Route previousRoute = 'login_screen' as Route;
   Route previousRoute;
 
@@ -173,8 +177,10 @@ class _UsersScreenState extends State<UsersScreen> {
                                 ],
                               ),
                               onPressed: () {
+                                tipo = "D";
+                                ajuda = null;
                                 //tela do deficiente visual
-                                addDv();
+                                addType();
                               },
                             ),
                           ),
@@ -204,8 +210,10 @@ class _UsersScreenState extends State<UsersScreen> {
                                 ],
                               ),
                               onPressed: () {
+                                tipo = "V";
+                                ajuda = 0;
                                 //tela do voluntário
-                                addVolunteer();
+                                addType();
                               },
                             ),
                           ),
@@ -225,13 +233,13 @@ class _UsersScreenState extends State<UsersScreen> {
   // ***************************************************************** //
 
 //Método para adicionar voluntário
-  void addVolunteer() {
+  void addType() {
     setState(() {
       isLoginPressed = true;
     });
     _repository.getCurrentUser().then((FirebaseUser user) {
       if (user != null) {
-        authenticateVolunteer(user);
+        authenticateType(user, tipo, ajuda);
       } else {
         Fluttertoast.showToast(
             msg: "Houve um erro",
@@ -242,18 +250,21 @@ class _UsersScreenState extends State<UsersScreen> {
     });
   }
 
-  void authenticateVolunteer(FirebaseUser user) {
+  void authenticateType(FirebaseUser user, String tipo, int ajuda) {
     _repository.authenticateUser(user).then((isNewUser) {
       setState(() {
         isLoginPressed = false;
       });
       if (!isNewUser) {
-        _repository.addVolunteer(user).then((value) {
-          Navigator.pushNamed(context, VoluntarioScreen.id);
-          didChangePrevious(previousRoute);
-          setState(() {
-            voluntario = true;
-          });
+        _repository.addType(user, tipo, ajuda).then((value) {
+          if (ajuda == 0) {
+            Navigator.pushNamed(context, VoluntarioScreen.id);
+            setState(() {
+              voluntario = true;
+            });
+          } else {
+            Navigator.pushNamed(context, DefVisualScreen.id);
+          }
           //return VoluntarioScreen(); não funciona
         });
       } else {
@@ -269,46 +280,46 @@ class _UsersScreenState extends State<UsersScreen> {
 
   //Método para adicionar Dv
 
-  void addDv() {
-    setState(() {
-      isLoginPressed = true;
-    });
-    _repository.getCurrentUser().then((FirebaseUser user) {
-      if (user != null) {
-        authenticateDv(user);
-        setState(() {
-          voluntario = false;
-        });
-      } else {
-        Fluttertoast.showToast(
-            msg: "Houve um erro",
-            toastLength: Toast.LENGTH_LONG,
-            textColor: Colors.red[300],
-            gravity: ToastGravity.BOTTOM);
-      }
-    });
-  }
-
-  void authenticateDv(FirebaseUser user) {
-    _repository.authenticateUser(user).then((isNewUser) {
-      setState(() {
-        isLoginPressed = false;
-      });
-      if (!isNewUser) {
-        _repository.addDv(user).then((value) {
-          Navigator.pushNamed(context, DefVisualScreen.id);
-          didChangePrevious(previousRoute); //não sei se realemte funcionou
-          //return DefVisualScreen(); não funciona
-        });
-      } else {
-        Fluttertoast.showToast(
-            msg: "Erro ao adicionar tipo de usuário",
-            toastLength: Toast.LENGTH_LONG,
-            textColor: Colors.red[300],
-            gravity: ToastGravity.BOTTOM);
-      }
-    });
-  }
+//  void addDv() {
+//    setState(() {
+//      isLoginPressed = true;
+//    });
+//    _repository.getCurrentUser().then((FirebaseUser user) {
+//      if (user != null) {
+//        authenticateDv(user, tipo);
+//        setState(() {
+//          voluntario = false;
+//        });
+//      } else {
+//        Fluttertoast.showToast(
+//            msg: "Houve um erro",
+//            toastLength: Toast.LENGTH_LONG,
+//            textColor: Colors.red[300],
+//            gravity: ToastGravity.BOTTOM);
+//      }
+//    });
+//  }
+//
+//  void authenticateDv(FirebaseUser user, String tipo) {
+//    _repository.authenticateUser(user).then((isNewUser) {
+//      setState(() {
+//        isLoginPressed = false;
+//      });
+//      if (!isNewUser) {
+//        _repository.addDv(user, tipo).then((value) {
+//          Navigator.pushNamed(context, DefVisualScreen.id);
+//          didChangePrevious(previousRoute); //não sei se realemte funcionou
+//          //return DefVisualScreen(); não funciona
+//        });
+//      } else {
+//        Fluttertoast.showToast(
+//            msg: "Erro ao adicionar tipo de usuário",
+//            toastLength: Toast.LENGTH_LONG,
+//            textColor: Colors.red[300],
+//            gravity: ToastGravity.BOTTOM);
+//      }
+//    });
+//  }
 
   @protected
   @mustCallSuper

@@ -24,6 +24,7 @@ class Call {
     callMap["receiver_name"] = call.receiverName;
     callMap["channel_id"] = call.channelId;
     callMap["has_dialled"] = call.hasDialled;
+    return callMap;
   }
 
   //from Map

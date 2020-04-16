@@ -23,14 +23,14 @@ class FirebaseRepository {
       _firebaseMethods.addDataToDb(user);
 
   //Adicionando tipo
-  Future<void> addVolunteer(FirebaseUser user) =>
-      _firebaseMethods.addVolunteer(user);
+  Future<void> addType(FirebaseUser user, String tipo, int ajuda) =>
+      _firebaseMethods.addType(user, tipo, ajuda);
 
-  Future<void> addDv(FirebaseUser user) => _firebaseMethods.addDv(user);
+//  Future<void> addDv(FirebaseUser user, String tipo) =>
+//      _firebaseMethods.addDv(user, tipo);
 
   Future<List<Users>> searchAllVolunteers(FirebaseUser currentUser) =>
       _firebaseMethods.searchAllVolunteers(currentUser);
 
   Future<List<Users>> getMaxHelp() => _firebaseMethods.getMaxHelp();
-
 }

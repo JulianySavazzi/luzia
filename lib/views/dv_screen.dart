@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:luzia/model/users.dart';
+import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 
 //Tela para usuários com deficiência visual
@@ -29,6 +30,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
 
   List<Users> volunteers;
   Users oneVolunteer;
+  Users sender;
 
   @override
   void initState() {
@@ -37,6 +39,9 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
     _repository.getCurrentUser().then((FirebaseUser currentUser) {
       _repository.searchAllVolunteers(currentUser).then((List<Users> list) {
         setState(() {
+          sender = Users(
+            uid: currentUser.uid,
+          );
           volunteers = list;
         });
       });
@@ -131,8 +136,8 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                     ],
                   ),
                   onPressed: () {
-                    _repository.getMaxHelp(); //teste buscar ajuda máxima
-                    selectingVolunteers();
+                    CallUtils.dial(
+                        from: sender, to: oneVolunteer, context: context);
                     // teste buscar voluntario
                   }),
             )),
@@ -155,11 +160,6 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
         nome: volunteers[i].nome,
         ajuda: volunteers[i].ajuda,
         tipo: volunteers[i].tipo);
-
-    print(oneVolunteer.nome);
-    print(oneVolunteer.uid);
-    print(oneVolunteer.ajuda);
-    print(oneVolunteer.tipo);
 
     return oneVolunteer;
   }

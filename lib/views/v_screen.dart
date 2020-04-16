@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:luzia/call_views/pickup/pickup_screen.dart';
-import 'package:luzia/utils/firebase_repository.dart';
 
 //Tela para voluntários
 
@@ -20,9 +18,8 @@ class VoluntarioScreen extends StatefulWidget {
 //o link do tutorial está no fichamento
 
 class _VoluntarioScreenState extends State<VoluntarioScreen> {
-
   Route previousRoute;
-  FirebaseRepository _repository = FirebaseRepository();
+  //FirebaseRepository _repository = FirebaseRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +90,8 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: RaisedButton(
-                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 0),
                       //VOLUNTÁRIO
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
@@ -113,7 +111,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
                         ],
                       ),
                       onPressed: () {
-                        Navigator.pushNamed(context, PickupScreen.id);
+                        //Navigator.pushNamed(context, PickupScreen.id);
                       }),
                 ),
               ),
@@ -126,5 +124,5 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
 
   @protected
   @mustCallSuper
-  void didChangePrevious(Route previousRoute){}
+  void didChangePrevious(Route previousRoute) {}
 }

@@ -29,8 +29,8 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
   FirebaseRepository _repository = FirebaseRepository();
 
   List<Users> volunteers;
-  Users oneVolunteer;
-  Users sender;
+  Users oneVolunteer = new Users();
+  Users sender = new Users();
 
   @override
   void initState() {
@@ -152,15 +152,15 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
   ////////////////******************************************/////////////////
 
   //Método que faz a escolha aleatória da lista de voluntarios e salva um voluntário toda vez que é chamado;
-  selectingVolunteers() {
+  Users selectingVolunteers(Users volunteer) {
     final random = new Random();
     var i = random.nextInt(volunteers.length);
-    oneVolunteer = Users(
+    volunteer = Users(
         uid: volunteers[i].uid,
         nome: volunteers[i].nome,
         ajuda: volunteers[i].ajuda,
         tipo: volunteers[i].tipo);
 
-    return oneVolunteer;
+    return volunteer = oneVolunteer;
   }
 }

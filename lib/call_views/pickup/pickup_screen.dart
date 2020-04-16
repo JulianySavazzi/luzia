@@ -14,47 +14,6 @@ import '../call_screen.dart';
 
 class PickupScreen extends StatelessWidget {
   final Call call;
-  final CallMethods callMethods = CallMethods();
-  static const String id = 'pickup_screen';
-  //FIREBASE FUNCTIONS
-  FirebaseRepository _repository = FirebaseRepository();
-  var ajuda;
-
-  //Adicionar ajuda ao voluntário que atende ligação
-  void addHelp(){
-    _repository.getCurrentUser().then((FirebaseUser user) async {
-      if(user != null){
-        Users volunteer = await _repository.getUserDetails(user.uid);
-        ajuda = volunteer.ajuda;
-        addHelpToVolunteer(user);
-        print(user.email);
-        print(ajuda);
-      } else {
-        Fluttertoast.showToast(
-            msg: "Houve um erro",
-            toastLength: Toast.LENGTH_LONG,
-            textColor: Colors.red[300],
-            gravity: ToastGravity.BOTTOM);
-      }
-    });
-  }
-
-//Adicionando numero de ajudas ao voluntário
-  Future<void> addHelpToVolunteer(FirebaseUser currentUser) async {
-    Users user = Users(
-      uid: currentUser.uid,
-      nome: currentUser.displayName,
-      email: currentUser.email,
-      tipo: "V",
-      photo: currentUser.photoUrl,
-      ajuda: ajuda+1,
-    );
-    FirebaseMethods.firestore
-        .collection(USERS_COLLECTION)
-        .document(currentUser.uid)
-        .setData(user.toMap(user));
-    print(user.ajuda); //mostrar ajuda
-  }
 
   PickupScreen({
     @required this.call,
@@ -71,7 +30,8 @@ class PickupScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Hero( //hero animation with tag
+              Hero(
+                //hero animation with tag
                 tag: 'text',
                 child: ScaleAnimatedTextKit(
                   text: ["Você tem uma ligação do Luzia!"],
@@ -106,6 +66,7 @@ class PickupScreen extends StatelessWidget {
                     color: Colors.redAccent,
                     iconSize: 50,
                     onPressed: () async {
+                      await callMethods.endCall(call: call);
                       Fluttertoast.showToast(
                           msg: "Chamada encerrada!",
                           toastLength: Toast.LENGTH_LONG,
@@ -123,7 +84,7 @@ class PickupScreen extends StatelessWidget {
                     onPressed: () {
                       //Adicionar ajuda
                       //ajuda++;
-                      addHelp(); //adiciona ajuda ao voluntário que atende a ligação
+                      //addHelp(); //adiciona ajuda ao voluntário que atende a ligação
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -138,5 +99,47 @@ class PickupScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  final CallMethods callMethods = CallMethods();
+  static const String id = 'pickup_screen';
+  //FIREBASE FUNCTIONS
+  FirebaseRepository _repository = FirebaseRepository();
+  var ajuda;
+
+  //Adicionar ajuda ao voluntário que atende ligação
+  void addHelp() {
+    _repository.getCurrentUser().then((FirebaseUser user) async {
+      if (user != null) {
+        Users volunteer = await _repository.getUserDetails(user.uid);
+        ajuda = volunteer.ajuda;
+        addHelpToVolunteer(user);
+        print(user.email);
+        print(ajuda);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Houve um erro",
+            toastLength: Toast.LENGTH_LONG,
+            textColor: Colors.red[300],
+            gravity: ToastGravity.BOTTOM);
+      }
+    });
+  }
+
+//Adicionando numero de ajudas ao voluntário
+  Future<void> addHelpToVolunteer(FirebaseUser currentUser) async {
+    Users user = Users(
+      uid: currentUser.uid,
+      nome: currentUser.displayName,
+      email: currentUser.email,
+      tipo: "V",
+      photo: currentUser.photoUrl,
+      ajuda: ajuda + 1,
+    );
+    FirebaseMethods.firestore
+        .collection(USERS_COLLECTION)
+        .document(currentUser.uid)
+        .setData(user.toMap(user));
+    print(user.ajuda); //mostrar ajuda
   }
 }

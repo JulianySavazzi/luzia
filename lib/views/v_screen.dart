@@ -18,7 +18,7 @@ class VoluntarioScreen extends StatefulWidget {
 //o link do tutorial está no fichamento
 
 class _VoluntarioScreenState extends State<VoluntarioScreen> {
-  Route previousRoute;
+  //Route previousRoute;
   //FirebaseRepository _repository = FirebaseRepository();
 
   @override
@@ -122,7 +122,8 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
     );
   }
 
-  @protected
-  @mustCallSuper
-  void didChangePrevious(Route previousRoute) {}
+//  @protected
+//  @mustCallSuper
+//  void didChangePrevious(Route previousRoute) {}
+
 }

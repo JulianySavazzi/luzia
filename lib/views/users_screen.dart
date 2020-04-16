@@ -34,7 +34,7 @@ class _UsersScreenState extends State<UsersScreen> {
   int ajuda = 0;
 
   //Route previousRoute = 'login_screen' as Route;
-  Route previousRoute;
+  //Route previousRoute;
 
   @override
   Widget build(BuildContext context) {
@@ -232,7 +232,7 @@ class _UsersScreenState extends State<UsersScreen> {
 
   // ***************************************************************** //
 
-//Método para adicionar voluntário
+//Método para adicionar tipo de usuário
   void addType() {
     setState(() {
       isLoginPressed = true;
@@ -265,7 +265,6 @@ class _UsersScreenState extends State<UsersScreen> {
           } else {
             Navigator.pushNamed(context, DefVisualScreen.id);
           }
-          //return VoluntarioScreen(); não funciona
         });
       } else {
         Fluttertoast.showToast(
@@ -321,7 +320,7 @@ class _UsersScreenState extends State<UsersScreen> {
 //    });
 //  }
 
-  @protected
-  @mustCallSuper
-  void didChangePrevious(Route previousRoute) {}
+//  @protected
+//  @mustCallSuper
+//  void didChangePrevious(Route previousRoute) {}
 }

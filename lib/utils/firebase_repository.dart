@@ -26,9 +26,6 @@ class FirebaseRepository {
   Future<void> addType(FirebaseUser user, String tipo, int ajuda) =>
       _firebaseMethods.addType(user, tipo, ajuda);
 
-//  Future<void> addDv(FirebaseUser user, String tipo) =>
-//      _firebaseMethods.addDv(user, tipo);
-
   Future<List<Users>> searchAllVolunteers(FirebaseUser currentUser) =>
       _firebaseMethods.searchAllVolunteers(currentUser);
 

@@ -41,6 +41,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
         setState(() {
           sender = Users(
             uid: currentUser.uid,
+            nome: currentUser.displayName,
           );
           volunteers = list;
         });
@@ -136,6 +137,8 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                     ],
                   ),
                   onPressed: () {
+                    selectingVolunteers(
+                        oneVolunteer); // sempre tem que chamar este método antes, senão ele nao pega random
                     CallUtils.dial(
                         from: sender, to: oneVolunteer, context: context);
                     // teste buscar voluntario
@@ -161,6 +164,8 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
         ajuda: volunteers[i].ajuda,
         tipo: volunteers[i].tipo);
 
-    return volunteer = oneVolunteer;
+    oneVolunteer = volunteer;
+
+    return volunteer;
   }
 }

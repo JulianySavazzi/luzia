@@ -114,22 +114,6 @@ class FirebaseMethods {
         .setData(user.toMap(user));
   }
 
-//  //Adicionando tipo ao usuário
-//  Future<void> addDv(FirebaseUser currentUser, String tipo) async {
-//    user = Users(
-//      uid: currentUser.uid,
-//      nome: currentUser.displayName,
-//      email: currentUser.email,
-//      tipo: tipo,
-//      photo: currentUser.photoUrl,
-//      ajuda: user.ajuda,
-//    );
-//    firestore
-//        .collection(USERS_COLLECTION)
-//        .document(currentUser.uid)
-//        .setData(user.toMap(user));
-//  }
-
   //Search all Volunteers
   Future<List<Users>> searchAllVolunteers(FirebaseUser currentUser) async {
     final usersRef = Firestore.instance.collection(USERS_COLLECTION);

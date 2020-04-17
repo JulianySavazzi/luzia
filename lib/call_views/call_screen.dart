@@ -14,14 +14,15 @@ class CallScreen extends StatefulWidget {
   _CallScreenState createState() => _CallScreenState();
 }
 
-class _CallScreenState extends State<CallScreen> { //animações
+class _CallScreenState extends State<CallScreen> {
+  //animações
   final CallMethods callMethods = CallMethods();
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.cyan.shade50,
+      backgroundColor: Colors.cyan.shade50,
       body: Container(
         alignment: Alignment.center,
         child: Column(
@@ -29,10 +30,11 @@ class _CallScreenState extends State<CallScreen> { //animações
           children: <Widget>[
             Hero(
               tag: 'text',
-              child: Text("Ligação efetuada",
+              child: Text(
+                "Ligação efetuada",
                 style: TextStyle(
-                    fontSize: 25,
-                    fontFamily: 'Montserrat',
+                  fontSize: 25,
+                  fontFamily: 'Montserrat',
                 ),
               ),
             ),
@@ -44,7 +46,9 @@ class _CallScreenState extends State<CallScreen> { //animações
               child: Icon(
                 Icons.call_end,
                 color: Colors.white,
-                size: 50,),
+                semanticLabel: 'Finalizar Ligação',
+                size: 50,
+              ),
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
               onPressed: () {
                 callMethods.endCall(call: widget.call);

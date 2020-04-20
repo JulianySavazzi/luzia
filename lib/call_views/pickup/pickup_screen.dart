@@ -9,7 +9,6 @@ import 'package:luzia/utils/firebase_methods.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/constants/strings.dart';
 import 'package:ringtone/ringtone.dart';
-
 import '../call_screen.dart';
 
 class PickupScreen extends StatelessWidget {
@@ -81,7 +80,7 @@ class PickupScreen extends StatelessWidget {
                     color: Colors.redAccent,
                     iconSize: 50,
                     onPressed: () async {
-                      _isPlaying = false;
+                      _isPlaying = true;
                       await callMethods.endCall(call: call);
                       Fluttertoast.showToast(
                           msg: "Chamada encerrada!",
@@ -98,7 +97,7 @@ class PickupScreen extends StatelessWidget {
                     iconSize: 50,
                     color: Colors.green,
                     onPressed: () {
-                      _isPlaying = false;
+                      _isPlaying = true;
                       //Adicionar ajuda
                       //ajuda++;
                       //addHelp(); //adiciona ajuda ao voluntário que atende a ligação

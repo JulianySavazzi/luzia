@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:link/link.dart';
 import 'package:luzia/call_views/pickup/pickup_layout.dart';
 
 //Tela para voluntários
@@ -92,30 +93,25 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
               child: Center(
                 child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: RaisedButton(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-                      //VOLUNTÁRIO
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      color: Colors.lightGreenAccent[100],
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          //SizedBox(width: 10.0),
-                          Text(
-                            'Sou voluntário',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Montserrat',
-                                fontSize: 20.0),
-                          )
-                        ],
-                      ),
-                      onPressed: () {
-                        //Navigator.pushNamed(context, PickupScreen.id);
-                      }),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      //SizedBox(width: 10.0),
+                      Link(
+                        child: Text(
+                          'Sou voluntário',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Montserrat',
+                              fontStyle: FontStyle.italic,
+                              decoration: TextDecoration.underline,
+                              fontSize: 20.0),
+                        ),
+                        url: "https://drive.google.com/file/d/1j_NJcvyvOFpj_AqtHwHatdfPfhQ2iEPI/view?usp=sharing",
+                        //url: "https://youtube.com",
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

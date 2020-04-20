@@ -14,6 +14,11 @@ import '../call_screen.dart';
 
 class PickupScreen extends StatelessWidget {
   final Call call;
+  final CallMethods callMethods = CallMethods();
+  static const String id = 'pickup_screen';
+  //FIREBASE FUNCTIONS
+  FirebaseRepository _repository = FirebaseRepository();
+  var ajuda = 0;
 
   PickupScreen({
     @required this.call,
@@ -100,12 +105,6 @@ class PickupScreen extends StatelessWidget {
       ),
     );
   }
-
-  final CallMethods callMethods = CallMethods();
-  static const String id = 'pickup_screen';
-  //FIREBASE FUNCTIONS
-  FirebaseRepository _repository = FirebaseRepository();
-  var ajuda;
 
   //Adicionar ajuda ao voluntário que atende ligação
   void addHelp() {

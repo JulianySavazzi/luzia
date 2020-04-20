@@ -6,6 +6,9 @@ class CallMethods {
   final CollectionReference callCollection =
       Firestore.instance.collection(CALL_COLLECTION);
 
+  Stream<DocumentSnapshot> callStream({String uid}) =>
+      callCollection.document(uid).snapshots();
+
   //Função para realizar a ligação, aqui deve ser inserido o algoritmo
   Future<bool> makeCall({Call call}) async {
     try {

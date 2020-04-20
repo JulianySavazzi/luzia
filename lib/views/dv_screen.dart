@@ -3,10 +3,13 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:luzia/model/users.dart';
+import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
+import 'package:provider/provider.dart';
 
 //Tela para usuários com deficiência visual
 
@@ -32,9 +35,18 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
   Users oneVolunteer = new Users();
   Users sender = new Users();
 
+  //Add UserProvider to refresh users
+  UserProvider userProvider;
+
   @override
   void initState() {
     super.initState();
+
+    //Add UsersProviders refresh, using this to
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+      userProvider.refreshUser();
+    });
 
     _repository.getCurrentUser().then((FirebaseUser currentUser) {
       _repository.searchAllVolunteers(currentUser).then((List<Users> list) {

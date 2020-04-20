@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:luzia/call_views/pickup/pickup_layout.dart';
 
 //Tela para voluntários
 
@@ -23,7 +24,9 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PickupLayout(
+        //mudança para pickuplayout, integração com chamada
+        scaffold: Scaffold(
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.transparent,
@@ -119,7 +122,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
           ),
         ]),
       ),
-    );
+    ));
   }
 
 //  @protected

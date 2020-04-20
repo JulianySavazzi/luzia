@@ -26,6 +26,15 @@ class FirebaseMethods {
     return currentUser;
   }
 
+  Future<Users> getUser() async {
+    FirebaseUser currentUser = await getCurrentUser();
+
+    DocumentSnapshot documentSnapshot =
+        await usersRef.document(currentUser.uid).get();
+
+    return Users.fromMap(documentSnapshot.data);
+  }
+
   // Adding this method to retrieve user details from firebase using just uid
   Future<Users> getUserDetails(String uid) async {
     DocumentSnapshot documentSnapshot =

@@ -30,4 +30,6 @@ class FirebaseRepository {
       _firebaseMethods.searchAllVolunteers(currentUser);
 
   Future<List<Users>> getMaxHelp() => _firebaseMethods.getMaxHelp();
+
+  Future<Users> getUser() => _firebaseMethods.getUser();
 }

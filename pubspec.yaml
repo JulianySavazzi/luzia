@@ -26,6 +26,7 @@ dependencies:
   random_string: ^2.0.1
   animated_text_kit: ^2.0.0
   flare_flutter: ^2.0.3
+  provider: ^4.0.5
 
 dev_dependencies:
   flutter_test:

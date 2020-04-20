@@ -437,13 +437,13 @@ SPEC CHECKSUMS:
   AgoraRtcEngine_iOS_Crypto: c2bca616406c6dda9ae254d59637a18ba0fae8f0
   AppAuth: 73574f3013a1e65b9601a3ddc8b3158cce68c09d
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
-  cloud_firestore: 31454d48df21f3e1a900015e36143c0d46a304b7
+  cloud_firestore: 56ea1a42d4a4b3c9cf22e0e0f73140b5d07376a8
   cloud_firestore_web: 9ec3dc7f5f98de5129339802d491c1204462bfec
   FBSDKCoreKit: e7dcac0aabcfb09d0166998edd95fe3b05a0ce5d
   FBSDKLoginKit: 1b0cf04df0370b37404213157b060d6666ede814
   Firebase: f378c80340dd41c0ad0914af740c021eb282a04b
   firebase_analytics: dacdcfc524d722fff13dcff942f0dfa47e6be567
-  firebase_auth: 4ee3a54d3f09434c508c284a62f895a741a30637
+  firebase_auth: f8287325aae894aff045dff38bf0667cbeb49563
   firebase_auth_web: 0955c07bcc06e84af76b9d4e32e6f31518f2d7de
   firebase_core: 0d8be0e0d14c4902953aeb5ac5d7316d1fe4b978
   firebase_core_web: d501d8b946b60c8af265428ce483b0fff5ad52d1

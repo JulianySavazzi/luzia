@@ -8,6 +8,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:luzia/utils/firebase_methods.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/constants/strings.dart';
+import 'package:ringtone/ringtone.dart';
 //import 'package:flare_flutter/flare_actor.dart';
 
 import '../call_screen.dart';
@@ -20,12 +21,23 @@ class PickupScreen extends StatelessWidget {
   FirebaseRepository _repository = FirebaseRepository();
   var ajuda = 0;
 
+  bool _isPlaying = false;
+
+  _playRingtone() async {
+    //Starting the ringtone sound
+    if (_isPlaying) {
+      Ringtone.stop();
+    }
+    Ringtone.play();
+  }
+
   PickupScreen({
     @required this.call,
   });
 
   @override
   Widget build(BuildContext context) {
+    _playRingtone(); //start ringtone
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.cyan.shade50,
@@ -71,6 +83,9 @@ class PickupScreen extends StatelessWidget {
                     color: Colors.redAccent,
                     iconSize: 50,
                     onPressed: () async {
+                      if (_isPlaying) {
+                        Ringtone.stop();
+                      }
                       await callMethods.endCall(call: call);
                       Fluttertoast.showToast(
                           msg: "Chamada encerrada!",
@@ -90,6 +105,9 @@ class PickupScreen extends StatelessWidget {
                       //Adicionar ajuda
                       //ajuda++;
                       //addHelp(); //adiciona ajuda ao voluntário que atende a ligação
+                      if (_isPlaying) {
+                        Ringtone.stop();
+                      }
                       Navigator.push(
                           context,
                           MaterialPageRoute(

@@ -107,8 +107,9 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
                               decoration: TextDecoration.underline,
                               fontSize: 20.0),
                         ),
-                        url: "https://drive.google.com/file/d/1j_NJcvyvOFpj_AqtHwHatdfPfhQ2iEPI/view?usp=sharing",
+                        //url: "https://drive.google.com/file/d/1j_NJcvyvOFpj_AqtHwHatdfPfhQ2iEPI/view?usp=sharing",
                         //url: "https://youtube.com",
+                        url: "https://youtu.be/qyuHeOWcsOQ",
                       )
                     ],
                   ),

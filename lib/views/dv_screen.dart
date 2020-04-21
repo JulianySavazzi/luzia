@@ -61,6 +61,21 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
     });
   }
 
+  //Método que faz a escolha aleatória da lista de voluntarios e salva um voluntário toda vez que é chamado;
+  Users selectingVolunteers(Users volunteer) {
+    final random = new Random();
+    var i = random.nextInt(volunteers.length);
+    volunteer = Users(
+        uid: volunteers[i].uid,
+        nome: volunteers[i].nome,
+        ajuda: volunteers[i].ajuda,
+        tipo: volunteers[i].tipo);
+
+    oneVolunteer = volunteer;
+
+    return volunteer;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,7 +169,9 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                   await Permissions.cameraAndMicrophonePermissionsGranted()
                       ? CallUtils.dial(
                     from: sender,
-                    to: sender,
+                    //to: sender, ERRO TAVA AQUI
+                    //estava chamando o sender e  não o voluntário
+                    to: oneVolunteer, //chama voluntário
                     context: context,
                   ) : {};
                 },
@@ -167,21 +184,4 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
 //  @protected
 //  @mustCallSuper
 //  void didChangePrevious(Route previousRoute) {}
-
-  ////////////////******************************************/////////////////
-
-  //Método que faz a escolha aleatória da lista de voluntarios e salva um voluntário toda vez que é chamado;
-  Users selectingVolunteers(Users volunteer) {
-    final random = new Random();
-    var i = random.nextInt(volunteers.length);
-    volunteer = Users(
-        uid: volunteers[i].uid,
-        nome: volunteers[i].nome,
-        ajuda: volunteers[i].ajuda,
-        tipo: volunteers[i].tipo);
-
-    oneVolunteer = volunteer;
-
-    return volunteer;
-  }
 }

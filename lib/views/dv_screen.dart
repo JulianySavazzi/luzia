@@ -1,11 +1,11 @@
 import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:luzia/model/users.dart';
+import 'package:luzia/utils/permissions.dart';
 import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
@@ -129,32 +129,34 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                 child: Align(
               alignment: Alignment.bottomCenter,
               child: RaisedButton(
-                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-                  //DEFICIENTE VISUAL
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  color: Colors.lightGreenAccent[100],
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      //SizedBox(width: 10.0),
-                      Text(
-                        'Ligar para voluntário',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: 'Montserrat',
-                            fontSize: 20.0),
-                      )
-                    ],
-                  ),
-                  onPressed: () {
-                    selectingVolunteers(
-                        oneVolunteer); // sempre tem que chamar este método antes, senão ele nao pega random
-                    CallUtils.dial(
-                        from: sender, to: oneVolunteer, context: context);
-                    // teste buscar voluntario
-                  }),
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+                //DEFICIENTE VISUAL
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                color: Colors.lightGreenAccent[100],
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    //SizedBox(width: 10.0),
+                    Text(
+                      'Ligar para voluntário',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'Montserrat',
+                          fontSize: 20.0),
+                    )
+                  ],
+                ),
+                onPressed: () async =>
+                    await Permissions.cameraAndMicrophonePermissionsGranted()
+                        ? CallUtils.dial(
+                            from: sender,
+                            to: sender,
+                            context: context,
+                          )
+                        : {},
+              ),
             )),
           )
         ])));

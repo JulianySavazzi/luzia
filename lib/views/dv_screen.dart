@@ -148,14 +148,16 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                     )
                   ],
                 ),
-                onPressed: () async =>
-                    await Permissions.cameraAndMicrophonePermissionsGranted()
-                        ? CallUtils.dial(
-                            from: sender,
-                            to: sender,
-                            context: context,
-                          )
-                        : {},
+                onPressed: () async  {
+                  selectingVolunteers(
+                      oneVolunteer); // sempre tem que chamar este método antes, senão ele nao pega random
+                  await Permissions.cameraAndMicrophonePermissionsGranted()
+                      ? CallUtils.dial(
+                    from: sender,
+                    to: sender,
+                    context: context,
+                  ) : {};
+                },
               ),
             )),
           )

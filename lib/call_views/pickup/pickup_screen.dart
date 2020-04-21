@@ -26,7 +26,7 @@ class PickupScreen extends StatelessWidget {
     if (_isPlaying) {
       FlutterRingtonePlayer.stop(); //tocar
     }
-    FlutterRingtonePlayer.play(); //parar
+    FlutterRingtonePlayer.playRingtone(); //parar
   }
 
   PickupScreen({

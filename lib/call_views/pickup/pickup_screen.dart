@@ -9,7 +9,7 @@ import 'package:luzia/utils/firebase_methods.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/constants/strings.dart';
 import 'package:luzia/utils/permissions.dart';
-import 'package:ringtone/ringtone.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import '../call_screen.dart';
 
 class PickupScreen extends StatelessWidget {
@@ -24,9 +24,9 @@ class PickupScreen extends StatelessWidget {
   _playRingtone() async {
     //Starting the ringtone sound
     if (_isPlaying) {
-      Ringtone.stop();
+      FlutterRingtonePlayer.stop(); //tocar
     }
-    Ringtone.play();
+    FlutterRingtonePlayer.play(); //parar
   }
 
   PickupScreen({

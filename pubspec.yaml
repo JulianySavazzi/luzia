@@ -27,7 +27,7 @@ dependencies:
   animated_text_kit: ^2.0.0
   flare_flutter: ^2.0.3
   provider: ^4.0.5
-  ringtone: ^0.0.2
+  flutter_ringtone_player: ^2.0.0
 
 dev_dependencies:
   flutter_test:

@@ -24,9 +24,9 @@ class PickupScreen extends StatelessWidget {
   _playRingtone() async {
     //Starting the ringtone sound
     if (_isPlaying) {
-      FlutterRingtonePlayer.stop(); //tocar
+      FlutterRingtonePlayer.stop(); //parar
     }
-    FlutterRingtonePlayer.playRingtone(); //parar
+    FlutterRingtonePlayer.playRingtone(); //tocar
   }
 
   PickupScreen({

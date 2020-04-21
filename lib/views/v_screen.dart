@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:link/link.dart';
 import 'package:luzia/call_views/pickup/pickup_layout.dart';
 
 //Tela para voluntários
@@ -21,6 +22,46 @@ class VoluntarioScreen extends StatefulWidget {
 class _VoluntarioScreenState extends State<VoluntarioScreen> {
   //Route previousRoute;
   //FirebaseRepository _repository = FirebaseRepository();
+
+  int _selectedIndex = 0; //índice do item
+
+  static const TextStyle optionStyle =
+      TextStyle(color: Colors.black, fontFamily: 'Montserrat', fontSize: 20.0);
+
+  static const List<Widget> _widgetOptions = <Widget>[
+    //Lista de itens do ButtomNavigatorBar
+    //item 1
+    Link(
+      child: Text(
+        'Sou voluntário',
+        style: TextStyle(
+            color: Colors.black,
+            fontFamily: 'Montserrat',
+            fontStyle: FontStyle.italic,
+            decoration: TextDecoration.underline,
+            fontSize: 20.0),
+      ),
+      //url: "https://drive.google.com/file/d/1j_NJcvyvOFpj_AqtHwHatdfPfhQ2iEPI/view?usp=sharing",
+      url: "https://youtube.com",
+      //url: "https://drive.google.com/file/d/1wHwlMOPKEBJM11MLQBfXIWNfYD7-0SNS/view?usp=sharing",
+    ),
+    //item 2
+    Text(
+      'Sou voluntário', //Texto que aparece na tela
+      style: optionStyle,
+    ),
+    //item 3
+    Text(
+      'Como usar o Luzia', //Texto que aparece na tela
+      style: optionStyle,
+    ),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index; //índice do item selecionado
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,41 +127,49 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
                   )
                 ]),
               )),
+          Center(
+            child: _widgetOptions.elementAt(_selectedIndex),
+          ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
             child: Container(
               child: Center(
                 child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: RaisedButton(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-                      //VOLUNTÁRIO
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      color: Colors.lightGreenAccent[100],
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          //SizedBox(width: 10.0),
-                          Text(
-                            'Sou voluntário',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Montserrat',
-                                fontSize: 20.0),
-                          )
-                        ],
-                      ),
-                      onPressed: () {
-                        //Navigator.pushNamed(context, PickupScreen.id);
-                      }),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      //SizedBox(width: 10.0),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
         ]),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            title: Text('Início'),
+            backgroundColor: Colors.black,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            title: Text('Voluntário'),
+            backgroundColor: Colors.black,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.help),
+            title: Text('Ajuda'),
+            backgroundColor: Colors.black,
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.lightGreenAccent.shade700,
+        onTap: _onItemTapped,
+        backgroundColor: Colors.cyan.shade100,
       ),
     ));
   }

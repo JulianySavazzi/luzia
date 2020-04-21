@@ -256,6 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     fontSize: 12,
                                     fontFamily: 'Montserrat',
                                     fontStyle: FontStyle.italic,
+                                    decoration: TextDecoration.underline,
                                     color: Colors.black,
                                   ),
                                 ),

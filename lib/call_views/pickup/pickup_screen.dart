@@ -81,7 +81,10 @@ class PickupScreen extends StatelessWidget {
                     color: Colors.redAccent,
                     iconSize: 50,
                     onPressed: () async {
-                      _isPlaying = true;
+                      //_isPlaying = true;
+                      if (_isPlaying) {
+                        FlutterRingtonePlayer.stop();
+                      }
                       await callMethods.endCall(call: call);
                       Fluttertoast.showToast(
                           msg: "Chamada encerrada!",
@@ -93,24 +96,28 @@ class PickupScreen extends StatelessWidget {
                   ),
                   SizedBox(width: 25),
                   IconButton(
-                    tooltip: 'Atender chamada',
-                    icon: Icon(Icons.call),
-                    iconSize: 50,
-                    color: Colors.green,
-                    onPressed: () async => await Permissions
-                            .cameraAndMicrophonePermissionsGranted()
-                        ?
-                        //Adicionar ajuda
-                        //ajuda++;
-                        //addHelp(); //adiciona ajuda ao voluntário que atende a ligação
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CallScreen(call: call),
-                            ),
-                          )
-                        : {},
-                  ),
+                      tooltip: 'Atender chamada',
+                      icon: Icon(Icons.call),
+                      iconSize: 50,
+                      color: Colors.green,
+                      onPressed: () async {
+                        if(_isPlaying){
+                          FlutterRingtonePlayer.stop();
+                        }
+                        await Permissions
+                                .cameraAndMicrophonePermissionsGranted()
+                            ?
+                            //Adicionar ajuda
+                            //ajuda++;
+                            //addHelp(); //adiciona ajuda ao voluntário que atende a ligação
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CallScreen(call: call),
+                                ),
+                              )
+                            : {};
+                      }),
                 ],
               ),
             ],

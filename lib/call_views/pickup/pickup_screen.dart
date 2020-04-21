@@ -8,9 +8,8 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:luzia/utils/firebase_methods.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/constants/strings.dart';
-import 'package:ringtone/ringtone.dart';
-//import 'package:flare_flutter/flare_actor.dart';
-
+import 'package:luzia/utils/permissions.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import '../call_screen.dart';
 
 class PickupScreen extends StatelessWidget {
@@ -20,15 +19,14 @@ class PickupScreen extends StatelessWidget {
   //FIREBASE FUNCTIONS
   FirebaseRepository _repository = FirebaseRepository();
   var ajuda = 0;
-
   bool _isPlaying = false;
 
   _playRingtone() async {
     //Starting the ringtone sound
     if (_isPlaying) {
-      Ringtone.stop();
+      FlutterRingtonePlayer.stop(); //tocar
     }
-    Ringtone.play();
+    FlutterRingtonePlayer.play(); //parar
   }
 
   PickupScreen({
@@ -83,8 +81,9 @@ class PickupScreen extends StatelessWidget {
                     color: Colors.redAccent,
                     iconSize: 50,
                     onPressed: () async {
+                      //_isPlaying = true;
                       if (_isPlaying) {
-                        Ringtone.stop();
+                        FlutterRingtonePlayer.stop();
                       }
                       await callMethods.endCall(call: call);
                       Fluttertoast.showToast(
@@ -97,24 +96,28 @@ class PickupScreen extends StatelessWidget {
                   ),
                   SizedBox(width: 25),
                   IconButton(
-                    tooltip: 'Atender chamada',
-                    icon: Icon(Icons.call),
-                    iconSize: 50,
-                    color: Colors.green,
-                    onPressed: () {
-                      //Adicionar ajuda
-                      //ajuda++;
-                      //addHelp(); //adiciona ajuda ao voluntário que atende a ligação
-                      if (_isPlaying) {
-                        Ringtone.stop();
-                      }
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CallScreen(call: call),
-                          ));
-                    },
-                  ),
+                      tooltip: 'Atender chamada',
+                      icon: Icon(Icons.call),
+                      iconSize: 50,
+                      color: Colors.green,
+                      onPressed: () async {
+                        if(_isPlaying){
+                          FlutterRingtonePlayer.stop();
+                        }
+                        await Permissions
+                                .cameraAndMicrophonePermissionsGranted()
+                            ?
+                            //Adicionar ajuda
+                            //ajuda++;
+                            //addHelp(); //adiciona ajuda ao voluntário que atende a ligação
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CallScreen(call: call),
+                                ),
+                              )
+                            : {};
+                      }),
                 ],
               ),
             ],

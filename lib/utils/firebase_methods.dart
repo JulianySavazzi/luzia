@@ -91,6 +91,7 @@ class FirebaseMethods {
     return docs.length == 0 ? true : false;
   }
 
+  //Salvando usuário no banco de dados
   Future<void> addDataToDb(FirebaseUser currentUser) async {
     user = Users(
       uid: currentUser.uid,
@@ -123,22 +124,6 @@ class FirebaseMethods {
         .setData(user.toMap(user));
   }
 
-  //Search all Volunteers
-  Future<List<Users>> searchAllVolunteers(FirebaseUser currentUser) async {
-    final usersRef = Firestore.instance.collection(USERS_COLLECTION);
-    List<Users> volunteerList = List<Users>();
-
-    final QuerySnapshot querySnapshot = await usersRef
-        .where("tipo", isEqualTo: "V")
-        .where("ajuda", isLessThan: 1)
-        .getDocuments();
-
-    for (var i = 0; i < querySnapshot.documents.length; i++) {
-      volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
-    }
-    return volunteerList;
-  }
-
   //Search max help number
   Future<List<Users>> getMaxHelp() async {
     final QuerySnapshot querySnapshot = await usersRef
@@ -161,4 +146,22 @@ class FirebaseMethods {
     }
     return volunteerList;
   }
+
+  //Search all Volunteers
+  Future<List<Users>> searchAllVolunteers(FirebaseUser currentUser) async {
+    final usersRef = Firestore.instance.collection(USERS_COLLECTION);
+    List<Users> volunteerList = List<Users>();
+
+    final QuerySnapshot querySnapshot = await usersRef
+        .where("tipo", isEqualTo: "V")
+        //.where("ajuda", isLessThan: maxhelp)
+        .where("ajuda", isLessThan: 1)
+        .getDocuments();
+
+    for (var i = 0; i < querySnapshot.documents.length; i++) {
+      volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
+    }
+    return volunteerList;
+  }
+
 }

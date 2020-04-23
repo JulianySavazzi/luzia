@@ -24,31 +24,18 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
   //Route previousRoute;
   //FirebaseRepository _repository = FirebaseRepository();
 
-  //vídeo
-  String url = 'https://drive.google.com/file/d/1wHwlMOPKEBJM11MLQBfXIWNfYD7-0SNS/view?usp=sharing';
-
-
   int _selectedIndex = 0; //índice do item
 
   static const TextStyle optionStyle =
       TextStyle(color: Colors.black, fontFamily: 'Montserrat', fontSize: 20.0);
 
-  static const List<Widget> _widgetOptions = <Widget>[
+  //static const List<Widget> _widgetOptions = <Widget>[ //required for BottomNavigationBarItem
+  List<Widget> _widgetOptions = <Widget>[ //required for BottomNavigationBarItem
     //Lista de itens do ButtomNavigatorBar
     //item 1
-    Link(//trocar link pelo url_launcher
-      child: Text(
-        'Sou voluntário',
-        style: TextStyle(
-            color: Colors.black,
-            fontFamily: 'Montserrat',
-            fontStyle: FontStyle.italic,
-            decoration: TextDecoration.underline,
-            fontSize: 20.0),
-      ),
-      //url: "https://drive.google.com/file/d/1j_NJcvyvOFpj_AqtHwHatdfPfhQ2iEPI/view?usp=sharing",
-      url: "https://youtube.com",
-      //url: "https://drive.google.com/file/d/1wHwlMOPKEBJM11MLQBfXIWNfYD7-0SNS/view?usp=sharing",
+    Text(
+      'Início',
+      style: optionStyle,
     ),
     //item 2
     Text(
@@ -56,9 +43,33 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
       style: optionStyle,
     ),
     //item 3
-    Text(
-      'Como usar o Luzia', //Texto que aparece na tela
-      style: optionStyle,
+    Center(
+      //Vídeo explicativo para voluntário
+      child: RaisedButton(
+        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        color: Colors.lightGreenAccent[100],
+        child: Text(
+          'Como usar o Luzia', //Texto que aparece na tela
+          style: optionStyle,
+        ),
+        onPressed: () async {
+          //vídeo
+          String url = 'https://drive.google.com/open?id=1w8dBZjhbbs924mZKFcJoAl-DFAqBZqMH';
+          if (await canLaunch(url)) {
+            await launch(
+              url,
+              forceSafariVC: false,
+              forceWebView: false,
+              headers: <String, String>{'my_header_key': 'my_header_value'},
+            );
+          } else {
+            throw 'Não é possível abrir $url';
+          }
+        },
+      ),
     ),
   ];
 
@@ -153,7 +164,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
           ),
         ]),
       ),
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: BottomNavigationBar( //Footer
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

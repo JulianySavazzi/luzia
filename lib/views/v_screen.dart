@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:link/link.dart';
 import 'package:luzia/call_views/pickup/pickup_layout.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 //Tela para voluntários
 
@@ -23,6 +24,10 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
   //Route previousRoute;
   //FirebaseRepository _repository = FirebaseRepository();
 
+  //vídeo
+  String url = 'https://drive.google.com/file/d/1wHwlMOPKEBJM11MLQBfXIWNfYD7-0SNS/view?usp=sharing';
+
+
   int _selectedIndex = 0; //índice do item
 
   static const TextStyle optionStyle =
@@ -31,7 +36,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
   static const List<Widget> _widgetOptions = <Widget>[
     //Lista de itens do ButtomNavigatorBar
     //item 1
-    Link(
+    Link(//trocar link pelo url_launcher
       child: Text(
         'Sou voluntário',
         style: TextStyle(

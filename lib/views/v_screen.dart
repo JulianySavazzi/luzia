@@ -60,33 +60,74 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
       ),
     ),
     //item 3
-    Center(
+    Wrap(
       //Vídeo explicativo para voluntário
-      child: RaisedButton(
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
+      children: <Widget>[
+        Center(
+          child: RaisedButton(
+            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            color: Colors.lightGreenAccent[100],
+            child: Text(
+              'Como usar o Luzia', //Texto que aparece na tela
+              style: optionStyle,
+            ),
+            onPressed: () async {
+              //vídeo
+              String url = 'https://drive.google.com/open?id=1w8dBZjhbbs924mZKFcJoAl-DFAqBZqMH';
+              if (await canLaunch(url)) {
+                await launch(
+                  url,
+                  forceSafariVC: false,
+                  forceWebView: false,
+                  headers: <String, String>{'my_header_key': 'my_header_value'},
+                );
+              } else {
+                throw 'Não é possível abrir $url';
+              }
+            },
+          ),
         ),
-        color: Colors.lightGreenAccent[100],
-        child: Text(
-          'Como usar o Luzia', //Texto que aparece na tela
-          style: optionStyle,
+        //Entrar em contato
+        SizedBox(
+          width: 10,
         ),
-        onPressed: () async {
-          //vídeo
-          String url = 'https://drive.google.com/open?id=1w8dBZjhbbs924mZKFcJoAl-DFAqBZqMH';
-          if (await canLaunch(url)) {
-            await launch(
-              url,
-              forceSafariVC: false,
-              forceWebView: false,
-              headers: <String, String>{'my_header_key': 'my_header_value'},
-            );
-          } else {
-            throw 'Não é possível abrir $url';
-          }
-        },
-      ),
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          child: Text(
+            'Caso encontrar algum erro, sugestão ou reclamação:',
+            style: optionStyle,
+            textAlign: TextAlign.center,
+          ),
+        ),
+        Center(
+          child: RaisedButton(
+            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            color: Colors.lightGreenAccent[100],
+            child: Text(
+              'Entrar em contato', //Texto que aparece na tela
+              style: optionStyle,
+            ),
+            onPressed: () async {
+              String url = 'mailto:<luzia.developers@gmail.com>?subject=Contato&body=';
+              if (await canLaunch(url)) {
+                await launch(
+                  url,
+                  forceSafariVC: false,
+                  forceWebView: false,
+                  headers: <String, String>{'my_header_key': 'my_header_value'},);
+              } else {
+                throw 'Erro ao abrir $url';
+              }
+            },
+          ),
+        ),
+      ],
     ),
   ];
 

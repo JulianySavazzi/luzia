@@ -32,4 +32,7 @@ class FirebaseRepository {
   Future<List<Users>> getMaxHelp() => _firebaseMethods.getMaxHelp();
 
   Future<Users> getUser() => _firebaseMethods.getUser();
+
+  Future<Users> getHelpCurrentUser() => _firebaseMethods.getHelpCurrentUser();
+
 }

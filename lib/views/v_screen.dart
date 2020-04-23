@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:link/link.dart';
 import 'package:luzia/call_views/pickup/pickup_layout.dart';
+import 'package:luzia/model/users.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -24,7 +25,10 @@ class VoluntarioScreen extends StatefulWidget {
 
 class _VoluntarioScreenState extends State<VoluntarioScreen> {
   //Route previousRoute;
-  FirebaseRepository _repository = FirebaseRepository();
+  static FirebaseRepository _repository = FirebaseRepository();
+  static var currentvolunteer  = _repository.getHelpCurrentUser();
+  //static int qtdajuda = currentvolunteer.ajuda;
+  static int qtdajuda;
 
   int _selectedIndex = 0; //índice do item
 
@@ -44,8 +48,9 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
     //item 2
     Container(
       child: Text(
-        'Sou voluntário', //Texto que aparece na tela
+        'Sou voluntário \n Já ajudei $qtdajuda vezes \n $currentvolunteer', //Texto que aparece na tela
         style: optionStyle,
+        textAlign: TextAlign.center,
       ),
     ),
     //item 3

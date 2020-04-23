@@ -16,6 +16,7 @@ class FirebaseMethods {
   final usersRef = Firestore.instance.collection(USERS_COLLECTION);
   int maxhelp;
   int currentUserHelp;
+  Users voluntario;
 
   //Users class
   Users user = Users();
@@ -127,11 +128,12 @@ class FirebaseMethods {
 
   //Pegar ajuda do voluntário logado (currentUser)
   Future<Users> getHelpCurrentUser() async {
-    Users currentUser = await getUser();
-    currentUserHelp = currentUser.ajuda;
+    //Users currentUser = await getUser();
+    voluntario = await getUser();
+    currentUserHelp = voluntario.ajuda;
     print(currentUserHelp);
-    print(currentUser.email);
-    return currentUser;
+    print(voluntario.email);
+    return voluntario;
   }
 
   //Search max help number

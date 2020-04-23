@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:link/link.dart';
 import 'package:luzia/call_views/pickup/pickup_layout.dart';
+import 'package:luzia/utils/firebase_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 //Tela para voluntários
@@ -22,7 +24,7 @@ class VoluntarioScreen extends StatefulWidget {
 
 class _VoluntarioScreenState extends State<VoluntarioScreen> {
   //Route previousRoute;
-  //FirebaseRepository _repository = FirebaseRepository();
+  FirebaseRepository _repository = FirebaseRepository();
 
   int _selectedIndex = 0; //índice do item
 
@@ -33,14 +35,18 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
   List<Widget> _widgetOptions = <Widget>[ //required for BottomNavigationBarItem
     //Lista de itens do ButtomNavigatorBar
     //item 1
-    Text(
-      'Início',
-      style: optionStyle,
+    Container(
+      child: Text(
+        'Início',
+        style: optionStyle,
+      ),
     ),
     //item 2
-    Text(
-      'Sou voluntário', //Texto que aparece na tela
-      style: optionStyle,
+    Container(
+      child: Text(
+        'Sou voluntário', //Texto que aparece na tela
+        style: optionStyle,
+      ),
     ),
     //item 3
     Center(

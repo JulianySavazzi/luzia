@@ -1,48 +1,117 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:link/link.dart';
 import 'package:luzia/call_views/pickup/pickup_layout.dart';
 import 'package:luzia/model/users.dart';
-import 'package:luzia/utils/firebase_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 //Tela para voluntários
 
+const String id = 'v_screen';
+final usersRef = Firestore.instance.collection('users');
+final FirebaseAuth _auth = FirebaseAuth.instance;
+FirebaseUser currentUser;
+Users user;
+
 class VoluntarioScreen extends StatefulWidget {
-  //String usada para dar nome á rota que leva a essa tela do app
-  //Static const é para criarmos uma constante da classe, assim podemos referenciar a classe e não um objeto da classe
   static const String id = 'v_screen';
 
   @override
   _VoluntarioScreenState createState() => _VoluntarioScreenState();
-  //Esse State é pra você poder setar um status para os botões, não sei se vamos usar mas já fiz pensando nisso
 }
 
-//OBS: o app não está muito responsivo, fui testar ele com a tela virada no celular e não deu pra navegar, mas no modo retrato funcionou
-//tentei deixar o app responsivo fazendo o que eu vi em um tutorial mas não tive muito sucesso,
-//o link do tutorial está no fichamento
-
 class _VoluntarioScreenState extends State<VoluntarioScreen> {
-  //Route previousRoute;
-  static FirebaseRepository _repository = FirebaseRepository();
-  static var currentvolunteer  = _repository.getHelpCurrentUser() as Users;
-  //static var currentvolunteer;
-  static int qtdajuda = currentvolunteer.ajuda;
-  //static int qtdajuda = currentvolunteer.then((Users user) async {
-  //  if (user != null) {
-  //    qtdajuda = user.ajuda;
-  //  }
-  //}) as int;
-
   int _selectedIndex = 0; //índice do item
-
   static const TextStyle optionStyle =
       TextStyle(color: Colors.black, fontFamily: 'Montserrat', fontSize: 20.0);
 
+  //GET THE CURRENT USER FROM FIREBASE
+  Future<FirebaseUser> getCurrentUser() async {
+    FirebaseUser currentUser;
+    currentUser = await _auth.currentUser();
+    return currentUser;
+  }
+
+  //FROM THE FIREBASE USER, IT CONVERTS TO USERS MODEL
+  getUser() async {
+    DocumentSnapshot documentSnapshot =
+        await usersRef.document(currentUser.uid).get();
+    user = Users.fromDocument(documentSnapshot);
+  }
+
+  //WIDGET TO BE CALLED ON VOLUNTARIO SCREEN
+  static buildProfile() {
+    return FutureBuilder(
+      future: usersRef.document(currentUser.uid).get(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+        //USER TESTE CREATED HERE BECAUSE OF FUTURE BUILDER
+        Users teste = Users.fromDocument(snapshot.data);
+        return Padding(
+          //
+          padding: EdgeInsets.all(1),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              CircleAvatar(
+                radius: 40.0,
+                backgroundColor: Colors.lightGreenAccent[100],
+                //backgroundImage: CachedNetworkImageProvider(user.photo),
+              ),
+              Text('Olá!'),
+              Text(
+                /*user.nome*/ "Teste",
+                style: TextStyle(
+                  fontFamily: 'LiuJianMaoCao',
+                  fontSize: 40.0,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'VOLUNTÁRIO',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  color: Colors.black54,
+                  letterSpacing: 2.5,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                height: 20.0,
+                width: 200,
+                child: Divider(
+                  color: Colors.lightGreen[200],
+                ),
+              ),
+              Text('Voce já ajudou:' /* + user.ajuda.toString() + 'vezes'*/,
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    color: Colors.black26,
+                    fontSize: 15.0,
+                  )),
+              RaisedButton(
+                color: Colors.red,
+                onPressed: () {
+                  //TESTING IF IT CONTAINS ANY DATA
+                  print(teste.uid);
+                  print(teste.ajuda);
+                  print(teste.nome);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   //static const List<Widget> _widgetOptions = <Widget>[ //required for BottomNavigationBarItem
-  List<Widget> _widgetOptions = <Widget>[ //required for BottomNavigationBarItem
+  List<Widget> _widgetOptions = <Widget>[
+    //required for BottomNavigationBarItem
     //Lista de itens do ButtomNavigatorBar
     //item 1
     Container(
@@ -52,13 +121,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
       ),
     ),
     //item 2
-    Container(
-      child: Text(
-        'Sou voluntário \n Já ajudei $qtdajuda vezes \n $currentvolunteer', //Texto que aparece na tela
-        style: optionStyle,
-        textAlign: TextAlign.center,
-      ),
-    ),
+    buildProfile(),
     //item 3
     Wrap(
       //Vídeo explicativo para voluntário
@@ -76,7 +139,8 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
             ),
             onPressed: () async {
               //vídeo
-              String url = 'https://drive.google.com/open?id=1w8dBZjhbbs924mZKFcJoAl-DFAqBZqMH';
+              String url =
+                  'https://drive.google.com/open?id=1w8dBZjhbbs924mZKFcJoAl-DFAqBZqMH';
               if (await canLaunch(url)) {
                 await launch(
                   url,
@@ -114,13 +178,15 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
               style: optionStyle,
             ),
             onPressed: () async {
-              String url = 'mailto:<luzia.developers@gmail.com>?subject=Contato&body=';
+              String url =
+                  'mailto:<luzia.developers@gmail.com>?subject=Contato&body=';
               if (await canLaunch(url)) {
                 await launch(
                   url,
                   forceSafariVC: false,
                   forceWebView: false,
-                  headers: <String, String>{'my_header_key': 'my_header_value'},);
+                  headers: <String, String>{'my_header_key': 'my_header_value'},
+                );
               } else {
                 throw 'Erro ao abrir $url';
               }
@@ -222,7 +288,8 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
           ),
         ]),
       ),
-      bottomNavigationBar: BottomNavigationBar( //Footer
+      bottomNavigationBar: BottomNavigationBar(
+        //Footer
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -247,6 +314,19 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
       ),
     ));
   }
+
+//  Future<FirebaseUser> getCurrentUser() async {
+//    FirebaseUser currentUser;
+//    currentUser = await _auth.currentUser();
+//    return currentUser;
+//  }
+//
+//  getUser() async {
+//    FirebaseUser currentUser = await getCurrentUser();
+//    DocumentSnapshot documentSnapshot =
+//        await usersRef.document(currentUser.uid).get();
+//    user = Users.fromDocument(documentSnapshot);
+//  }
 
 //  @protected
 //  @mustCallSuper

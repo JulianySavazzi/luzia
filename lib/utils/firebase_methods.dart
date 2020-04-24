@@ -127,7 +127,7 @@ class FirebaseMethods {
   }
 
   //Pegar ajuda do voluntário logado (currentUser)
-  Future<Users> getHelpCurrentUser() async {
+  Future<Users> getHelpCurrentUser(Users voluntario) async {
     //Users currentUser = await getUser();
     voluntario = await getUser();
     currentUserHelp = voluntario.ajuda;
@@ -175,5 +175,4 @@ class FirebaseMethods {
     }
     return volunteerList;
   }
-
 }

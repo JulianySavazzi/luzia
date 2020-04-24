@@ -33,6 +33,6 @@ class FirebaseRepository {
 
   Future<Users> getUser() => _firebaseMethods.getUser();
 
-  Future<Users> getHelpCurrentUser() => _firebaseMethods.getHelpCurrentUser();
-
+  Future<Users> getHelpCurrentUser(Users voluntario) =>
+      _firebaseMethods.getHelpCurrentUser(voluntario);
 }

@@ -4,17 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:luzia/call_views/pickup/pickup_layout.dart';
 import 'package:luzia/model/users.dart';
+import 'package:luzia/provider/user_provider.dart';
+import 'package:luzia/utils/firebase_repository.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 //Tela para voluntários
 
 const String id = 'v_screen';
 final usersRef = Firestore.instance.collection('users');
-final FirebaseAuth _auth = FirebaseAuth.instance;
+FirebaseRepository _repository = FirebaseRepository();
 FirebaseUser currentUser;
 Users user;
+//Add UserProvider to refresh users
+UserProvider userProvider;
+var nome = user.nome;
+var ajuda = user.ajuda;
 
 class VoluntarioScreen extends StatefulWidget {
+  final String profileId;
+
+  VoluntarioScreen({this.profileId});
+
   static const String id = 'v_screen';
 
   @override
@@ -25,89 +36,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
   int _selectedIndex = 0; //índice do item
   static const TextStyle optionStyle =
       TextStyle(color: Colors.black, fontFamily: 'Montserrat', fontSize: 20.0);
-
-  //GET THE CURRENT USER FROM FIREBASE
-  Future<FirebaseUser> getCurrentUser() async {
-    FirebaseUser currentUser;
-    currentUser = await _auth.currentUser();
-    return currentUser;
-  }
-
-  //FROM THE FIREBASE USER, IT CONVERTS TO USERS MODEL
-  getUser() async {
-    DocumentSnapshot documentSnapshot =
-        await usersRef.document(currentUser.uid).get();
-    user = Users.fromDocument(documentSnapshot);
-  }
-
-  //WIDGET TO BE CALLED ON VOLUNTARIO SCREEN
-  static buildProfile() {
-    return FutureBuilder(
-      future: usersRef.document(currentUser.uid).get(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return CircularProgressIndicator();
-        }
-        //USER TESTE CREATED HERE BECAUSE OF FUTURE BUILDER
-        Users teste = Users.fromDocument(snapshot.data);
-        return Padding(
-          //
-          padding: EdgeInsets.all(1),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              CircleAvatar(
-                radius: 40.0,
-                backgroundColor: Colors.lightGreenAccent[100],
-                //backgroundImage: CachedNetworkImageProvider(user.photo),
-              ),
-              Text('Olá!'),
-              Text(
-                /*user.nome*/ "Teste",
-                style: TextStyle(
-                  fontFamily: 'LiuJianMaoCao',
-                  fontSize: 40.0,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                'VOLUNTÁRIO',
-                style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  color: Colors.black54,
-                  letterSpacing: 2.5,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: 20.0,
-                width: 200,
-                child: Divider(
-                  color: Colors.lightGreen[200],
-                ),
-              ),
-              Text('Voce já ajudou:' /* + user.ajuda.toString() + 'vezes'*/,
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    color: Colors.black26,
-                    fontSize: 15.0,
-                  )),
-              RaisedButton(
-                color: Colors.red,
-                onPressed: () {
-                  //TESTING IF IT CONTAINS ANY DATA
-                  print(teste.uid);
-                  print(teste.ajuda);
-                  print(teste.nome);
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  Users user;
 
   //static const List<Widget> _widgetOptions = <Widget>[ //required for BottomNavigationBarItem
   List<Widget> _widgetOptions = <Widget>[
@@ -121,7 +50,14 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
       ),
     ),
     //item 2
-    buildProfile(),
+    FutureBuilder(
+        future: _repository.getUser(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Text("${snapshot.data.nome}");
+          }
+          return CircularProgressIndicator();
+        }),
     //item 3
     Wrap(
       //Vídeo explicativo para voluntário

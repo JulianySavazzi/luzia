@@ -253,7 +253,7 @@ class _UsersScreenState extends State<UsersScreen> {
   void authenticateType(FirebaseUser user, String tipo, int ajuda) {
     _repository.authenticateUser(user).then((isNewUser) {
       setState(() {
-        isLoginPressed = false;
+        isLoginPressed = true;
       });
       if (!isNewUser) {
         _repository.addType(user, tipo, ajuda).then((value) {

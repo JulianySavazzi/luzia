@@ -54,7 +54,10 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
         future: _repository.getUser(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return Text("${snapshot.data.nome}");
+            return Center(
+                child: Text(
+              "Olá \n${snapshot.data.nome}\n Você já ajudou ${snapshot.data.ajuda} vezes.\n Você está logado como ${snapshot.data.email}",
+            ));
           }
           return CircularProgressIndicator();
         }),

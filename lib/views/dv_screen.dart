@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
+import 'package:luzia/call_views/pickup/pickup_screen.dart';
 import 'package:luzia/model/call.dart';
 import 'package:luzia/model/users.dart';
 import 'package:luzia/utils/permissions.dart';
@@ -13,7 +14,6 @@ import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:provider/provider.dart';
-import 'package:luzia/call_views/pickup/pickup_screen.dart';
 
 Route previousRoute;
 FirebaseRepository _repository = FirebaseRepository();
@@ -22,10 +22,7 @@ List<Users> volunteers;
 Call call;
 Users oneVolunteer = new Users();
 Users sender = new Users();
-Timer _timer;
-int _start = 10;
 bool answered = PickupScreen(call: call).answered;
-int tries = 0;
 
 //Add UserProvider to refresh users
 UserProvider userProvider;
@@ -146,7 +143,6 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
               alignment: Alignment.bottomCenter,
               child: RaisedButton(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-                //DEFICIENTE VISUAL
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
@@ -165,17 +161,14 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                   ],
                 ),
                 onPressed: () async {
-                  selectingVolunteers(
-                      oneVolunteer); // sempre tem que chamar este método antes, senão ele nao pega random
+                  selectingVolunteers(oneVolunteer);
                   await Permissions.cameraAndMicrophonePermissionsGranted()
                       ? CallUtils.dial(
                           from: sender,
-                          //to: sender, ERRO TAVA AQUI
-                          //estava chamando o sender e  não o voluntário
-                          to: oneVolunteer, //chama voluntário
+                          to: oneVolunteer,
                           context: context,
                         )
-                      : Navigator.pop(context); //CASO NÃO AUTORIZE, SAI DA TELA
+                      : Navigator.pop(context);
                 },
               ),
             )),
@@ -185,39 +178,41 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
 
   //METHOD FOR ENTERING A LOOP UNTIL A VOLUNTEER IS SELECTED
 
-  searchAlgorithm(oneVolunteer) async {
-    do {
+  searchAlgorithm() async {
+    selectingVolunteers(oneVolunteer);
+    await Permissions.cameraAndMicrophonePermissionsGranted()
+        ? CallUtils.dial(
+            from: sender,
+            to: oneVolunteer,
+            context: context,
+          )
+        : answerTrue();
+    for (int i = 0; i < 5; i++) {
       selectingVolunteers(oneVolunteer);
-      if (answered) {
-        await Permissions.cameraAndMicrophonePermissionsGranted()
-            ? CallUtils.dial(from: sender, to: oneVolunteer, context: context)
-            : Navigator.pop(context);
-      } else {
-        startTimer();
-        tries++;
-      }
-    } while (tries > 5);
+      await Permissions.cameraAndMicrophonePermissionsGranted()
+          ? CallUtils.dial(
+              from: sender,
+              to: oneVolunteer,
+              context: context,
+            )
+          : answerTrue();
+    }
   }
+}
 
-  startTimer() {
-    const oneSec = const Duration(seconds: 30);
-    _timer = new Timer.periodic(
-      oneSec,
-      (Timer timer) => setState(
-        () {
-          if (_start < 1) {
-            timer.cancel();
-          } else {
-            _start = _start - 1;
-          }
-        },
-      ),
-    );
-  }
+startTimer() {
+  Stopwatch _stopwatch = Stopwatch();
+  _stopwatch.start();
+  sleep(Duration(seconds: 30));
+  _stopwatch.stop();
+}
 
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
+answerTrue() {
+  switch (answered) {
+    case true:
+      break;
+
+    default:
+      return startTimer();
   }
 }

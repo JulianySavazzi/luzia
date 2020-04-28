@@ -175,4 +175,17 @@ class FirebaseMethods {
     }
     return volunteerList;
   }
+
+  Future<List<Users>> getVolunteers() async {
+    final usersRef = Firestore.instance.collection(USERS_COLLECTION);
+    List<Users> volunteerList = List<Users>();
+
+    final QuerySnapshot querySnapshot =
+        await usersRef.where("tipo", isEqualTo: "V").getDocuments();
+
+    for (var i = 0; i < querySnapshot.documents.length; i++) {
+      volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
+    }
+    return volunteerList;
+  }
 }

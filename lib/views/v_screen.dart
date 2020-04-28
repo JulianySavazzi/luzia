@@ -43,12 +43,35 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
     //required for BottomNavigationBarItem
     //Lista de itens do ButtomNavigatorBar
     //item 1
-    Container(
-      child: Text(
-        'Início',
-        style: optionStyle,
-      ),
-    ),
+    FutureBuilder(
+        future: _repository.getVolunteers(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Center(
+                child: Container(
+              height: 300,
+              width: 400,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    'Somos ${snapshot.data.length} voluntários!',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Montserrat',
+                      fontSize: 25.0,
+                    ),
+                  ),
+                  Image(
+                    image: AssetImage('images/vhome.jpg'),
+                    semanticLabel: 'Várias pessoas voluntárias',
+                  ),
+                ],
+              ),
+            ));
+          }
+          return CircularProgressIndicator();
+        }),
     //item 2
     FutureBuilder(
         future: _repository.getUser(),
@@ -99,10 +122,6 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
                 ],
               ),
             ));
-
-//                child: Text(
-//              "Olá \n${snapshot.data.nome}\n Você já ajudou ${snapshot.data.ajuda} vezes.\n Você está logado como ${snapshot.data.email}",
-//            ));
           }
           return CircularProgressIndicator();
         }),

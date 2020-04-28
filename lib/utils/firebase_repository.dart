@@ -35,4 +35,6 @@ class FirebaseRepository {
 
   Future<Users> getHelpCurrentUser(Users voluntario) =>
       _firebaseMethods.getHelpCurrentUser(voluntario);
+
+  Future<List<Users>> getVolunteers() => _firebaseMethods.getVolunteers();
 }

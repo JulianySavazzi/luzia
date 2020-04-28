@@ -6,36 +6,23 @@ import 'package:luzia/utils/firebase_repository.dart';
 import 'dv_screen.dart';
 import 'v_screen.dart';
 
-//Tela para diferenciar o usuário com deficiência visual do voluntário
+FirebaseRepository _repository = FirebaseRepository();
+
+bool isLoginPressed = false;
+bool voluntario = false;
+
+//Variáveis para o tipo e número de ajuda do usuário
+String tipo = "";
+int ajuda = 0;
 
 class UsersScreen extends StatefulWidget {
-  //String usada para dar nome á rota que leva a essa tela do app
-  //Static const é para criarmos uma constante da classe, assim podemos referenciar a classe e não um objeto da classe
   static const String id = 'users_screen';
 
   @override
   _UsersScreenState createState() => _UsersScreenState();
-//Esse State é pra você poder setar um status para os botões, não sei se vamos usar mas já fiz pensando nisso
 }
 
-//OBS: o app não está muito responsivo, fui testar ele com a tela virada no celular e não deu pra navegar, mas no modo retrato funcionou
-//tentei deixar o app responsivo fazendo o que eu vi em um tutorial mas não tive muito sucesso,
-//o link do tutorial está no fichamento
-
 class _UsersScreenState extends State<UsersScreen> {
-//FIREBASE FUNCTIONS
-  FirebaseRepository _repository = FirebaseRepository();
-
-  bool isLoginPressed = false;
-  bool voluntario = false;
-
-  //Variáveis para o tipo e número de ajuda do usuário
-  String tipo = "";
-  int ajuda = 0;
-
-  //Route previousRoute = 'login_screen' as Route;
-  //Route previousRoute;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -275,52 +262,4 @@ class _UsersScreenState extends State<UsersScreen> {
       }
     });
   }
-  // ***************************************************************** //
-
-  //Método para adicionar Dv
-
-//  void addDv() {
-//    setState(() {
-//      isLoginPressed = true;
-//    });
-//    _repository.getCurrentUser().then((FirebaseUser user) {
-//      if (user != null) {
-//        authenticateDv(user, tipo);
-//        setState(() {
-//          voluntario = false;
-//        });
-//      } else {
-//        Fluttertoast.showToast(
-//            msg: "Houve um erro",
-//            toastLength: Toast.LENGTH_LONG,
-//            textColor: Colors.red[300],
-//            gravity: ToastGravity.BOTTOM);
-//      }
-//    });
-//  }
-//
-//  void authenticateDv(FirebaseUser user, String tipo) {
-//    _repository.authenticateUser(user).then((isNewUser) {
-//      setState(() {
-//        isLoginPressed = false;
-//      });
-//      if (!isNewUser) {
-//        _repository.addDv(user, tipo).then((value) {
-//          Navigator.pushNamed(context, DefVisualScreen.id);
-//          didChangePrevious(previousRoute); //não sei se realemte funcionou
-//          //return DefVisualScreen(); não funciona
-//        });
-//      } else {
-//        Fluttertoast.showToast(
-//            msg: "Erro ao adicionar tipo de usuário",
-//            toastLength: Toast.LENGTH_LONG,
-//            textColor: Colors.red[300],
-//            gravity: ToastGravity.BOTTOM);
-//      }
-//    });
-//  }
-
-//  @protected
-//  @mustCallSuper
-//  void didChangePrevious(Route previousRoute) {}
 }

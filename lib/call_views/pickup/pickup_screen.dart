@@ -20,6 +20,7 @@ class PickupScreen extends StatelessWidget {
   FirebaseRepository _repository = FirebaseRepository();
   var ajuda = 0;
   bool _isPlaying = false;
+  bool answered = false;
 
   _playRingtone() async {
     //Starting the ringtone sound
@@ -102,13 +103,14 @@ class PickupScreen extends StatelessWidget {
                       iconSize: 50,
                       color: Colors.green,
                       onPressed: () async {
-                        //_isPlaying = false;
+                        answered = true; // THE VOLUNTEER ANSWERED;
                         if (_isPlaying) {
                           FlutterRingtonePlayer.stop();
                         }
                         await Permissions
                                 .cameraAndMicrophonePermissionsGranted()
                             ?
+
                             //Adicionar ajuda
                             //ajuda++;
                             //addHelp(); //adiciona ajuda ao voluntário que atende a ligação

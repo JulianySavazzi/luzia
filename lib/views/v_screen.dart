@@ -2,11 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:luzia/call_views/pickup/pickup_layout.dart';
-import 'package:luzia/model/users.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-//Tela para voluntários
 
 FirebaseRepository _repository = FirebaseRepository();
 
@@ -19,9 +16,6 @@ class VoluntarioScreen extends StatefulWidget {
 
 class _VoluntarioScreenState extends State<VoluntarioScreen> {
   int _selectedIndex = 0; //índice do item
-  static const TextStyle optionStyle =
-      TextStyle(color: Colors.black, fontFamily: 'Montserrat', fontSize: 20.0);
-  Users user;
 
   //static const List<Widget> _widgetOptions = <Widget>[ //required for BottomNavigationBarItem
   List<Widget> _widgetOptions = <Widget>[
@@ -224,7 +218,6 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
   @override
   Widget build(BuildContext context) {
     return PickupLayout(
-        //mudança para pickuplayout, integração com chamada
         scaffold: Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -332,22 +325,4 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
       ),
     ));
   }
-
-//  Future<FirebaseUser> getCurrentUser() async {
-//    FirebaseUser currentUser;
-//    currentUser = await _auth.currentUser();
-//    return currentUser;
-//  }
-//
-//  getUser() async {
-//    FirebaseUser currentUser = await getCurrentUser();
-//    DocumentSnapshot documentSnapshot =
-//        await usersRef.document(currentUser.uid).get();
-//    user = Users.fromDocument(documentSnapshot);
-//  }
-
-//  @protected
-//  @mustCallSuper
-//  void didChangePrevious(Route previousRoute) {}
-
 }

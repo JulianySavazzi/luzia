@@ -1,53 +1,54 @@
+import 'dart:async';
+import 'dart:ui';
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
+import 'package:luzia/model/call.dart';
 import 'package:luzia/model/users.dart';
 import 'package:luzia/utils/permissions.dart';
 import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:provider/provider.dart';
+import 'package:luzia/call_views/pickup/pickup_screen.dart';
 
-//Tela para usuários com deficiência visual
+Route previousRoute;
+FirebaseRepository _repository = FirebaseRepository();
+
+List<Users> volunteers;
+Call call;
+Users oneVolunteer = new Users();
+Users sender = new Users();
+Timer _timer;
+int _start = 10;
+bool answered = PickupScreen(call: call).answered;
+int tries = 0;
+
+//Add UserProvider to refresh users
+UserProvider userProvider;
 
 class DefVisualScreen extends StatefulWidget {
-  //String usada para dar nome á rota que leva a essa tela do app
-  //Static const é para criarmos uma constante da classe, assim podemos referenciar a classe e não um objeto da classe
   static const String id = 'dv_screen';
+  final Duration time;
+
+  DefVisualScreen({this.time});
 
   @override
   _DefVisualScreenState createState() => _DefVisualScreenState();
-//Esse State é pra você poder setar um status para os botões, não sei se vamos usar mas já fiz pensando nisso
 }
 
-//OBS: o app não está muito responsivo, fui testar ele com a tela virada no celular e não deu pra navegar, mas no modo retrato funcionou
-//tentei deixar o app responsivo fazendo o que eu vi em um tutorial mas não tive muito sucesso,
-//o link do tutorial está no fichamento
-
 class _DefVisualScreenState extends State<DefVisualScreen> {
-  Route previousRoute;
-  FirebaseRepository _repository = FirebaseRepository();
-
-  List<Users> volunteers;
-  Users oneVolunteer = new Users();
-  Users sender = new Users();
-
-  //Add UserProvider to refresh users
-  UserProvider userProvider;
-
   @override
   void initState() {
     super.initState();
-
     //Add UsersProviders refresh, using this to
     SchedulerBinding.instance.addPostFrameCallback((_) {
       userProvider = Provider.of<UserProvider>(context, listen: false);
       userProvider.refreshUser();
     });
-
     _repository.getCurrentUser().then((FirebaseUser currentUser) {
       _repository.searchAllVolunteers(currentUser).then((List<Users> list) {
         setState(() {
@@ -182,7 +183,41 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
         ])));
   }
 
-//  @protected
-//  @mustCallSuper
-//  void didChangePrevious(Route previousRoute) {}
+  //METHOD FOR ENTERING A LOOP UNTIL A VOLUNTEER IS SELECTED
+
+  searchAlgorithm(oneVolunteer) async {
+    do {
+      selectingVolunteers(oneVolunteer);
+      if (answered) {
+        await Permissions.cameraAndMicrophonePermissionsGranted()
+            ? CallUtils.dial(from: sender, to: oneVolunteer, context: context)
+            : Navigator.pop(context);
+      } else {
+        startTimer();
+        tries++;
+      }
+    } while (tries > 5);
+  }
+
+  startTimer() {
+    const oneSec = const Duration(seconds: 30);
+    _timer = new Timer.periodic(
+      oneSec,
+      (Timer timer) => setState(
+        () {
+          if (_start < 1) {
+            timer.cancel();
+          } else {
+            _start = _start - 1;
+          }
+        },
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
 }

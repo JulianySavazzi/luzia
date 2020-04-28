@@ -1,31 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:luzia/call_views/pickup/pickup_layout.dart';
 import 'package:luzia/model/users.dart';
-import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 //Tela para voluntários
 
-const String id = 'v_screen';
-final usersRef = Firestore.instance.collection('users');
 FirebaseRepository _repository = FirebaseRepository();
-FirebaseUser currentUser;
-Users user;
-//Add UserProvider to refresh users
-UserProvider userProvider;
-var nome = user.nome;
-var ajuda = user.ajuda;
 
 class VoluntarioScreen extends StatefulWidget {
-  final String profileId;
-
-  VoluntarioScreen({this.profileId});
-
   static const String id = 'v_screen';
 
   @override
@@ -126,77 +111,107 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
           return CircularProgressIndicator();
         }),
     //item 3
-    Wrap(
-      //Vídeo explicativo para voluntário
-      children: <Widget>[
-        Center(
-          child: RaisedButton(
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
+    Center(
+      child: Container(
+        height: 310.0,
+        width: 250,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+              color: Colors.lightGreenAccent[100],
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.movie),
+                  SizedBox(width: 10.0),
+                  Text(
+                    'Como usar o Luzia',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Montserrat',
+                        fontSize: 15.0),
+                  )
+                ],
+              ),
+              onPressed: () async {
+                //vídeo
+                String url =
+                    'https://drive.google.com/open?id=1w8dBZjhbbs924mZKFcJoAl-DFAqBZqMH';
+                if (await canLaunch(url)) {
+                  await launch(
+                    url,
+                    forceSafariVC: false,
+                    forceWebView: false,
+                    headers: <String, String>{
+                      'my_header_key': 'my_header_value'
+                    },
+                  );
+                } else {
+                  throw 'Não é possível abrir $url';
+                }
+              },
             ),
-            color: Colors.lightGreenAccent[100],
-            child: Text(
-              'Como usar o Luzia', //Texto que aparece na tela
-              style: optionStyle,
+            SizedBox(
+              height: 50.0,
             ),
-            onPressed: () async {
-              //vídeo
-              String url =
-                  'https://drive.google.com/open?id=1w8dBZjhbbs924mZKFcJoAl-DFAqBZqMH';
-              if (await canLaunch(url)) {
-                await launch(
-                  url,
-                  forceSafariVC: false,
-                  forceWebView: false,
-                  headers: <String, String>{'my_header_key': 'my_header_value'},
-                );
-              } else {
-                throw 'Não é possível abrir $url';
-              }
-            },
-          ),
-        ),
-        //Entrar em contato
-        SizedBox(
-          width: 10,
-        ),
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          child: Text(
-            'Caso encontrar algum erro, sugestão ou reclamação:',
-            style: optionStyle,
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Center(
-          child: RaisedButton(
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
+            Text(
+              'Caso encontrar algum erro, sugestão ou reclamação:',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                fontSize: 15.0,
+              ),
             ),
-            color: Colors.lightGreenAccent[100],
-            child: Text(
-              'Entrar em contato', //Texto que aparece na tela
-              style: optionStyle,
+            SizedBox(
+              height: 20.0,
             ),
-            onPressed: () async {
-              String url =
-                  'mailto:<luzia.developers@gmail.com>?subject=Contato&body=';
-              if (await canLaunch(url)) {
-                await launch(
-                  url,
-                  forceSafariVC: false,
-                  forceWebView: false,
-                  headers: <String, String>{'my_header_key': 'my_header_value'},
-                );
-              } else {
-                throw 'Erro ao abrir $url';
-              }
-            },
-          ),
+            RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+              color: Colors.lightGreenAccent[100],
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.email),
+                  SizedBox(
+                    width: 20.0,
+                  ),
+                  Text(
+                    'Entrar em contato',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Montserrat',
+                        fontSize: 15.0),
+                  )
+                ],
+              ),
+              onPressed: () async {
+                String url =
+                    'mailto:<luzia.developers@gmail.com>?subject=Contato&body=';
+                if (await canLaunch(url)) {
+                  await launch(
+                    url,
+                    forceSafariVC: false,
+                    forceWebView: false,
+                    headers: <String, String>{
+                      'my_header_key': 'my_header_value'
+                    },
+                  );
+                } else {
+                  throw 'Erro ao abrir $url';
+                }
+              },
+            ),
+          ],
         ),
-      ],
+      ),
     ),
   ];
 
@@ -300,8 +315,8 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
             backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            title: Text('Voluntário'),
+            icon: Icon(Icons.person),
+            title: Text('Perfil'),
             backgroundColor: Colors.black,
           ),
           BottomNavigationBarItem(

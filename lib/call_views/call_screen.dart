@@ -29,6 +29,7 @@ class _CallScreenState extends State<CallScreen> {
   static final _users = <int>[];
   final _infoStrings = <String>[];
   bool muted = false;
+  bool flash = false; //try enable flash
 
   @override
   void dispose() {
@@ -163,6 +164,13 @@ class _CallScreenState extends State<CallScreen> {
     AgoraRtcEngine.switchCamera();
   }
 
+  void _onFlashCamera(){ //try enable flash
+    setState(() {
+      flash = !flash;
+    });
+    //AgoraRtcEngine.;
+  }
+
 //  @override
 //  void dispose() {
 //    super.dispose();
@@ -267,6 +275,18 @@ class _CallScreenState extends State<CallScreen> {
             onPressed: _onSwitchCamera,
             child: Icon(
               Icons.switch_camera,
+              color: Colors.blueAccent,
+              size: 20.0,
+            ),
+            shape: CircleBorder(),
+            elevation: 2.0,
+            fillColor: Colors.white,
+            padding: const EdgeInsets.all(12.0),
+          ),
+          RawMaterialButton( //flash button
+            onPressed: _onFlashCamera, // try enable flash camera
+            child: Icon(
+              flash ? Icons.flash_off : Icons.flash_on,
               color: Colors.blueAccent,
               size: 20.0,
             ),

@@ -18,7 +18,7 @@ class PickupScreen extends StatelessWidget {
   static const String id = 'pickup_screen';
   //FIREBASE FUNCTIONS
   FirebaseRepository _repository = FirebaseRepository();
-  var ajuda = 0;
+  var ajuda = 0; //help volunteer
   bool _isPlaying = false;
   bool answered = false;
 
@@ -107,13 +107,10 @@ class PickupScreen extends StatelessWidget {
                         if (_isPlaying) {
                           FlutterRingtonePlayer.stop();
                         }
+                        addHelp(); //add help to volunteer join call
                         await Permissions
                                 .cameraAndMicrophonePermissionsGranted()
                             ?
-
-                            //Adicionar ajuda
-                            //ajuda++;
-                            //addHelp(); //adiciona ajuda ao voluntário que atende a ligação
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -131,13 +128,13 @@ class PickupScreen extends StatelessWidget {
     );
   }
 
-  //Adicionar ajuda ao voluntário que atende ligação
+  //Add help volunteer join call
   void addHelp() {
-    _repository.getCurrentUser().then((FirebaseUser user) async {
-      if (user != null) {
-        Users volunteer = await _repository.getUserDetails(user.uid);
+    _repository.getCurrentUser().then((FirebaseUser user) async { //get current volunteer
+      if (user != null) { //current volunteer is not null
+        Users volunteer = await _repository.getUserDetails(user.uid); // users map receive firebase user
         ajuda = volunteer.ajuda;
-        addHelpToVolunteer(user);
+        addHelpToVolunteer(user, ajuda); //incremented help for current volunteer in database
         print(user.email);
         print(ajuda);
       } else {
@@ -150,8 +147,8 @@ class PickupScreen extends StatelessWidget {
     });
   }
 
-//Adicionando numero de ajudas ao voluntário
-  Future<void> addHelpToVolunteer(FirebaseUser currentUser) async {
+//Incrementing volunteer help
+  Future<void> addHelpToVolunteer(FirebaseUser currentUser, int ajuda) async {
     Users user = Users(
       uid: currentUser.uid,
       nome: currentUser.displayName,
@@ -164,6 +161,7 @@ class PickupScreen extends StatelessWidget {
         .collection(USERS_COLLECTION)
         .document(currentUser.uid)
         .setData(user.toMap(user));
-    print(user.ajuda); //mostrar ajuda
+    print(user.ajuda); //show help in output
   }
+
 }

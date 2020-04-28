@@ -330,7 +330,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void authenticateUser(FirebaseUser user) {
     _repository.authenticateUser(user).then((isNewUser) {
       setState(() {
-        isLoginPressed = false;
+        isLoginPressed = true;
       });
       if (isNewUser) {
         _repository.addDataToDb(user).then((value) {

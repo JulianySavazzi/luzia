@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -54,9 +55,54 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return Center(
-                child: Text(
-              "Olá \n${snapshot.data.nome}\n Você já ajudou ${snapshot.data.ajuda} vezes.\n Você está logado como ${snapshot.data.email}",
+                child: Container(
+              height: 310,
+              width: 400,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  CircleAvatar(
+                    radius: 50.0,
+                    backgroundImage:
+                        CachedNetworkImageProvider(snapshot.data.photo),
+                  ),
+                  Text(
+                    '${snapshot.data.nome}',
+                    style: TextStyle(
+                        fontFamily: 'LiuJianMaoCao',
+                        fontSize: 32.0,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.5),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Text(
+                    'VOLUNTÁRIO(A)',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 24.0,
+                      letterSpacing: 2.0,
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.black26,
+                  ),
+                  Text(
+                    'Já ajudei ${snapshot.data.ajuda} vezes!',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontFamily: 'Montserrat',
+                      fontSize: 20.0,
+                    ),
+                  ),
+                ],
+              ),
             ));
+
+//                child: Text(
+//              "Olá \n${snapshot.data.nome}\n Você já ajudou ${snapshot.data.ajuda} vezes.\n Você está logado como ${snapshot.data.email}",
+//            ));
           }
           return CircularProgressIndicator();
         }),

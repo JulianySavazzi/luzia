@@ -207,7 +207,7 @@ class _CallScreenState extends State<CallScreen> {
             child: Column(
           children: <Widget>[
             _expandedVideoRow([views[0]]),
-            _expandedVideoRow([views[1]])
+            //_expandedVideoRow([views[1]])
           ],
         ));
       case 3:

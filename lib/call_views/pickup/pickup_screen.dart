@@ -103,21 +103,21 @@ class PickupScreen extends StatelessWidget {
                       color: Colors.green,
                       onPressed: () async {
                         //_isPlaying = false;
-                        if(_isPlaying){
+                        if (_isPlaying) {
                           FlutterRingtonePlayer.stop();
                         }
                         await Permissions
-                            .cameraAndMicrophonePermissionsGranted()
+                                .cameraAndMicrophonePermissionsGranted()
                             ?
-                        //Adicionar ajuda
-                        //ajuda++;
-                        //addHelp(); //adiciona ajuda ao voluntário que atende a ligação
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CallScreen(call: call),
-                          ),
-                        )
+                            //Adicionar ajuda
+                            //ajuda++;
+                            //addHelp(); //adiciona ajuda ao voluntário que atende a ligação
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CallScreen(call: call),
+                                ),
+                              )
                             : {};
                       }),
                 ],

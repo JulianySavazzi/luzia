@@ -6,7 +6,6 @@ import 'package:luzia/call_views/pickup/pickup_layout.dart';
 import 'package:luzia/model/users.dart';
 import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/firebase_repository.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 //Tela para voluntários

@@ -67,13 +67,10 @@ class _MyAppState extends State<LuziaApp> {
             primaryColor: Colors.cyan,
           ),
           routes: {
-            //rotas para indicar as telas do app
-            //id é uma constante da classe, então não se coloca ()
             LoginScreen.id: (context) => LoginScreen(),
             UsersScreen.id: (context) => UsersScreen(),
             DefVisualScreen.id: (context) => DefVisualScreen(),
             VoluntarioScreen.id: (context) => VoluntarioScreen(),
-            //PickupScreen.id: (context) => PickupScreen(),
           },
         ));
   }

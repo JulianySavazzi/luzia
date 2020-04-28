@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Users {
   String uid;
   String nome;
@@ -9,18 +7,6 @@ class Users {
   int ajuda;
 
   Users({this.uid, this.nome, this.email, this.tipo, this.photo, this.ajuda});
-
-//  factory Users.fromDocument(DocumentSnapshot doc) {
-//    ///INCLUSION FROM SOCIAL
-//    return Users(
-//      uid: doc['uid'],
-//      nome: doc['nome'],
-//      email: doc['email'],
-//      tipo: doc['tipo'],
-//      photo: doc['photo'],
-//      ajuda: doc['ajuda'],
-//    );
-//  }
 
   Map toMap(Users user) {
     var data = Map<String, dynamic>();

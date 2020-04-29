@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:luzia/locator.dart';
 import 'package:luzia/model/users.dart';
 import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/firebase_repository.dart';
@@ -11,7 +12,12 @@ import 'package:luzia/views/login_screen.dart';
 import 'package:luzia/views/users_screen.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(LuziaApp());
+import 'lifecycle_manager.dart';
+
+void main() {
+  setupLocator();
+  runApp(LuziaApp());
+}
 
 class LuziaApp extends StatefulWidget {
   @override
@@ -43,35 +49,36 @@ class _MyAppState extends State<LuziaApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<UserProvider>(
-        create: (_) => UserProvider(),
-        child: MaterialApp(
-          title: 'Luzia',
-          home: FutureBuilder(
-              future: _repository.getCurrentUser(),
-              builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
-                if (snapshot.hasData) {
-                  // initializing firebase user
-                  FirebaseUser firebaseUser = snapshot.data;
-                  //retrieving User details
-                  userDetails(firebaseUser);
-                  // This line is responsible for checking the user type and returning the nced
-                  return result == true
-                      ? VoluntarioScreen()
-                      : DefVisualScreen();
-                } else {
-                  return LoginScreen();
-                }
-              }),
-          theme: ThemeData(
-            primaryColor: Colors.cyan,
-          ),
-          routes: {
-            LoginScreen.id: (context) => LoginScreen(),
-            UsersScreen.id: (context) => UsersScreen(),
-            DefVisualScreen.id: (context) => DefVisualScreen(),
-            VoluntarioScreen.id: (context) => VoluntarioScreen(),
-          },
-        ));
+    return LifeCycleManager(
+        child: ChangeNotifierProvider<UserProvider>(
+            create: (_) => UserProvider(),
+            child: MaterialApp(
+              title: 'Luzia',
+              home: FutureBuilder(
+                  future: _repository.getCurrentUser(),
+                  builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
+                    if (snapshot.hasData) {
+                      // initializing firebase user
+                      FirebaseUser firebaseUser = snapshot.data;
+                      //retrieving User details
+                      userDetails(firebaseUser);
+                      // This line is responsible for checking the user type and returning the nced
+                      return result == true
+                          ? VoluntarioScreen()
+                          : DefVisualScreen();
+                    } else {
+                      return LoginScreen();
+                    }
+                  }),
+              theme: ThemeData(
+                primaryColor: Colors.cyan,
+              ),
+              routes: {
+                LoginScreen.id: (context) => LoginScreen(),
+                UsersScreen.id: (context) => UsersScreen(),
+                DefVisualScreen.id: (context) => DefVisualScreen(),
+                VoluntarioScreen.id: (context) => VoluntarioScreen(),
+              },
+            )));
   }
 }

@@ -9,7 +9,6 @@ import 'package:luzia/utils/firebase_methods.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/constants/strings.dart';
 import 'package:luzia/utils/permissions.dart';
-import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import '../call_screen.dart';
 
 class PickupScreen extends StatelessWidget {
@@ -19,11 +18,10 @@ class PickupScreen extends StatelessWidget {
   //FIREBASE FUNCTIONS
   FirebaseRepository _repository = FirebaseRepository();
   var ajuda = 0; //help volunteer
-  bool _isPlaying = true;
   bool answered = false;
 
 //  _playRingtone() async {
-    //Starting the ringtone sound
+  //Starting the ringtone sound
 //    if (!_isPlaying) {
 //      FlutterRingtonePlayer.stop(); //parar
 //    }
@@ -110,8 +108,7 @@ class PickupScreen extends StatelessWidget {
                         addHelp(); //add help to volunteer join call
                         await Permissions
                                 .cameraAndMicrophonePermissionsGranted()
-                            ?
-                            Navigator.push(
+                            ? Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => CallScreen(call: call),
@@ -130,11 +127,15 @@ class PickupScreen extends StatelessWidget {
 
   //Add help volunteer join call
   void addHelp() {
-    _repository.getCurrentUser().then((FirebaseUser user) async { //get current volunteer
-      if (user != null) { //current volunteer is not null
-        Users volunteer = await _repository.getUserDetails(user.uid); // users map receive firebase user
+    _repository.getCurrentUser().then((FirebaseUser user) async {
+      //get current volunteer
+      if (user != null) {
+        //current volunteer is not null
+        Users volunteer = await _repository
+            .getUserDetails(user.uid); // users map receive firebase user
         ajuda = volunteer.ajuda;
-        addHelpToVolunteer(user, ajuda); //incremented help for current volunteer in database
+        addHelpToVolunteer(
+            user, ajuda); //incremented help for current volunteer in database
         print(user.email);
         print(ajuda);
       } else {
@@ -163,5 +164,4 @@ class PickupScreen extends StatelessWidget {
         .setData(user.toMap(user));
     print(user.ajuda); //show help in output
   }
-
 }

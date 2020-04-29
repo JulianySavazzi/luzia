@@ -22,7 +22,7 @@ class FirebaseRepository {
   Future<void> addDataToDb(FirebaseUser user) =>
       _firebaseMethods.addDataToDb(user);
 
-  //Adicionando tipo
+  //Add type for user
   Future<void> addType(FirebaseUser user, String tipo, int ajuda) =>
       _firebaseMethods.addType(user, tipo, ajuda);
 

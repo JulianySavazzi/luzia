@@ -59,7 +59,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
     });
   }
 
-  //Método que faz a escolha aleatória da lista de voluntarios e salva um voluntário toda vez que é chamado;
+  //Select random volunteer, and save chosen volunteer
   Users selectingVolunteers(Users volunteer) {
     final random = new Random();
     var i = random.nextInt(volunteers.length);

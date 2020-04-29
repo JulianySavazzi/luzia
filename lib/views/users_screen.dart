@@ -11,7 +11,7 @@ FirebaseRepository _repository = FirebaseRepository();
 bool isLoginPressed = false;
 bool voluntario = false;
 
-//Variáveis para o tipo e número de ajuda do usuário
+//vars for type and help number by users
 String tipo = "";
 int ajuda = 0;
 
@@ -69,7 +69,7 @@ class _UsersScreenState extends State<UsersScreen> {
                       children: <Widget>[
                         Positioned(
                             child: Hero(
-                          //Hero indica a transição de página dando foco no elemento com a tag
+                          //Hero page transition by tag
                           tag: 'logo',
                           child: Container(
                             decoration: BoxDecoration(
@@ -98,7 +98,7 @@ class _UsersScreenState extends State<UsersScreen> {
                         Padding(
                           padding: EdgeInsets.symmetric(
                               vertical: 100, horizontal: 10),
-                          //Espaço entre a logo e o texto
+                          //space between logo and text
                         ),
                       ],
                     ),
@@ -166,7 +166,7 @@ class _UsersScreenState extends State<UsersScreen> {
                               onPressed: () {
                                 tipo = "D";
                                 ajuda = null;
-                                //tela do deficiente visual
+                                //DV screen
                                 addType();
                               },
                             ),
@@ -199,7 +199,7 @@ class _UsersScreenState extends State<UsersScreen> {
                               onPressed: () {
                                 tipo = "V";
                                 ajuda = 0;
-                                //tela do voluntário
+                                //V screen
                                 addType();
                               },
                             ),
@@ -219,7 +219,7 @@ class _UsersScreenState extends State<UsersScreen> {
 
   // ***************************************************************** //
 
-//Método para adicionar tipo de usuário
+//Add type for user
   void addType() {
     setState(() {
       isLoginPressed = true;
@@ -237,6 +237,7 @@ class _UsersScreenState extends State<UsersScreen> {
     });
   }
 
+  //Auth type for user
   void authenticateType(FirebaseUser user, String tipo, int ajuda) {
     _repository.authenticateUser(user).then((isNewUser) {
       setState(() {
@@ -249,6 +250,7 @@ class _UsersScreenState extends State<UsersScreen> {
               voluntario = true;
             });
             Navigator.pushNamed(context, VoluntarioScreen.id);
+            print(VoluntarioScreen);
           } else {
             Navigator.pushNamed(context, DefVisualScreen.id);
           }

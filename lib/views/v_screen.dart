@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:luzia/call_views/pickup/pickup_layout.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -15,17 +16,21 @@ class VoluntarioScreen extends StatefulWidget {
 }
 
 class _VoluntarioScreenState extends State<VoluntarioScreen> {
-  int _selectedIndex = 0; //índice do item
+  int _selectedIndex = 0; //item index
 
   //static const List<Widget> _widgetOptions = <Widget>[ //required for BottomNavigationBarItem
   List<Widget> _widgetOptions = <Widget>[
     //required for BottomNavigationBarItem
-    //Lista de itens do ButtomNavigatorBar
+    //Items list for ButtomNavigatorBar
     //item 1
     FutureBuilder(
         future: _repository.getVolunteers(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+          //if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+            //Error loading volunteer page return circular progressIndicator
+            print(snapshot.connectionState); //print connectionState in output
+            print(snapshot.hasData); //print hasData in output
             return Center(
                 child: Container(
               height: 300,
@@ -48,8 +53,14 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
                 ],
               ),
             ));
-          }
-          return CircularProgressIndicator();
+          } //if
+          else {
+            print(snapshot.connectionState); //print connectionState in output
+            print(snapshot.hasData); //print hasData in output
+            return CircularProgressIndicator(
+              semanticsLabel: 'Problema ao carregar página. Reinicie o app ou feche e abra novamente!',
+            );
+          } //Connection State Condition
         }),
     //item 2
     FutureBuilder(
@@ -101,8 +112,13 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
                 ],
               ),
             ));
+          } else {
+            print(snapshot.connectionState); //print connectionState in output
+            print(snapshot.hasData); //print hasData in output
+            return CircularProgressIndicator(
+              semanticsLabel: 'Problema ao carregar página. Reinicie o app ou feche e abra novamente!',
+            );
           }
-          return CircularProgressIndicator();
         }),
     //item 3
     Center(
@@ -211,7 +227,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index; //índice do item selecionado
+      _selectedIndex = index; //item index selected in buttonNavigationBar
     });
   }
 
@@ -299,6 +315,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
           ),
         ]),
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         //Footer
         items: const <BottomNavigationBarItem>[

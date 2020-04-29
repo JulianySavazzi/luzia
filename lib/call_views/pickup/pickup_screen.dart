@@ -19,16 +19,16 @@ class PickupScreen extends StatelessWidget {
   //FIREBASE FUNCTIONS
   FirebaseRepository _repository = FirebaseRepository();
   var ajuda = 0; //help volunteer
-  bool _isPlaying = false;
+  bool _isPlaying = true;
   bool answered = false;
 
-  _playRingtone() async {
+//  _playRingtone() async {
     //Starting the ringtone sound
-    if (_isPlaying) {
-      FlutterRingtonePlayer.stop(); //parar
-    }
-    FlutterRingtonePlayer.playNotification(); //tocar
-  }
+//    if (!_isPlaying) {
+//      FlutterRingtonePlayer.stop(); //parar
+//    }
+//    FlutterRingtonePlayer.playNotification(); //tocar
+//  }
 
   PickupScreen({
     @required this.call,
@@ -36,8 +36,7 @@ class PickupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _playRingtone(); //start ringtone
-    //_isPlaying = true;
+    //_playRingtone(); //start ringtone
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.cyan.shade50,
@@ -84,9 +83,9 @@ class PickupScreen extends StatelessWidget {
                     iconSize: 50,
                     onPressed: () async {
                       //_isPlaying = false;
-                      if (_isPlaying) {
-                        FlutterRingtonePlayer.stop();
-                      }
+                      //if (_isPlaying) {
+                      //  FlutterRingtonePlayer.stop();
+                      //}
                       await callMethods.endCall(call: call);
                       Fluttertoast.showToast(
                           msg: "Chamada encerrada!",
@@ -104,9 +103,10 @@ class PickupScreen extends StatelessWidget {
                       color: Colors.green,
                       onPressed: () async {
                         answered = true; // THE VOLUNTEER ANSWERED;
-                        if (_isPlaying) {
-                          FlutterRingtonePlayer.stop();
-                        }
+                        //_isPlaying = false;
+                        //if (_isPlaying) {
+                        //  FlutterRingtonePlayer.stop();
+                        //}
                         addHelp(); //add help to volunteer join call
                         await Permissions
                                 .cameraAndMicrophonePermissionsGranted()

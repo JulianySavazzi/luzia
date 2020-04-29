@@ -245,10 +245,10 @@ class _UsersScreenState extends State<UsersScreen> {
       if (!isNewUser) {
         _repository.addType(user, tipo, ajuda).then((value) {
           if (ajuda == 0) {
-            Navigator.pushNamed(context, VoluntarioScreen.id);
             setState(() {
               voluntario = true;
             });
+            Navigator.pushNamed(context, VoluntarioScreen.id);
           } else {
             Navigator.pushNamed(context, DefVisualScreen.id);
           }

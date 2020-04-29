@@ -180,8 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               onPressed: () {
                                 createDialog(context);
-                                //alert dialog de termos de uso
-                                //se aceitar termos de uso, autenticação de usuário
+                                //alert dialog
                                 //Google sign
                               },
                             ),
@@ -217,10 +216,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ],
                               ),
                               onPressed: () {
-                                //alert para termos de uso
-                                //se aceitar termos de uso, chamar autenticação
-                                //se autenticação ok
-                                //ir para a tela do usuário
+                                //alert dialog
+                                //facebook login
                                 facebookDialog(context);
                               },
                             ),
@@ -249,17 +246,22 @@ class _LoginScreenState extends State<LoginScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Link(
-                                child: Text(
-                                  //Onde será o link para o site
-                                  'Termos de uso e Política de Privacidade',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'Montserrat',
-                                    fontStyle: FontStyle.italic,
-                                    decoration: TextDecoration.underline,
-                                    color: Colors.black,
-                                  ),
-                                ),
+                                child:
+                                    Row(
+                                      children: <Widget>[
+                                        Text(
+                                          //link for site
+                                          'Termos de uso e Política de Privacidade',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontFamily: 'Montserrat',
+                                            fontStyle: FontStyle.italic,
+                                            decoration: TextDecoration.underline,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                 url: "https://www.globo.com",
                               ),
                             ],
@@ -277,9 +279,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // ********************************************************************************** //
+  // *********************************** Google Login ************************************** //
 
-  //Método para mostrar o diálogo ao logar com o google
+  //Alert dialog for Google Sig in
   createDialog(BuildContext context) {
     return showDialog(
         context: context,
@@ -297,7 +299,11 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               FlatButton(
                 child: Text("Aceito"),
-                onPressed: () => performLogin(),
+                //onPressed: () => performLogin(), //login with Google
+                onPressed: () {
+                  performLogin(); //login with Google
+                  Navigator.of(context).pop();
+                }, //login with Google
               ),
             ],
             elevation: 24.0,
@@ -305,7 +311,7 @@ class _LoginScreenState extends State<LoginScreen> {
         });
   }
 
-  //Método para realizar o log in com o google. Caso dê erro, um toast aparece com a mensagem.
+  //Login with Google
   void performLogin() {
     setState(() {
       isLoginPressed = true;
@@ -323,6 +329,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  //***************** Authenticate User ************************
   //Método usado para controlar autenticação de usuários:
   //Se o usuário é novo, passa para tela tipo de usuario,
   //caso contrário para sua respectiva tela. Pois o usuário pode
@@ -333,18 +340,21 @@ class _LoginScreenState extends State<LoginScreen> {
         isLoginPressed = true;
       });
       if (isNewUser) {
+        //CircularProgressIndicator(
+          //valueColor: AlwaysStoppedAnimation<Color>(Colors.lightGreenAccent),
+        //);
         _repository.addDataToDb(user).then((value) {
           Navigator.pushNamed(context, UsersScreen.id);
         });
       } else {
-        Navigator.pushNamed(context, UsersScreen.id);
+        Navigator.pushNamed(context, UsersScreen.id); //Redirect V screen and DV screen
       }
     });
   }
 
   //**************** Facebook Login *******************
 
-  //Método para mostrar o diálogo de termos de uso ao logar com facebook
+  //Alert dialog for Facebook Sig in
   facebookDialog(BuildContext context) {
     return showDialog(
         context: context,
@@ -361,21 +371,24 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
               ),
               FlatButton(
-                child: Text("Aceito"),
-                onPressed: () => logIn(), //login com facebook
-              ),
+                  child: Text("Aceito"),
+                  //onPressed: () => logIn(), //login with facebook
+                  onPressed: () {
+                    logIn(); //login with facebook
+                    Navigator.of(context).pop();
+                  }),
             ],
             elevation: 24.0,
           );
         });
   }
 
-  //login com o facebook
+  //login with facebook
   void logIn() {
     _repository.loginWithFacebook().then((response) {
       if (response != null) {
         myUser = response;
-        authenticateUser(myUser); //autenticação de usuário do firebase
+        authenticateUser(myUser); //firebase user auth
         setState(() {
           isLoginPressed = true;
         });

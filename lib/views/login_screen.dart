@@ -385,13 +385,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //login with facebook
   void logIn() {
+    setState(() {
+      isLoginPressed = true;
+    });
     _repository.loginWithFacebook().then((response) {
       if (response != null) {
         myUser = response;
         authenticateUser(myUser); //firebase user auth
-        setState(() {
-          isLoginPressed = true;
-        });
       } else {
         Fluttertoast.showToast(
             msg: "Houve um erro ao efetuar o log-in",

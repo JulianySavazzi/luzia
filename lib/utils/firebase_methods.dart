@@ -111,7 +111,8 @@ class FirebaseMethods {
   }
 
   //Adicionando tipo ao usuário
-  Future<void> addType(FirebaseUser currentUser, String tipo, int ajuda) async {
+  Future<void> addType(
+      FirebaseUser currentUser, String tipo, int ajuda, String token) async {
     user = Users(
       uid: currentUser.uid,
       nome: currentUser.displayName,
@@ -119,6 +120,7 @@ class FirebaseMethods {
       tipo: tipo,
       photo: currentUser.photoUrl,
       ajuda: ajuda,
+      token: token,
     );
     firestore
         .collection(USERS_COLLECTION)

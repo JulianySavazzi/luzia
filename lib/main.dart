@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:luzia/locator.dart';
@@ -26,6 +27,7 @@ class LuziaApp extends StatefulWidget {
 
 class _MyAppState extends State<LuziaApp> {
   FirebaseRepository _repository = FirebaseRepository();
+  //final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   Users user;
   Firestore firestore;
   //resultado do voluntario
@@ -46,6 +48,18 @@ class _MyAppState extends State<LuziaApp> {
     }
     return user;
   }
+
+//  _getToken() {
+//    _firebaseMessaging.getToken().then((token) {
+//      print("Device Token: $token");
+//    });
+//  }
+//
+//  @override
+//  void initState() {
+//    super.initState();
+//    _getToken();
+//  }
 
   @override
   Widget build(BuildContext context) {

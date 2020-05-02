@@ -3,17 +3,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:luzia/utils/firebase_repository.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'dv_screen.dart';
 import 'v_screen.dart';
 
 FirebaseRepository _repository = FirebaseRepository();
-
+final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 bool isLoginPressed = false;
 bool voluntario = false;
 
 //vars for type and help number by users
 String tipo = "";
 int ajuda = 0;
+String _token = "";
 
 class UsersScreen extends StatefulWidget {
   static const String id = 'users_screen';
@@ -23,6 +25,19 @@ class UsersScreen extends StatefulWidget {
 }
 
 class _UsersScreenState extends State<UsersScreen> {
+  _getToken() {
+    _firebaseMessaging.getToken().then((token) {
+      _token = token;
+      print("Device Token: $token");
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getToken();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -166,6 +181,7 @@ class _UsersScreenState extends State<UsersScreen> {
                               onPressed: () {
                                 tipo = "D";
                                 ajuda = null;
+                                _token = _token;
                                 //DV screen
                                 addType();
                               },
@@ -199,6 +215,7 @@ class _UsersScreenState extends State<UsersScreen> {
                               onPressed: () {
                                 tipo = "V";
                                 ajuda = 0;
+                                _token = _token;
                                 //V screen
                                 addType();
                               },
@@ -226,7 +243,7 @@ class _UsersScreenState extends State<UsersScreen> {
     });
     _repository.getCurrentUser().then((FirebaseUser user) {
       if (user != null) {
-        authenticateType(user, tipo, ajuda);
+        authenticateType(user, tipo, ajuda, _token);
       } else {
         Fluttertoast.showToast(
             msg: "Houve um erro",
@@ -238,13 +255,14 @@ class _UsersScreenState extends State<UsersScreen> {
   }
 
   //Auth type for user
-  void authenticateType(FirebaseUser user, String tipo, int ajuda) {
+  void authenticateType(
+      FirebaseUser user, String tipo, int ajuda, String token) {
     _repository.authenticateUser(user).then((isNewUser) {
       setState(() {
         isLoginPressed = true;
       });
       if (!isNewUser) {
-        _repository.addType(user, tipo, ajuda).then((value) {
+        _repository.addType(user, tipo, ajuda, token).then((value) {
           if (ajuda == 0) {
             setState(() {
               voluntario = true;

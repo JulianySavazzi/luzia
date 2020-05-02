@@ -14,9 +14,11 @@ import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:provider/provider.dart';
+import 'package:luzia/services/push_notification_service.dart';
 
 Route previousRoute;
 FirebaseRepository _repository = FirebaseRepository();
+PushNotificationService _fcm = PushNotificationService();
 
 List<Users> volunteers;
 Call call;

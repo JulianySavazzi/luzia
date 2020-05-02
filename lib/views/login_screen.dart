@@ -246,22 +246,21 @@ class _LoginScreenState extends State<LoginScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Link(
-                                child:
-                                    Row(
-                                      children: <Widget>[
-                                        Text(
-                                          //link for site
-                                          'Termos de uso e Política de Privacidade',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontFamily: 'Montserrat',
-                                            fontStyle: FontStyle.italic,
-                                            decoration: TextDecoration.underline,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ],
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      //link for site
+                                      'Termos de uso e Política de Privacidade',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontFamily: 'Montserrat',
+                                        fontStyle: FontStyle.italic,
+                                        decoration: TextDecoration.underline,
+                                        color: Colors.black,
+                                      ),
                                     ),
+                                  ],
+                                ),
                                 url: "https://www.globo.com",
                               ),
                             ],
@@ -341,13 +340,14 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       if (isNewUser) {
         //CircularProgressIndicator(
-          //valueColor: AlwaysStoppedAnimation<Color>(Colors.lightGreenAccent),
+        //valueColor: AlwaysStoppedAnimation<Color>(Colors.lightGreenAccent),
         //);
         _repository.addDataToDb(user).then((value) {
           Navigator.pushNamed(context, UsersScreen.id);
         });
       } else {
-        Navigator.pushNamed(context, UsersScreen.id); //Redirect V screen and DV screen
+        Navigator.pushNamed(
+            context, UsersScreen.id); //Redirect V screen and DV screen
       }
     });
   }

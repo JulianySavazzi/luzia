@@ -23,6 +23,7 @@ Call call;
 Users oneVolunteer = new Users();
 Users sender = new Users();
 bool answered = PickupScreen(call: call).answered;
+int tries = 0;
 
 //Add UserProvider to refresh users
 UserProvider userProvider;
@@ -47,7 +48,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
       userProvider.refreshUser();
     });
     _repository.getCurrentUser().then((FirebaseUser currentUser) {
-      _repository.searchAllVolunteers(currentUser).then((List<Users> list) {
+      _repository.searchVolunteers(currentUser).then((List<Users> list) {
         setState(() {
           sender = Users(
             uid: currentUser.uid,
@@ -177,6 +178,12 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
   }
 
   //METHOD FOR ENTERING A LOOP UNTIL A VOLUNTEER IS SELECTED
+
+//  search() async {
+//    do {
+//      selectingVolunteers(oneVolunteer);
+//    } while (tries < 5);
+//  }
 
   searchAlgorithm() async {
     selectingVolunteers(oneVolunteer);

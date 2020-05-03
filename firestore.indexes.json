@@ -1,0 +1,33 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "users",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "tipo",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "ajuda",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "users",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "tipo",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "ajuda",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

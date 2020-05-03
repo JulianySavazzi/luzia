@@ -43,10 +43,11 @@ class DefVisualScreen extends StatefulWidget {
   _DefVisualScreenState createState() => _DefVisualScreenState();
 }
 
+
+
 class _DefVisualScreenState extends State<DefVisualScreen> {
-  @override
-  void initState() {
-    super.initState();
+
+  void initNotification (){
     //NOTIFICATION
     if (Platform.isIOS) {
       _fcm.requestNotificationPermissions(IosNotificationSettings());
@@ -62,23 +63,30 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
             title: Text(message['notification']['title']),
             content: Text(message['notification']['body']),
             //actions: <Widget>[
-             // FlatButton(
-             //   child: Text("Não Aceito"),
-             //   onPressed: () {
-             //     Navigator.of(context).pop();
-             //   },
-             // ),
-             // FlatButton(
-             //   child: Text("Aceito"),
-             //   onPressed: () {
-                  //TODO FAZER A LIGAÇÃO;
-             //     Navigator.of(context).pop();
-             //   },
-             // ),
+            // FlatButton(
+            //   child: Text("Não Aceito"),
+            //   onPressed: () {
+            //     Navigator.of(context).pop();
+            //   },
+            // ),
+            // FlatButton(
+            //   child: Text("Aceito"),
+            //   onPressed: () {
+            //TODO FAZER A LIGAÇÃO;
+            //     Navigator.of(context).pop();
+            //   },
+            // ),
             //],
             elevation: 24.0,
           ));
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    //NOTIFICATION
+    initNotification();
     //Add UsersProviders refresh, using this to
     SchedulerBinding.instance.addPostFrameCallback((_) {
       userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -212,6 +220,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                       toastLength: Toast.LENGTH_LONG,
                       textColor: Colors.white,
                       gravity: ToastGravity.CENTER);
+                  initNotification();
                 },
               ),
             )),

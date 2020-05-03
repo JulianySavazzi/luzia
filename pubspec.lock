@@ -155,13 +155,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2"
-  firebase_cloud_messaging:
-    dependency: "direct main"
-    description:
-      name: firebase_cloud_messaging
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.4+1"
   firebase_core:
     dependency: "direct main"
     description:

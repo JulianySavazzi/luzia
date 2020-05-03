@@ -12,7 +12,7 @@ final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 bool isLoginPressed = false;
 bool voluntario = false;
 
-//vars for type and help number by users
+//vars for type and help number by users, and device token
 String tipo = "";
 int ajuda = 0;
 String _token = "";

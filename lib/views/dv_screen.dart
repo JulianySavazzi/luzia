@@ -16,6 +16,7 @@ import 'package:luzia/utils/firebase_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:luzia/services/push_notification_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 Route previousRoute;
 FirebaseRepository _repository = FirebaseRepository();
@@ -206,6 +207,11 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                           context: context,
                         )
                       : Navigator.pop(context);
+                  Fluttertoast.showToast(
+                      msg: "Chamando voluntário...",
+                      toastLength: Toast.LENGTH_LONG,
+                      textColor: Colors.white,
+                      gravity: ToastGravity.CENTER);
                 },
               ),
             )),

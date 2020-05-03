@@ -15,11 +15,12 @@ import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:luzia/services/push_notification_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 Route previousRoute;
 FirebaseRepository _repository = FirebaseRepository();
-PushNotificationService _fcm = PushNotificationService();
-
+//PushNotificationService _fcm = PushNotificationService();
+final FirebaseMessaging _fcm = FirebaseMessaging();
 
 List<Users> volunteers;
 Call call;
@@ -45,6 +46,38 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
   @override
   void initState() {
     super.initState();
+    //NOTIFICATION
+    if (Platform.isIOS) {
+      _fcm.requestNotificationPermissions(IosNotificationSettings());
+    }
+    _fcm.configure(onMessage: (Map<String, dynamic> message) async {
+      print("onMessage: $message");
+    }, onLaunch: (Map<String, dynamic> message) async {
+      print("onLaunch: $message");
+    }, onResume: (Map<String, dynamic> message) async {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(message['notification']['title']),
+            content: Text(message['notification']['body']),
+            //actions: <Widget>[
+             // FlatButton(
+             //   child: Text("Não Aceito"),
+             //   onPressed: () {
+             //     Navigator.of(context).pop();
+             //   },
+             // ),
+             // FlatButton(
+             //   child: Text("Aceito"),
+             //   onPressed: () {
+                  //TODO FAZER A LIGAÇÃO;
+             //     Navigator.of(context).pop();
+             //   },
+             // ),
+            //],
+            elevation: 24.0,
+          ));
+    });
     //Add UsersProviders refresh, using this to
     SchedulerBinding.instance.addPostFrameCallback((_) {
       userProvider = Provider.of<UserProvider>(context, listen: false);

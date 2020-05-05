@@ -14,11 +14,11 @@ import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:provider/provider.dart';
-import 'package:luzia/services/push_notification_service.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 Route previousRoute;
 FirebaseRepository _repository = FirebaseRepository();
-PushNotificationService _fcm = PushNotificationService();
+ProgressDialog pr;
 
 List<Users> volunteers;
 Call call;
@@ -79,6 +79,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
 
   @override
   Widget build(BuildContext context) {
+    pr = new ProgressDialog(context);
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -164,6 +165,9 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                   ],
                 ),
                 onPressed: () async {
+                  pr = ProgressDialog(context,
+                      type: ProgressDialogType.Normal, isDismissible: false);
+                  await pr.show();
                   selectingVolunteers(oneVolunteer);
                   await Permissions.cameraAndMicrophonePermissionsGranted()
                       ? CallUtils.dial(
@@ -171,7 +175,8 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                           to: oneVolunteer,
                           context: context,
                         )
-                      : Navigator.pop(context);
+                      : await pr.hide();
+                  Navigator.pop(context);
                 },
               ),
             )),

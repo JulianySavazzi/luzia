@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:luzia/call_views/pickup/pickup_layout.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 FirebaseRepository _repository = FirebaseRepository();
+final FirebaseMessaging _fcm = FirebaseMessaging();
 
 class VoluntarioScreen extends StatefulWidget {
   static const String id = 'v_screen';
@@ -15,6 +19,83 @@ class VoluntarioScreen extends StatefulWidget {
 }
 
 class _VoluntarioScreenState extends State<VoluntarioScreen> {
+
+  @override
+  //FUNCTIONS TO HANDLE NOTIFICATIONS
+  void initState() {
+    super.initState();
+    if (Platform.isIOS) {
+      _fcm.requestNotificationPermissions(IosNotificationSettings());
+    }
+    _fcm.configure(onMessage: (Map<String, dynamic> message) async {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text(message['notification']['title']),
+                content: Text(message['notification']['body']),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("Não Aceito"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  FlatButton(
+                    child: Text("Aceito"),
+                    onPressed: () {
+                      Navigator.pushNamed(context, VoluntarioScreen.id);
+                    },
+                  ),
+                ],
+                elevation: 24.0,
+              ));
+    }, onLaunch: (Map<String, dynamic> message) async {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text(message['notification']['title']),
+                content: Text(message['notification']['body']),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("Não Aceito"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  FlatButton(
+                    child: Text("Aceito"),
+                    onPressed: () {
+                      Navigator.pushNamed(context, VoluntarioScreen.id);
+                    },
+                  ),
+                ],
+                elevation: 24.0,
+              ));
+    }, onResume: (Map<String, dynamic> message) async {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text(message['notification']['title']),
+                content: Text(message['notification']['body']),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("Não Aceito"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  FlatButton(
+                    child: Text("Aceito"),
+                    onPressed: () {
+                      Navigator.pushNamed(context, VoluntarioScreen.id);
+                    },
+                  ),
+                ],
+                elevation: 24.0,
+              ));
+    });
+  }
+
   int _selectedIndex = 0; //item index
 
   //static const List<Widget> _widgetOptions = <Widget>[ //required for BottomNavigationBarItem

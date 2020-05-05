@@ -1,6 +1,7 @@
 import 'dart:io';
-import 'dart:ui';
 import 'dart:math';
+import 'dart:ui';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +10,12 @@ import 'package:flutter/widgets.dart';
 import 'package:luzia/call_views/pickup/pickup_screen.dart';
 import 'package:luzia/model/call.dart';
 import 'package:luzia/model/users.dart';
-import 'package:luzia/utils/permissions.dart';
 import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
-import 'package:provider/provider.dart';
+import 'package:luzia/utils/permissions.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart';
 
 Route previousRoute;
 FirebaseRepository _repository = FirebaseRepository();

@@ -5,37 +5,36 @@ admin.initializeApp(functions.config().functions);
 
 
 exports.getDetailsforCallNotification = functions.firestore.document('call/{receiver_id}').onCreate(async(snapshot, context) => {
+      
     console.log('Receiverid found', snapshot.data());
     //Get data from snapshot
     const data = snapshot.data();
     //Get receiverId from the call document
     const receiver_id = data['receiver_id'];
     //Get receiverId token
-    return admin.firestore().doc('users/' + receiver_id).get().then(userDoc => {
-        const userToken = userDoc.get('token');
+    //admin.firestore().doc('users/' + receiver_id).get().then(userDoc => {
+        //const tokens = userDoc.get('token');
 
-    //function sendNotification(userToken, receiver_id){
-        
+
+        var token = await admin
+        .firestore()
+        .doc('users/' + receiver_id)
+        .get();
+
         //create a message
-        const payload = {
-            notification: {title: 'Ligação do Luzia', body: 'Alguém precisa de sua ajuda! Clique Aceito para atender a ligação.'},
-            icon: 'your-icon-url',
-            token: userToken,
-            clickAction: "FLUTTER_NOTIFICATION_CLICK",
+        var payload = {
+            notification: {title: 'Ligação do Luzia', body: 'teste', sound: 'default'},
+            data: {click_action: 'FLUTTER_NOTIFICATION_CLICK', message: data.message },
+        };
+
+        try {
+            const response = await admin.messaging().sendToDevice(token, payload);
+            console.log('A mensagem foi enviada com sucesso', response);
+        } catch (error){
+            console.log('A mensagem não foi enviada', error);
         }
-        //send message with admin.message()
-        return admin.messaging()
-        .sendToDevice(userToken, payload)
-        .then(response => {
-            console.log("Message sent", response);
-        })
-        .catch(error => {
-            console.log("Error sending message", error);
-        })
 
-    //}
-
-})
+//})
 
 }); //END OF getDetailsforCallNotification FCM
 

@@ -14,7 +14,7 @@ class Users {
       this.tipo,
       this.photo,
       this.ajuda,
-      this.token});
+      this.token,});
 
   Map toMap(Users user) {
     var data = Map<String, dynamic>();

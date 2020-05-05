@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:luzia/locator.dart';
@@ -8,9 +10,9 @@ import 'package:luzia/model/users.dart';
 import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/views/dv_screen.dart';
-import 'package:luzia/views/v_screen.dart';
 import 'package:luzia/views/login_screen.dart';
 import 'package:luzia/views/users_screen.dart';
+import 'package:luzia/views/v_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'lifecycle_manager.dart';
@@ -27,11 +29,24 @@ class LuziaApp extends StatefulWidget {
 
 class _MyAppState extends State<LuziaApp> {
   FirebaseRepository _repository = FirebaseRepository();
+  final FirebaseMessaging _fcm = FirebaseMessaging();
   //final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   Users user;
   Firestore firestore;
   //resultado do voluntario
   bool result = false;
+
+  Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
+    if (message.containsKey('data')) {
+      // Handle data message
+      final dynamic data = message['data'];
+    }
+
+    if (message.containsKey('notification')) {
+      // Handle notification message
+      final dynamic notification = message['notification'];
+    }
+  }
 
   Future<Users> userDetails(firebaseUser) async {
     // retrieving User details
@@ -49,17 +64,81 @@ class _MyAppState extends State<LuziaApp> {
     return user;
   }
 
-//  _getToken() {
-//    _firebaseMessaging.getToken().then((token) {
-//      print("Device Token: $token");
-//    });
-//  }
-//
-//  @override
-//  void initState() {
-//    super.initState();
-//    _getToken();
-//  }
+  @override
+  //FUNCTIONS TO HANDLE NOTIFICATIONS
+  void initState() {
+    super.initState();
+    if (Platform.isIOS) {
+      _fcm.requestNotificationPermissions(IosNotificationSettings());
+    }
+    _fcm.configure(onMessage: (Map<String, dynamic> message) async {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text(message['notification']['title']),
+                content: Text(message['notification']['body']),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("Não Aceito"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  FlatButton(
+                    child: Text("Aceito"),
+                    onPressed: () {
+                      Navigator.pushNamed(context, VoluntarioScreen.id);
+                    },
+                  ),
+                ],
+                elevation: 24.0,
+              ));
+    }, onLaunch: (Map<String, dynamic> message) async {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text(message['notification']['title']),
+                content: Text(message['notification']['body']),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("Não Aceito"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  FlatButton(
+                    child: Text("Aceito"),
+                    onPressed: () {
+                      Navigator.pushNamed(context, VoluntarioScreen.id);
+                    },
+                  ),
+                ],
+                elevation: 24.0,
+              ));
+    }, onResume: (Map<String, dynamic> message) async {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text(message['notification']['title']),
+                content: Text(message['notification']['body']),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("Não Aceito"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  FlatButton(
+                    child: Text("Aceito"),
+                    onPressed: () {
+                      Navigator.pushNamed(context, VoluntarioScreen.id);
+                    },
+                  ),
+                ],
+                elevation: 24.0,
+              ));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

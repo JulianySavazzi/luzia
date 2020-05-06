@@ -261,7 +261,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ],
                                 ),
-                                url: "https://www.globo.com",
+                                url: "https://luziaapp.z13.web.core.windows.net/politica.html",
                               ),
                             ],
                           ),

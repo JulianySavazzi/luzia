@@ -167,7 +167,12 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                 ),
                 onPressed: () async {
                   pr = ProgressDialog(context,
-                      type: ProgressDialogType.Normal, isDismissible: false);
+                      type: ProgressDialogType.Normal,
+                      isDismissible: false,
+                  );
+                  pr.style(
+                    message: 'Chamando voluntário...',
+                  );
                   await pr.show();
                   selectingVolunteers(oneVolunteer);
                   await Permissions.cameraAndMicrophonePermissionsGranted()

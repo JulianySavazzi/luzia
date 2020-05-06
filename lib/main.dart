@@ -52,13 +52,13 @@ class _MyAppState extends State<LuziaApp> {
     // retrieving User details
     //firebaseUser = user;
     user = await _repository.getUserDetails(firebaseUser.uid);
-    if (user.tipo == "V") {
+    if (user.tipo == "DV") {
       setState(() {
-        result = true; //voluntário
+        result = false; //voluntário
       });
     } else {
       setState(() {
-        result = false; //deficiente visual
+        result = true; //deficiente visual
       });
     }
     return user;

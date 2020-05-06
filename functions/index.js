@@ -12,29 +12,23 @@ exports.getDetailsforCallNotification = functions.firestore.document('call/{rece
     //Get receiverId from the call document
     const receiver_id = data['receiver_id'];
     //Get receiverId token
-    //admin.firestore().doc('users/' + receiver_id).get().then(userDoc => {
-        //const tokens = userDoc.get('token');
-
-
-        var token = await admin
-        .firestore()
-        .doc('users/' + receiver_id)
-        .get();
+    admin.firestore().doc('users/' + receiver_id).get().then(userDoc => {
+        const tokens = userDoc.get('token');
 
         //create a message
         var payload = {
             notification: {title: 'Ligação do Luzia', body: 'teste', sound: 'default'},
-            data: {click_action: 'FLUTTER_NOTIFICATION_CLICK', message: data.message },
+            data: {click_action: 'FLUTTER_NOTIFICATION_CLICK', message: 'teste' },
         };
 
         try {
-            const response = await admin.messaging().sendToDevice(token, payload);
+            const response = admin.messaging().sendToDevice(tokens, payload);
             console.log('A mensagem foi enviada com sucesso', response);
         } catch (error){
             console.log('A mensagem não foi enviada', error);
         }
 
-//})
+})
 
 }); //END OF getDetailsforCallNotification FCM
 

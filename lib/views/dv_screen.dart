@@ -7,10 +7,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:luzia/call_views/pickup/pickup_screen.dart';
 import 'package:luzia/model/call.dart';
 import 'package:luzia/model/users.dart';
 import 'package:luzia/provider/user_provider.dart';
+import 'package:luzia/utils/call_methods.dart';
 import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/utils/permissions.dart';
@@ -19,6 +21,7 @@ import 'package:provider/provider.dart';
 
 Route previousRoute;
 FirebaseRepository _repository = FirebaseRepository();
+CallMethods _callMethods = CallMethods(); //pegar endcall
 ProgressDialog pr;
 
 List<Users> volunteers;
@@ -166,21 +169,18 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                   ],
                 ),
                 onPressed: () async {
-                  pr = ProgressDialog(context,
-                      type: ProgressDialogType.Normal,
-                      isDismissible: false,
+                  pr = ProgressDialog(
+                    context,
+                    type: ProgressDialogType.Normal,
+                    isDismissible: false,
                   );
                   pr.style(
                     message: 'Chamando voluntário...',
                   );
                   await pr.show();
-                  selectingVolunteers(oneVolunteer);
+
                   await Permissions.cameraAndMicrophonePermissionsGranted()
-                      ? CallUtils.dial(
-                          from: sender,
-                          to: oneVolunteer,
-                          context: context,
-                        )
+                      ? searchAlgorithm()
                       : await pr.hide();
                   Navigator.pop(context);
                 },
@@ -192,47 +192,27 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
 
   //METHOD FOR ENTERING A LOOP UNTIL A VOLUNTEER IS SELECTED
 
-//  search() async {
-//    do {
-//      selectingVolunteers(oneVolunteer);
-//    } while (tries < 5);
-//  }
-
   searchAlgorithm() async {
-    selectingVolunteers(oneVolunteer);
-    await Permissions.cameraAndMicrophonePermissionsGranted()
-        ? CallUtils.dial(
-            from: sender,
-            to: oneVolunteer,
-            context: context,
-          )
-        : answerTrue();
-    for (int i = 0; i < 5; i++) {
+    do {
       selectingVolunteers(oneVolunteer);
-      await Permissions.cameraAndMicrophonePermissionsGranted()
-          ? CallUtils.dial(
-              from: sender,
-              to: oneVolunteer,
-              context: context,
-            )
-          : answerTrue();
-    }
+      CallUtils.dial(from: sender, to: oneVolunteer, context: context);
+      if (!answered) {
+        startTimer();
+        _callMethods.endCall(call: call);
+      }
+      tries++;
+    } while (tries < 5);
+    Fluttertoast.showToast(
+        msg: "Não foi possível encontrar um voluntário",
+        toastLength: Toast.LENGTH_LONG,
+        textColor: Colors.red[300],
+        gravity: ToastGravity.BOTTOM);
   }
-}
 
-startTimer() {
-  Stopwatch _stopwatch = Stopwatch();
-  _stopwatch.start();
-  sleep(Duration(seconds: 30));
-  _stopwatch.stop();
-}
-
-answerTrue() {
-  switch (answered) {
-    case true:
-      break;
-
-    default:
-      return startTimer();
+  startTimer() {
+    Stopwatch _stopwatch = Stopwatch();
+    _stopwatch.start();
+    sleep(Duration(seconds: 30));
+    _stopwatch.stop();
   }
 }

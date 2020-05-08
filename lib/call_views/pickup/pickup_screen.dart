@@ -1,36 +1,45 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:luzia/constants/strings.dart';
 import 'package:luzia/model/call.dart';
 import 'package:luzia/model/users.dart';
 import 'package:luzia/utils/call_methods.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:luzia/utils/firebase_methods.dart';
 import 'package:luzia/utils/firebase_repository.dart';
-import 'package:luzia/constants/strings.dart';
 import 'package:luzia/utils/permissions.dart';
+import 'package:luzia/views/dv_screen.dart';
+
 import '../call_screen.dart';
 
-class PickupScreen extends StatelessWidget {
+class PickupScreen extends StatefulWidget {
   final Call call;
-  final CallMethods callMethods = CallMethods();
   static const String id = 'pickup_screen';
-  //FIREBASE FUNCTIONS
-  FirebaseRepository _repository = FirebaseRepository();
-  var ajuda = 0; //help volunteer
-  bool answered = false;
-
-//  _playRingtone() async {
-  //Starting the ringtone sound
-//    if (!_isPlaying) {
-//      FlutterRingtonePlayer.stop(); //parar
-//    }
-//    FlutterRingtonePlayer.playNotification(); //tocar
-//  }
+  bool answered;
 
   PickupScreen({
     @required this.call,
   });
+
+  @override
+  _PickupScreenState createState() => _PickupScreenState();
+}
+
+class _PickupScreenState extends State<PickupScreen> {
+  final CallMethods callMethods = CallMethods();
+
+  FirebaseRepository _repository = FirebaseRepository();
+
+  var ajuda = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      answered = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +93,13 @@ class PickupScreen extends StatelessWidget {
                       //if (_isPlaying) {
                       //  FlutterRingtonePlayer.stop();
                       //}
-                      await callMethods.endCall(call: call);
+                      await callMethods.endCall(call: widget.call);
                       Fluttertoast.showToast(
                           msg: "Chamada encerrada!",
                           toastLength: Toast.LENGTH_LONG,
                           textColor: Colors.white,
                           gravity: ToastGravity.CENTER);
-                      await callMethods.endCall(call: call);
+                      await callMethods.endCall(call: widget.call);
                     },
                   ),
                   SizedBox(width: 25),
@@ -100,7 +109,9 @@ class PickupScreen extends StatelessWidget {
                       iconSize: 50,
                       color: Colors.green,
                       onPressed: () async {
-                        answered = true; // THE VOLUNTEER ANSWERED;
+                        setState(() {
+                          answered = true;
+                        }); // THE VOLUNTEER ANSWERED;
                         //_isPlaying = false;
                         //if (_isPlaying) {
                         //  FlutterRingtonePlayer.stop();
@@ -111,10 +122,11 @@ class PickupScreen extends StatelessWidget {
                             ? Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => CallScreen(call: call),
+                                  builder: (context) =>
+                                      CallScreen(call: widget.call),
                                 ),
                               )
-                            : {};
+                            : Navigator.pop(context);
                       }),
                 ],
               ),
@@ -125,7 +137,6 @@ class PickupScreen extends StatelessWidget {
     );
   }
 
-  //Add help volunteer join call
   void addHelp() {
     _repository.getCurrentUser().then((FirebaseUser user) async {
       //get current volunteer
@@ -148,7 +159,6 @@ class PickupScreen extends StatelessWidget {
     });
   }
 
-//Incrementing volunteer help
   Future<void> addHelpToVolunteer(FirebaseUser currentUser, int ajuda) async {
     Users user = Users(
       uid: currentUser.uid,

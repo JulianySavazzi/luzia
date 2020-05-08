@@ -17,8 +17,8 @@ exports.getDetailsforCallNotification = functions.firestore.document('call/{rece
 
         //create a message
         var payload = {
-            notification: {title: 'Ligação do Luzia', body: 'teste', sound: 'default'},
-            data: {click_action: 'FLUTTER_NOTIFICATION_CLICK', message: 'teste' },
+            notification: {title: 'Ligação do Luzia', body: 'Alguém precisa de sua ajuda! Clique para atender a ligação.', sound: 'default'},
+            data: {click_action: 'FLUTTER_NOTIFICATION_CLICK', message: 'Ligação do Luzia' },
         };
 
         try {

@@ -147,8 +147,6 @@ class _PickupScreenState extends State<PickupScreen> {
         ajuda = volunteer.ajuda;
         addHelpToVolunteer(
             user, ajuda); //incremented help for current volunteer in database
-        print(user.email);
-        print(ajuda);
       } else {
         Fluttertoast.showToast(
             msg: "Houve um erro",
@@ -172,6 +170,5 @@ class _PickupScreenState extends State<PickupScreen> {
         .collection(USERS_COLLECTION)
         .document(currentUser.uid)
         .setData(user.toMap(user));
-    print(user.ajuda); //show help in output
   }
 }

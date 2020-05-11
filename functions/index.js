@@ -6,18 +6,23 @@ admin.initializeApp(functions.config().functions);
 
 exports.getDetailsforCallNotification = functions.firestore.document('call/{receiver_id}').onCreate(async(snapshot, context) => {
       
-    console.log('Receiverid found', snapshot.data());
+    console.log('Id do destinatário encontrado', snapshot.data());
     //Get data from snapshot
     const data = snapshot.data();
     //Get receiverId from the call document
     const receiver_id = data['receiver_id'];
+
+
     //Get receiverId token
+    let tokens;
     admin.firestore().doc('users/' + receiver_id).get().then(userDoc => {
-        const tokens = userDoc.get('token');
+        tokens = userDoc.get('token');
+    });
+
 
         //create a message
         var payload = {
-            notification: {title: 'Ligação do Luzia', body: 'Alguém precisa de sua ajuda! Clique para atender a ligação.', sound: 'default'},
+            notification: {title: 'Ligação do Luzia', body: 'Alguém precisa da sua ajuda! Clique para abrir!', sound: 'default'},
             data: {click_action: 'FLUTTER_NOTIFICATION_CLICK', message: 'Ligação do Luzia' },
         };
 
@@ -27,8 +32,6 @@ exports.getDetailsforCallNotification = functions.firestore.document('call/{rece
         } catch (error){
             console.log('A mensagem não foi enviada', error);
         }
-
-})
 
 }); //END OF getDetailsforCallNotification FCM
 

@@ -29,7 +29,7 @@ class LuziaApp extends StatefulWidget {
 
 class _MyAppState extends State<LuziaApp> {
   FirebaseRepository _repository = FirebaseRepository();
-  final FirebaseMessaging _fcm = FirebaseMessaging();
+  FirebaseMessaging _fcm = FirebaseMessaging();
   //final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   Users user;
   Firestore firestore;
@@ -69,75 +69,12 @@ class _MyAppState extends State<LuziaApp> {
   void initState() {
     super.initState();
     if (Platform.isIOS) {
-      _fcm.requestNotificationPermissions(IosNotificationSettings());
+      _fcm.requestNotificationPermissions(IosNotificationSettings(alert: true, badge: true, sound: true));
     }
-    _fcm.configure(onMessage: (Map<String, dynamic> message) async {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: Text(message['notification']['title']),
-                content: Text(message['notification']['body']),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text("Não Aceito"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  FlatButton(
-                    child: Text("Aceito"),
-                    onPressed: () {
-                      Navigator.pushNamed(context, VoluntarioScreen.id);
-                    },
-                  ),
-                ],
-                elevation: 24.0,
-              ));
-    }, onLaunch: (Map<String, dynamic> message) async {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: Text(message['notification']['title']),
-                content: Text(message['notification']['body']),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text("Não Aceito"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  FlatButton(
-                    child: Text("Aceito"),
-                    onPressed: () {
-                      Navigator.pushNamed(context, VoluntarioScreen.id);
-                    },
-                  ),
-                ],
-                elevation: 24.0,
-              ));
-    }, onResume: (Map<String, dynamic> message) async {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: Text(message['notification']['title']),
-                content: Text(message['notification']['body']),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text("Não Aceito"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  FlatButton(
-                    child: Text("Aceito"),
-                    onPressed: () {
-                      Navigator.pushNamed(context, VoluntarioScreen.id);
-                    },
-                  ),
-                ],
-                elevation: 24.0,
-              ));
-    });
+    _fcm.configure(
+      onLaunch: (Map<String, dynamic> message) async {},
+      onResume: (Map<String, dynamic> message) async {},
+    );
   }
 
   @override

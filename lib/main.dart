@@ -52,29 +52,19 @@ class _MyAppState extends State<LuziaApp> {
     return user;
   }
 
-   getToken() async {
-    FirebaseUser user = await _repository.getCurrentUser();
-    _fcm.getToken().then((token){
-      print("FCM Messaging token: $token\n");
-      usersRef.document(user.uid)
-      .updateData({'token': token});
-    });
-  }
-
   @override
   //FUNCTIONS TO HANDLE NOTIFICATIONS
   void initState() {
     super.initState();
     if (Platform.isIOS) {
-      _fcm.requestNotificationPermissions(IosNotificationSettings(alert: true, badge: true, sound: true));
+      _fcm.requestNotificationPermissions(
+          IosNotificationSettings(alert: true, badge: true, sound: true));
     }
     _fcm.configure(
       onLaunch: (Map<String, dynamic> message) async {},
       onResume: (Map<String, dynamic> message) async {},
-      onBackgroundMessage: (Map<String, dynamic> message) async {},
       onMessage: (Map<String, dynamic> message) async {},
     );
-    getToken();
   }
 
   @override

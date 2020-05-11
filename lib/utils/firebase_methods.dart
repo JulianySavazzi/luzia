@@ -152,10 +152,7 @@ class FirebaseMethods {
       volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
       return volunteerList;
     }
-    if (volunteerList.length >= 0) {
-      return volunteerList;
-    }
-    if (volunteerList.length.isNaN) {
+    if (volunteerList.length < 0) {
       final QuerySnapshot querySnapshot =
           await usersRef.where("tipo", isEqualTo: "V").getDocuments();
 

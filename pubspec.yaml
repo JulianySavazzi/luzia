@@ -17,7 +17,7 @@ dependencies:
   firebase_auth: ^0.16.0
   google_sign_in: ^4.4.4
   firebase_core: ^0.4.4+3
-  agora_rtc_engine: ^1.0.11
+  agora_rtc_engine: ^1.0.12
   fluttertoast: ^4.0.1
   firebase_analytics: ^5.0.11
   link: ^1.1.0

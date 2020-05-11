@@ -14,10 +14,10 @@ exports.getDetailsforCallNotification = functions.firestore.document('call/{rece
 
 
     //Get receiverId token
-    let tokens;
+
     admin.firestore().doc('users/' + receiver_id).get().then(userDoc => {
-        tokens = userDoc.get('token');
-    });
+        const token = userDoc.get('token');
+
 
 
         //create a message
@@ -27,11 +27,13 @@ exports.getDetailsforCallNotification = functions.firestore.document('call/{rece
         };
 
         try {
-            const response = admin.messaging().sendToDevice(tokens, payload);
+            const response = admin.messaging().sendToDevice(token, payload);
             console.log('A mensagem foi enviada com sucesso', response);
         } catch (error){
             console.log('A mensagem não foi enviada', error);
         }
+
+    });
 
 }); //END OF getDetailsforCallNotification FCM
 

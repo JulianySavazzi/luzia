@@ -1,11 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:luzia/call_views/pickup/pickup_layout.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-FirebaseRepository _repository = FirebaseRepository();
+final FirebaseRepository _repository = FirebaseRepository();
+final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+final usersRef = Firestore.instance.collection('users');
+
+
 
 class VoluntarioScreen extends StatefulWidget {
   static const String id = 'v_screen';
@@ -15,6 +22,23 @@ class VoluntarioScreen extends StatefulWidget {
 }
 
 class _VoluntarioScreenState extends State<VoluntarioScreen> {
+
+   getToken() async {
+    FirebaseUser user = await _repository.getCurrentUser();
+    _firebaseMessaging.getToken().then((token){
+      print("FCM Messaging token: $token\n");
+      usersRef.document(user.uid)
+      .updateData({'token': token});
+    });
+  }
+
+   @override
+  void initState() {
+    super.initState();
+    getToken();
+  }
+
+ 
   int _selectedIndex = 0; //item index
 
   //static const List<Widget> _widgetOptions = <Widget>[ //required for BottomNavigationBarItem

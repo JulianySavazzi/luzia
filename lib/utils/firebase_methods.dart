@@ -139,7 +139,7 @@ class FirebaseMethods {
   }
 
   //Search Volunteers
-  Future<List<Users>> searchVolunteers(FirebaseUser currentUser) async {
+  Future<List<Users>> searchVolunteers() async {
     final usersRef = Firestore.instance.collection(USERS_COLLECTION);
     List<Users> volunteerList = List<Users>();
 
@@ -150,34 +150,22 @@ class FirebaseMethods {
 
     for (var i = 0; i < querySnapshot.documents.length; i++) {
       volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
-      return volunteerList;
     }
-    if (volunteerList.length < 0) {
+    if (volunteerList.length == 0) {
       final QuerySnapshot querySnapshot =
           await usersRef.where("tipo", isEqualTo: "V").getDocuments();
 
       for (var i = 0; i < querySnapshot.documents.length; i++) {
         volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
-        return volunteerList;
       }
+      print(volunteerList);
+      print(volunteerList.length);
       return volunteerList;
     }
+    print(volunteerList);
+    print(volunteerList.length);
     return volunteerList;
   }
-
-//  //Search All Volunteers
-//  Future<List<Users>> searchAllVolunteers(FirebaseUser currentUser) async {
-//    final usersRef = Firestore.instance.collection(USERS_COLLECTION);
-//    List<Users> volunteerList = List<Users>();
-//
-//    final QuerySnapshot querySnapshot =
-//        await usersRef.where("tipo", isEqualTo: "V").getDocuments();
-//
-//    for (var i = 0; i < querySnapshot.documents.length; i++) {
-//      volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
-//    }
-//    return volunteerList;
-//  }
 
   Future<List<Users>> getVolunteers() async {
     final usersRef = Firestore.instance.collection(USERS_COLLECTION);

@@ -15,7 +15,6 @@ import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/call_methods.dart';
 import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
-import 'package:luzia/utils/permissions.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -54,7 +53,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
       userProvider.refreshUser();
     });
     _repository.getCurrentUser().then((FirebaseUser currentUser) {
-      _repository.searchVolunteers(currentUser).then((List<Users> list) {
+      _repository.searchVolunteers().then((List<Users> list) {
         setState(() {
           sender = Users(
             uid: currentUser.uid,
@@ -77,6 +76,9 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
         tipo: volunteers[i].tipo);
 
     oneVolunteer = volunteer;
+//    print(oneVolunteer.nome);
+//    print(oneVolunteer.ajuda);
+//    print(oneVolunteer.uid);
 
     return volunteer;
   }
@@ -179,9 +181,12 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                   );
                   await pr.show();
 
-                  await Permissions.cameraAndMicrophonePermissionsGranted()
-                      ? searchAlgorithm()
-                      : await pr.hide();
+                  //await Permissions.cameraAndMicrophonePermissionsGranted()
+                  _repository.searchVolunteers();
+//                  print(volunteers);
+//                  selectingVolunteers(oneVolunteer);
+//                  print(sender.nome);
+                  // : await pr.hide();
                   Navigator.pop(context);
                 },
               ),

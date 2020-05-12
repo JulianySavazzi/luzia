@@ -7,13 +7,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:luzia/call_views/pickup/pickup_screen.dart';
 import 'package:luzia/model/call.dart';
 import 'package:luzia/model/users.dart';
 import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/call_methods.dart';
-import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +27,7 @@ Users oneVolunteer = new Users();
 Users sender = new Users();
 bool answered = PickupScreen(call: call).answered;
 int tries = 0;
+//int novaAjuda;
 
 //Add UserProvider to refresh users
 UserProvider userProvider;
@@ -74,12 +73,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
         nome: volunteers[i].nome,
         ajuda: volunteers[i].ajuda,
         tipo: volunteers[i].tipo);
-
     oneVolunteer = volunteer;
-//    print(oneVolunteer.nome);
-//    print(oneVolunteer.ajuda);
-//    print(oneVolunteer.uid);
-
     return volunteer;
   }
 
@@ -182,7 +176,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                   await pr.show();
 
                   //await Permissions.cameraAndMicrophonePermissionsGranted()
-                  _repository.searchVolunteers();
+                  searchAlgorithm();
 //                  print(volunteers);
 //                  selectingVolunteers(oneVolunteer);
 //                  print(sender.nome);
@@ -197,27 +191,42 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
 
   //METHOD FOR ENTERING A LOOP UNTIL A VOLUNTEER IS SELECTED
 
-  searchAlgorithm() async {
+  searchAlgorithm() {
+    Stopwatch _stopwatch = Stopwatch();
     do {
       selectingVolunteers(oneVolunteer);
-      CallUtils.dial(from: sender, to: oneVolunteer, context: context);
-      if (!answered) {
-        startTimer();
-        _callMethods.endCall(call: call);
-      }
+      print(oneVolunteer.nome);
+      print(oneVolunteer.ajuda);
+      print('início do timer 5sec');
+      print('tentativa: $tries');
+      _stopwatch.start();
+      sleep(Duration(seconds: 5));
+      _stopwatch.stop();
       tries++;
     } while (tries < 5);
-    Fluttertoast.showToast(
-        msg: "Não foi possível encontrar um voluntário",
-        toastLength: Toast.LENGTH_LONG,
-        textColor: Colors.red[300],
-        gravity: ToastGravity.BOTTOM);
   }
 
-  startTimer() {
-    Stopwatch _stopwatch = Stopwatch();
-    _stopwatch.start();
-    sleep(Duration(seconds: 30));
-    _stopwatch.stop();
-  }
+//  searchAlgorithm() {
+//    do {
+//      selectingVolunteers(oneVolunteer);
+//      CallUtils.dial(from: sender, to: oneVolunteer, context: context);
+//      Future checkHelp() async {
+//        novaAjuda = oneVolunteer.ajuda;
+//        return novaAjuda;
+//      }
+//
+//      checkHelp();
+//      if (oneVolunteer.ajuda == novaAjuda) {
+//        countdown();
+//        _callMethods.endCall(call: call);
+//      }
+//      tries++;
+//    } while (tries < 5);
+//    Fluttertoast.showToast(
+//        msg: "Não foi possível encontrar um voluntário",
+//        toastLength: Toast.LENGTH_LONG,
+//        textColor: Colors.red[300],
+//        gravity: ToastGravity.BOTTOM);
+//  }
+
 }

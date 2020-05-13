@@ -12,6 +12,7 @@ import 'package:luzia/utils/call_methods.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/utils/settings.dart';
 import 'package:provider/provider.dart';
+import 'package:torch_compat/torch_compat.dart';
 
 final FirebaseRepository _repository = FirebaseRepository();
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -46,6 +47,7 @@ class _CallScreenState extends State<CallScreen> {
   final _infoStrings = <String>[];
   bool muted = false;
   bool flash = false; //try enable flash
+  bool camera = false;
 
   @override
   void dispose() {
@@ -182,11 +184,11 @@ class _CallScreenState extends State<CallScreen> {
   }
 
   void _onFlashCamera() {
-    //try enable flash
     setState(() {
+      TorchCompat.turnOn();
       flash = !flash;
     });
-    //AgoraRtcEngine.;
+    TorchCompat.turnOff();
   }
 
 //  @override
@@ -292,7 +294,7 @@ class _CallScreenState extends State<CallScreen> {
           RawMaterialButton(
             onPressed: _onSwitchCamera,
             child: Icon(
-              Icons.switch_camera,
+              camera ? Icons.camera_rear : Icons.camera_front,
               color: Colors.blueAccent,
               size: 20.0,
             ),

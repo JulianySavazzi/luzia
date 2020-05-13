@@ -7,8 +7,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:luzia/model/call.dart';
 import 'package:luzia/model/users.dart';
 import 'package:luzia/provider/user_provider.dart';
+import 'package:luzia/utils/call_methods.dart';
 import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -16,11 +19,11 @@ import 'package:provider/provider.dart';
 
 Route previousRoute;
 FirebaseRepository _repository = FirebaseRepository();
-CallUtils _callUtils = CallUtils();
+final CallMethods callMethods = CallMethods();
 ProgressDialog pr;
 
 List<Users> volunteers;
-//Call call;
+Call call;
 Users oneVolunteer = Users();
 Users sender = Users();
 int tries = 0;
@@ -172,7 +175,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                   await pr.show();
 
                   //await Permissions.cameraAndMicrophonePermissionsGranted()
-                  searchAlgorithm();
+                  searchAlgorithm(context);
 //                  print(volunteers);
 //                  selectingVolunteers(oneVolunteer);
 //                  print(sender.nome);
@@ -186,22 +189,27 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
 
   //METHOD FOR ENTERING A LOOP UNTIL A VOLUNTEER IS SELECTED
 
-  searchAlgorithm() async {
+  searchAlgorithm(context) async {
     Stopwatch _stopwatch = Stopwatch();
     do {
       selectingVolunteers(oneVolunteer);
       print(oneVolunteer.nome);
       print(oneVolunteer.ajuda);
-      _callUtils.dial(from: sender, to: oneVolunteer, context: context);
+      CallUtils.dial(from: sender, to: oneVolunteer, context: context);
       print('início do timer 10sec');
       print('tentativa: $tries');
       _stopwatch.start();
       sleep(Duration(seconds: 10));
       _stopwatch.stop();
-      _callUtils.endCall(call: call);
+      callMethods.endCall(call: call);
       tries++;
     } while (tries < 6);
     tries = 0;
+    Fluttertoast.showToast(
+        msg: "Não foi possível encontrar um voluntário",
+        toastLength: Toast.LENGTH_LONG,
+        textColor: Colors.red[300],
+        gravity: ToastGravity.CENTER);
   }
 
 //  searchAlgorithm() {

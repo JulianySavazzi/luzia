@@ -7,27 +7,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
-import 'package:luzia/call_views/pickup/pickup_screen.dart';
-import 'package:luzia/model/call.dart';
 import 'package:luzia/model/users.dart';
 import 'package:luzia/provider/user_provider.dart';
-import 'package:luzia/utils/call_methods.dart';
+import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
 Route previousRoute;
 FirebaseRepository _repository = FirebaseRepository();
-CallMethods _callMethods = CallMethods(); //pegar endcall
+CallUtils _callUtils = CallUtils();
 ProgressDialog pr;
 
 List<Users> volunteers;
-Call call;
-Users oneVolunteer = new Users();
-Users sender = new Users();
-bool answered = PickupScreen(call: call).answered;
+//Call call;
+Users oneVolunteer = Users();
+Users sender = Users();
 int tries = 0;
-//int novaAjuda;
 
 //Add UserProvider to refresh users
 UserProvider userProvider;
@@ -167,7 +163,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                 onPressed: () async {
                   pr = ProgressDialog(
                     context,
-                    type: ProgressDialogType.Normal,
+                    type: ProgressDialogType.Download,
                     isDismissible: false,
                   );
                   pr.style(
@@ -180,7 +176,6 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
 //                  print(volunteers);
 //                  selectingVolunteers(oneVolunteer);
 //                  print(sender.nome);
-                  // : await pr.hide();
                   Navigator.pop(context);
                 },
               ),
@@ -191,19 +186,22 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
 
   //METHOD FOR ENTERING A LOOP UNTIL A VOLUNTEER IS SELECTED
 
-  searchAlgorithm() {
+  searchAlgorithm() async {
     Stopwatch _stopwatch = Stopwatch();
     do {
       selectingVolunteers(oneVolunteer);
       print(oneVolunteer.nome);
       print(oneVolunteer.ajuda);
-      print('início do timer 5sec');
+      _callUtils.dial(from: sender, to: oneVolunteer, context: context);
+      print('início do timer 10sec');
       print('tentativa: $tries');
       _stopwatch.start();
-      sleep(Duration(seconds: 5));
+      sleep(Duration(seconds: 10));
       _stopwatch.stop();
+      _callUtils.endCall(call: call);
       tries++;
-    } while (tries < 5);
+    } while (tries < 6);
+    tries = 0;
   }
 
 //  searchAlgorithm() {

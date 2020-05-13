@@ -9,14 +9,12 @@ import 'package:luzia/utils/call_methods.dart';
 import 'package:luzia/utils/firebase_methods.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/utils/permissions.dart';
-import 'package:luzia/views/dv_screen.dart';
 
 import '../call_screen.dart';
 
 class PickupScreen extends StatefulWidget {
   final Call call;
   static const String id = 'pickup_screen';
-  bool answered;
 
   PickupScreen({
     @required this.call,
@@ -32,14 +30,6 @@ class _PickupScreenState extends State<PickupScreen> {
   FirebaseRepository _repository = FirebaseRepository();
 
   var ajuda = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      answered = false;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,9 +99,7 @@ class _PickupScreenState extends State<PickupScreen> {
                       iconSize: 50,
                       color: Colors.green,
                       onPressed: () async {
-                        setState(() {
-                          answered = true;
-                        }); // THE VOLUNTEER ANSWERED;
+                        setState(() {}); // THE VOLUNTEER ANSWERED;
                         //_isPlaying = false;
                         //if (_isPlaying) {
                         //  FlutterRingtonePlayer.stop();

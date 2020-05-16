@@ -15,14 +15,14 @@ class CallMethods {
       call.hasDialled = true;
       Map<String, dynamic> hasDialledMap = call.toMap(call);
 
-      /*call.hasDialled = false;
-      Map<String, dynamic> hasNotDialledMap = call.toMap(call);*/
+      call.hasDialled = false;
+      Map<String, dynamic> hasNotDialledMap = call.toMap(call);
 
       //Popula documento do DV = HASDIALLED
       await callCollection.document(call.callerId).setData(hasDialledMap);
 
-      /*//Popula documento do V = HASNOTDIALLED
-      await callCollection.document(call.receiverId).setData(hasNotDialledMap);*/
+      //Popula documento do V = HASNOTDIALLED
+      await callCollection.document(call.receiverId).setData(hasNotDialledMap);
 
       return true;
     } on Exception catch (e) {
@@ -35,7 +35,7 @@ class CallMethods {
   Future<bool> endCall({Call call}) async {
     try {
       await callCollection.document(call.callerId).delete();
-      //await callCollection.document(call.receiverId).delete();
+      await callCollection.document(call.receiverId).delete();
       return true;
     } on Exception catch (e) {
       print(e);

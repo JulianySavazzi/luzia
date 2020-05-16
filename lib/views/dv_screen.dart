@@ -14,6 +14,7 @@ import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/call_methods.dart';
 import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
+import 'package:luzia/utils/permissions.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -173,13 +174,12 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                     message: 'Chamando voluntário...',
                   );
                   await pr.show();
-
-                  //await Permissions.cameraAndMicrophonePermissionsGranted()
-                  searchAlgorithm(context);
+                  await Permissions.cameraAndMicrophonePermissionsGranted()
+                      ? searchAlgorithm(context)
 //                  print(volunteers);
 //                  selectingVolunteers(oneVolunteer);
 //                  print(sender.nome);
-                  Navigator.pop(context);
+                      : Navigator.pop(context);
                 },
               ),
             )),
@@ -211,28 +211,4 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
         textColor: Colors.red[300],
         gravity: ToastGravity.CENTER);
   }
-
-//  searchAlgorithm() {
-//    do {
-//      selectingVolunteers(oneVolunteer);
-//      CallUtils.dial(from: sender, to: oneVolunteer, context: context);
-//      Future checkHelp() async {
-//        novaAjuda = oneVolunteer.ajuda;
-//        return novaAjuda;
-//      }
-//
-//      checkHelp();
-//      if (oneVolunteer.ajuda == novaAjuda) {
-//        countdown();
-//        _callMethods.endCall(call: call);
-//      }
-//      tries++;
-//    } while (tries < 5);
-//    Fluttertoast.showToast(
-//        msg: "Não foi possível encontrar um voluntário",
-//        toastLength: Toast.LENGTH_LONG,
-//        textColor: Colors.red[300],
-//        gravity: ToastGravity.BOTTOM);
-//  }
-
 }

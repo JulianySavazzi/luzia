@@ -12,7 +12,7 @@ import 'package:luzia/utils/call_methods.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/utils/settings.dart';
 import 'package:provider/provider.dart';
-import 'package:torch_compat/torch_compat.dart';
+//import 'package:torch_compat/torch_compat.dart';
 
 final FirebaseRepository _repository = FirebaseRepository();
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -183,13 +183,13 @@ class _CallScreenState extends State<CallScreen> {
     AgoraRtcEngine.switchCamera();
   }
 
-  void _onFlashCamera() {
+  /*void _onFlashCamera() {
     setState(() {
       TorchCompat.turnOn();
       flash = !flash;
     });
     TorchCompat.turnOff();
-  }
+  }*/
 
 //  @override
 //  void dispose() {
@@ -303,7 +303,7 @@ class _CallScreenState extends State<CallScreen> {
             fillColor: Colors.white,
             padding: const EdgeInsets.all(12.0),
           ),
-          RawMaterialButton(
+          /*RawMaterialButton(
             //flash button
             onPressed: _onFlashCamera, // try enable flash camera
             child: Icon(
@@ -315,7 +315,7 @@ class _CallScreenState extends State<CallScreen> {
             elevation: 2.0,
             fillColor: Colors.white,
             padding: const EdgeInsets.all(12.0),
-          )
+          )*/
         ],
       ),
     );

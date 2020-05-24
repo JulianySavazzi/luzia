@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:luzia/locator.dart';
@@ -7,9 +10,9 @@ import 'package:luzia/model/users.dart';
 import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/views/dv_screen.dart';
-import 'package:luzia/views/v_screen.dart';
 import 'package:luzia/views/login_screen.dart';
 import 'package:luzia/views/users_screen.dart';
+import 'package:luzia/views/v_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'lifecycle_manager.dart';
@@ -26,14 +29,16 @@ class LuziaApp extends StatefulWidget {
 
 class _MyAppState extends State<LuziaApp> {
   FirebaseRepository _repository = FirebaseRepository();
+  FirebaseMessaging _fcm = FirebaseMessaging();
+  //final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   Users user;
   Firestore firestore;
   //resultado do voluntario
   bool result = false;
 
+  //Verify user type
   Future<Users> userDetails(firebaseUser) async {
     // retrieving User details
-    //firebaseUser = user;
     user = await _repository.getUserDetails(firebaseUser.uid);
     if (user.tipo == "V") {
       setState(() {
@@ -45,6 +50,21 @@ class _MyAppState extends State<LuziaApp> {
       });
     }
     return user;
+  }
+
+  @override
+  //FUNCTIONS TO HANDLE NOTIFICATIONS
+  void initState() {
+    super.initState();
+    if (Platform.isIOS) {
+      _fcm.requestNotificationPermissions(
+          IosNotificationSettings(alert: true, badge: true, sound: true));
+    }
+    _fcm.configure(
+      onLaunch: (Map<String, dynamic> message) async {},
+      onResume: (Map<String, dynamic> message) async {},
+      onMessage: (Map<String, dynamic> message) async {},
+    );
   }
 
   @override

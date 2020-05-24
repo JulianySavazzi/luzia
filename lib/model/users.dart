@@ -5,8 +5,16 @@ class Users {
   String tipo;
   String photo;
   int ajuda;
+  String token;
 
-  Users({this.uid, this.nome, this.email, this.tipo, this.photo, this.ajuda});
+  Users(
+      {this.uid,
+      this.nome,
+      this.email,
+      this.tipo,
+      this.photo,
+      this.ajuda,
+      this.token,});
 
   Map toMap(Users user) {
     var data = Map<String, dynamic>();
@@ -16,6 +24,7 @@ class Users {
     data['tipo'] = user.tipo;
     data['photo'] = user.photo;
     data['ajuda'] = user.ajuda;
+    data['token'] = user.token;
     return data;
   }
 
@@ -26,5 +35,6 @@ class Users {
     this.tipo = mapData['tipo'];
     this.photo = mapData['photo'];
     this.ajuda = mapData['ajuda'];
+    this.token = mapData['token'];
   }
 }

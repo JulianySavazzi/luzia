@@ -111,7 +111,8 @@ class FirebaseMethods {
   }
 
   //Adicionando tipo ao usuário
-  Future<void> addType(FirebaseUser currentUser, String tipo, int ajuda) async {
+  Future<void> addType(
+      FirebaseUser currentUser, String tipo, int ajuda, String token) async {
     user = Users(
       uid: currentUser.uid,
       nome: currentUser.displayName,
@@ -119,6 +120,7 @@ class FirebaseMethods {
       tipo: tipo,
       photo: currentUser.photoUrl,
       ajuda: ajuda,
+      token: token,
     );
     firestore
         .collection(USERS_COLLECTION)
@@ -136,42 +138,27 @@ class FirebaseMethods {
     return voluntario;
   }
 
-  //Search max help number
-  Future<List<Users>> getMaxHelp() async {
-    final QuerySnapshot querySnapshot = await usersRef
-        .where("tipo", isEqualTo: "V")
-        .orderBy("ajuda", descending: true)
-        .getDocuments(); //ordena a ajuda da maior para a menor
-    //o primeiro voluntário que ele salva na lista é o que tem o número de ajuda maior
-    for (var i = 0; i < querySnapshot.documents.length; i++) {
-      volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
-      maxhelp = volunteerList[0].ajuda; //salva ajuda máxima na variável
-      print('---------');
-      print('ajuda máxima:'); //mostra ajuda máxima
-      print(maxhelp); //mostra valor da ajuda máxima
-      print('---------');
-      print('voluntário:');
-      print(volunteerList[i].nome);
-      print(volunteerList[i].ajuda);
-      print(volunteerList[i].tipo);
-      print('---------');
-    }
-    return volunteerList;
-  }
-
-  //Search all Volunteers
-  Future<List<Users>> searchAllVolunteers(FirebaseUser currentUser) async {
+  //Search Volunteers
+  Future<List<Users>> searchVolunteers() async {
     final usersRef = Firestore.instance.collection(USERS_COLLECTION);
     List<Users> volunteerList = List<Users>();
 
     final QuerySnapshot querySnapshot = await usersRef
         .where("tipo", isEqualTo: "V")
-        //.where("ajuda", isLessThan: maxhelp)
         .where("ajuda", isLessThan: 1)
         .getDocuments();
 
     for (var i = 0; i < querySnapshot.documents.length; i++) {
       volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
+    }
+    if (volunteerList.length == 0) {
+      final QuerySnapshot querySnapshot =
+          await usersRef.where("tipo", isEqualTo: "V").getDocuments();
+
+      for (var i = 0; i < querySnapshot.documents.length; i++) {
+        volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
+      }
+      return volunteerList;
     }
     return volunteerList;
   }

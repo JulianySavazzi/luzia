@@ -5,7 +5,7 @@ import 'package:luzia/call_views/pickup/pickup_layout.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-FirebaseRepository _repository = FirebaseRepository();
+final FirebaseRepository _repository = FirebaseRepository();
 
 class VoluntarioScreen extends StatefulWidget {
   static const String id = 'v_screen';
@@ -15,17 +15,22 @@ class VoluntarioScreen extends StatefulWidget {
 }
 
 class _VoluntarioScreenState extends State<VoluntarioScreen> {
-  int _selectedIndex = 0; //índice do item
+  int _selectedIndex = 0; //item index
 
   //static const List<Widget> _widgetOptions = <Widget>[ //required for BottomNavigationBarItem
   List<Widget> _widgetOptions = <Widget>[
     //required for BottomNavigationBarItem
-    //Lista de itens do ButtomNavigatorBar
+    //Items list for ButtomNavigatorBar
     //item 1
     FutureBuilder(
         future: _repository.getVolunteers(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+          //if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasData) {
+            //Error loading volunteer page return circular progressIndicator
+            print(snapshot.connectionState); //print connectionState in output
+            print(snapshot.hasData); //print hasData in output
             return Center(
                 child: Container(
               height: 300,
@@ -48,8 +53,12 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
                 ],
               ),
             ));
-          }
-          return CircularProgressIndicator();
+          } //if
+          else {
+            print(snapshot.connectionState); //print connectionState in output
+            print(snapshot.hasData); //print hasData in output
+            return CircularProgressIndicator();
+          } //Connection State Condition
         }),
     //item 2
     FutureBuilder(
@@ -101,8 +110,11 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
                 ],
               ),
             ));
+          } else {
+            print(snapshot.connectionState); //print connectionState in output
+            print(snapshot.hasData); //print hasData in output
+            return CircularProgressIndicator();
           }
-          return CircularProgressIndicator();
         }),
     //item 3
     Center(
@@ -211,7 +223,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index; //índice do item selecionado
+      _selectedIndex = index; //item index selected in buttonNavigationBar
     });
   }
 

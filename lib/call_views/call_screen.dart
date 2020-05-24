@@ -1,13 +1,22 @@
 import 'dart:async';
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:luzia/model/call.dart';
 import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/call_methods.dart';
+import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/utils/settings.dart';
 import 'package:provider/provider.dart';
+//import 'package:torch_compat/torch_compat.dart';
+
+final FirebaseRepository _repository = FirebaseRepository();
+final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+final usersRef = Firestore.instance.collection('users');
 
 class CallScreen extends StatefulWidget {
   final Call call;
@@ -25,11 +34,20 @@ class _CallScreenState extends State<CallScreen> {
   //animações
   final CallMethods callMethods = CallMethods();
 
+  getToken() async {
+    FirebaseUser user = await _repository.getCurrentUser();
+    _firebaseMessaging.getToken().then((token) {
+      print("FCM Messaging token: $token\n");
+      usersRef.document(user.uid).updateData({'token': token});
+    });
+  }
+
   //AGORA VARIABLES
   static final _users = <int>[];
   final _infoStrings = <String>[];
   bool muted = false;
   bool flash = false; //try enable flash
+  bool camera = false;
 
   @override
   void dispose() {
@@ -47,6 +65,7 @@ class _CallScreenState extends State<CallScreen> {
   @override
   void initState() {
     super.initState();
+    getToken();
     addPostFrameCallBack(); // to disable all end call screens
     initializeAgora();
   }
@@ -164,12 +183,13 @@ class _CallScreenState extends State<CallScreen> {
     AgoraRtcEngine.switchCamera();
   }
 
-  void _onFlashCamera(){ //try enable flash
+  /*void _onFlashCamera() {
     setState(() {
+      TorchCompat.turnOn();
       flash = !flash;
     });
-    //AgoraRtcEngine.;
-  }
+    TorchCompat.turnOff();
+  }*/
 
 //  @override
 //  void dispose() {
@@ -274,7 +294,7 @@ class _CallScreenState extends State<CallScreen> {
           RawMaterialButton(
             onPressed: _onSwitchCamera,
             child: Icon(
-              Icons.switch_camera,
+              camera ? Icons.camera_rear : Icons.camera_front,
               color: Colors.blueAccent,
               size: 20.0,
             ),
@@ -283,7 +303,8 @@ class _CallScreenState extends State<CallScreen> {
             fillColor: Colors.white,
             padding: const EdgeInsets.all(12.0),
           ),
-          RawMaterialButton( //flash button
+          /*RawMaterialButton(
+            //flash button
             onPressed: _onFlashCamera, // try enable flash camera
             child: Icon(
               flash ? Icons.flash_off : Icons.flash_on,
@@ -294,7 +315,7 @@ class _CallScreenState extends State<CallScreen> {
             elevation: 2.0,
             fillColor: Colors.white,
             padding: const EdgeInsets.all(12.0),
-          )
+          )*/
         ],
       ),
     );

@@ -1,6 +1,6 @@
-import 'package:luzia/utils/firebase_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:luzia/model/users.dart';
+import 'package:luzia/utils/firebase_methods.dart';
 
 class FirebaseRepository {
   FirebaseMethods _firebaseMethods = FirebaseMethods();
@@ -22,14 +22,14 @@ class FirebaseRepository {
   Future<void> addDataToDb(FirebaseUser user) =>
       _firebaseMethods.addDataToDb(user);
 
-  //Adicionando tipo
-  Future<void> addType(FirebaseUser user, String tipo, int ajuda) =>
-      _firebaseMethods.addType(user, tipo, ajuda);
+  //Add type for user
+  Future<void> addType(
+          FirebaseUser user, String tipo, int ajuda, String token) =>
+      _firebaseMethods.addType(user, tipo, ajuda, token);
 
-  Future<List<Users>> searchAllVolunteers(FirebaseUser currentUser) =>
-      _firebaseMethods.searchAllVolunteers(currentUser);
+  Future<List<Users>> searchVolunteers() => _firebaseMethods.searchVolunteers();
 
-  Future<List<Users>> getMaxHelp() => _firebaseMethods.getMaxHelp();
+//  Future<List<Users>> getMaxHelp() => _firebaseMethods.getMaxHelp();
 
   Future<Users> getUser() => _firebaseMethods.getUser();
 

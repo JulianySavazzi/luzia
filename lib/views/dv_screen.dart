@@ -1,28 +1,33 @@
-import 'dart:io';
-import 'dart:ui';
+//import 'dart:io';
 import 'dart:math';
+import 'dart:ui';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
-import 'package:luzia/call_views/pickup/pickup_screen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:luzia/model/call.dart';
 import 'package:luzia/model/users.dart';
-import 'package:luzia/utils/permissions.dart';
 import 'package:luzia/provider/user_provider.dart';
+import 'package:luzia/utils/call_methods.dart';
 import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
+import 'package:luzia/utils/permissions.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
 Route previousRoute;
 FirebaseRepository _repository = FirebaseRepository();
+final CallMethods callMethods = CallMethods();
+ProgressDialog pr;
 
 List<Users> volunteers;
 Call call;
-Users oneVolunteer = new Users();
-Users sender = new Users();
-bool answered = PickupScreen(call: call).answered;
+Users oneVolunteer = Users();
+Users sender = Users();
+int tries = 0;
 
 //Add UserProvider to refresh users
 UserProvider userProvider;
@@ -47,7 +52,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
       userProvider.refreshUser();
     });
     _repository.getCurrentUser().then((FirebaseUser currentUser) {
-      _repository.searchAllVolunteers(currentUser).then((List<Users> list) {
+      _repository.searchVolunteers().then((List<Users> list) {
         setState(() {
           sender = Users(
             uid: currentUser.uid,
@@ -59,7 +64,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
     });
   }
 
-  //Método que faz a escolha aleatória da lista de voluntarios e salva um voluntário toda vez que é chamado;
+  //Select random volunteer, and save chosen volunteer
   Users selectingVolunteers(Users volunteer) {
     final random = new Random();
     var i = random.nextInt(volunteers.length);
@@ -68,14 +73,13 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
         nome: volunteers[i].nome,
         ajuda: volunteers[i].ajuda,
         tipo: volunteers[i].tipo);
-
     oneVolunteer = volunteer;
-
     return volunteer;
   }
 
   @override
   Widget build(BuildContext context) {
+    pr = new ProgressDialog(context);
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -161,13 +165,20 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                   ],
                 ),
                 onPressed: () async {
-                  selectingVolunteers(oneVolunteer);
+                  pr = ProgressDialog(
+                    context,
+                    type: ProgressDialogType.Download,
+                    isDismissible: false,
+                  );
+                  pr.style(
+                    message: 'Chamando voluntário...',
+                  );
+                  await pr.show();
                   await Permissions.cameraAndMicrophonePermissionsGranted()
-                      ? CallUtils.dial(
-                          from: sender,
-                          to: oneVolunteer,
-                          context: context,
-                        )
+                      ? callVolunteer(context)
+//                  print(volunteers);
+//                  selectingVolunteers(oneVolunteer);
+//                  print(sender.nome);
                       : Navigator.pop(context);
                 },
               ),
@@ -178,41 +189,39 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
 
   //METHOD FOR ENTERING A LOOP UNTIL A VOLUNTEER IS SELECTED
 
-  searchAlgorithm() async {
-    selectingVolunteers(oneVolunteer);
-    await Permissions.cameraAndMicrophonePermissionsGranted()
-        ? CallUtils.dial(
-            from: sender,
-            to: oneVolunteer,
-            context: context,
-          )
-        : answerTrue();
-    for (int i = 0; i < 5; i++) {
+  /*searchAlgorithm(context) async {
+    Stopwatch _stopwatch = Stopwatch();
+    do {
       selectingVolunteers(oneVolunteer);
-      await Permissions.cameraAndMicrophonePermissionsGranted()
-          ? CallUtils.dial(
-              from: sender,
-              to: oneVolunteer,
-              context: context,
-            )
-          : answerTrue();
+      print(oneVolunteer.nome);
+      print(oneVolunteer.ajuda);
+      CallUtils.dial(from: sender, to: oneVolunteer, context: context);
+      print('início do timer 10sec');
+      print('tentativa: $tries');
+      _stopwatch.start();
+      sleep(Duration(seconds: 10));
+      _stopwatch.stop();
+      callMethods.endCall(call: call);
+      tries++;
+    } while (tries < 6);
+    tries = 0;
+    Fluttertoast.showToast(
+        msg: "Não foi possível encontrar um voluntário",
+        toastLength: Toast.LENGTH_LONG,
+        textColor: Colors.red[300],
+        gravity: ToastGravity.CENTER);
+  }*/
+
+  callVolunteer(context) {
+    try {
+      selectingVolunteers(oneVolunteer);
+      CallUtils.dial(from: sender, to: oneVolunteer, context: context);
+    } catch (error) {
+      Fluttertoast.showToast(
+          msg: "Não foi possível encontrar um voluntário $error",
+          toastLength: Toast.LENGTH_LONG,
+          textColor: Colors.red[300],
+          gravity: ToastGravity.CENTER);
     }
-  }
-}
-
-startTimer() {
-  Stopwatch _stopwatch = Stopwatch();
-  _stopwatch.start();
-  sleep(Duration(seconds: 30));
-  _stopwatch.stop();
-}
-
-answerTrue() {
-  switch (answered) {
-    case true:
-      break;
-
-    default:
-      return startTimer();
   }
 }

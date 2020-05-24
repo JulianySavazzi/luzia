@@ -1,4 +1,4 @@
-import 'dart:io';
+//import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
@@ -175,7 +175,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                   );
                   await pr.show();
                   await Permissions.cameraAndMicrophonePermissionsGranted()
-                      ? searchAlgorithm(context)
+                      ? callVolunteer(context)
 //                  print(volunteers);
 //                  selectingVolunteers(oneVolunteer);
 //                  print(sender.nome);
@@ -189,7 +189,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
 
   //METHOD FOR ENTERING A LOOP UNTIL A VOLUNTEER IS SELECTED
 
-  searchAlgorithm(context) async {
+  /*searchAlgorithm(context) async {
     Stopwatch _stopwatch = Stopwatch();
     do {
       selectingVolunteers(oneVolunteer);
@@ -210,5 +210,18 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
         toastLength: Toast.LENGTH_LONG,
         textColor: Colors.red[300],
         gravity: ToastGravity.CENTER);
+  }*/
+
+  callVolunteer(context) {
+    try {
+      selectingVolunteers(oneVolunteer);
+      CallUtils.dial(from: sender, to: oneVolunteer, context: context);
+    } catch (error) {
+      Fluttertoast.showToast(
+          msg: "Não foi possível encontrar um voluntário $error",
+          toastLength: Toast.LENGTH_LONG,
+          textColor: Colors.red[300],
+          gravity: ToastGravity.CENTER);
+    }
   }
 }

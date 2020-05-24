@@ -15,13 +15,13 @@ import 'package:luzia/utils/call_methods.dart';
 import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/utils/permissions.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+//import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
 Route previousRoute;
 FirebaseRepository _repository = FirebaseRepository();
 final CallMethods callMethods = CallMethods();
-ProgressDialog pr;
+//ProgressDialog pr;
 
 List<Users> volunteers;
 Call call;
@@ -79,7 +79,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
 
   @override
   Widget build(BuildContext context) {
-    pr = new ProgressDialog(context);
+   // pr = new ProgressDialog(context);
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -165,21 +165,22 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                   ],
                 ),
                 onPressed: () async {
-                  pr = ProgressDialog(
-                    context,
-                    type: ProgressDialogType.Download,
-                    isDismissible: false,
-                  );
-                  pr.style(
-                    message: 'Chamando voluntário...',
-                  );
-                  await pr.show();
+                 // pr = ProgressDialog(
+                 //   context,
+                 //   type: ProgressDialogType.Download,
+                 //   isDismissible: false,
+                 // );
+                 // pr.style(
+                 //   message: 'Chamando voluntário...',
+                 // );
+                 // await pr.show();
                   await Permissions.cameraAndMicrophonePermissionsGranted()
                       ? callVolunteer(context)
 //                  print(volunteers);
 //                  selectingVolunteers(oneVolunteer);
 //                  print(sender.nome);
                       : Navigator.pop(context);
+                  // await pr.hide;
                 },
               ),
             )),

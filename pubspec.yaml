@@ -30,7 +30,7 @@ dependencies:
   cached_network_image: ^2.2.0+1
   get_it: ^4.0.2
   firebase_messaging: ^6.0.9
-  progress_dialog: ^1.2.2
+  #progress_dialog: ^1.2.2
   #torch_compat: ^1.0.2
 
 dev_dependencies:

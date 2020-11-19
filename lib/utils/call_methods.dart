@@ -12,9 +12,11 @@ class CallMethods {
   //Função para realizar a ligação, aqui deve ser inserido o algoritmo
   Future<bool> makeCall({Call call}) async {
     try {
+      //DV = HASDIALLED
       call.hasDialled = true;
       Map<String, dynamic> hasDialledMap = call.toMap(call);
 
+      //V = HASNOTDIALLED
       call.hasDialled = false;
       Map<String, dynamic> hasNotDialledMap = call.toMap(call);
 

@@ -15,6 +15,15 @@ class CallUtils {
   Stream<DocumentSnapshot> callStream({String uid}) =>
       callCollection.document(uid).snapshots();
 
+  // String callerId;
+  // String callerName;
+  // String receiverId;
+  // String receiverName;
+  // String channelId;
+  // bool hasDialled;
+  // bool accepted;
+  // bool rejected;
+
   static dial({Users from, Users to, context}) async {
     Call call = Call(
       callerId: from.uid,
@@ -23,16 +32,23 @@ class CallUtils {
       receiverName: to.nome,
       channelId: randomAlphaNumeric(10),
     );
+
+    call.rejected = false;
+    call.accepted = false;
+
     bool callMade = await callMethods.makeCall(call: call);
 
     call.hasDialled = true;
 
     if (callMade) {
+      // call.accepted = true;
       Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => CallScreen(call: call),
           ));
+    } else {
+      // call.rejected = true;
     }
   }
 }

@@ -26,6 +26,9 @@ class PickupScreen extends StatefulWidget {
 
 class _PickupScreenState extends State<PickupScreen> {
   final CallMethods callMethods = CallMethods();
+  CallMethods _callMethods = CallMethods();
+
+  Call call_model = Call();
 
   FirebaseRepository _repository = FirebaseRepository();
 
@@ -79,10 +82,14 @@ class _PickupScreenState extends State<PickupScreen> {
                     color: Colors.redAccent,
                     iconSize: 50,
                     onPressed: () async {
-                      //_isPlaying = false;
-                      //if (_isPlaying) {
-                      //  FlutterRingtonePlayer.stop();
-                      //}
+                      // call.accepted = false;
+                      // call.rejected = true;
+                      //V = HASNOTDIALLED
+                      call_model.hasDialled = false;
+                      call_model.rejected = true;
+                      call_model.accepted = false;
+                      // Map<String, dynamic> hasNotDialledMap = call_model.toMap(call_model);
+                      _callMethods.makeCall(call: call_model);
                       await callMethods.endCall(call: widget.call);
                       Fluttertoast.showToast(
                           msg: "Chamada encerrada!",
@@ -100,10 +107,14 @@ class _PickupScreenState extends State<PickupScreen> {
                       color: Colors.green,
                       onPressed: () async {
                         setState(() {}); // THE VOLUNTEER ANSWERED;
-                        //_isPlaying = false;
-                        //if (_isPlaying) {
-                        //  FlutterRingtonePlayer.stop();
-                        //}
+                        // call.accepted = true;
+                        // call.rejected = false;
+                        //V = HASNOTDIALLED
+                        call_model.hasDialled = false;
+                        call_model.rejected = false;
+                        call_model.accepted = true;
+                        // Map<String, dynamic> hasNotDialledMap = call_model.toMap(call_model);
+                        _callMethods.makeCall(call: call_model);
                         addHelp(); //add help to volunteer join call
                         await Permissions
                                 .cameraAndMicrophonePermissionsGranted()

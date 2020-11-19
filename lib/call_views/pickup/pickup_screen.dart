@@ -29,6 +29,14 @@ class _PickupScreenState extends State<PickupScreen> {
   CallMethods _callMethods = CallMethods();
 
   Call call_model = Call();
+  // String callerId;
+  // String callerName;
+  // String receiverId;
+  // String receiverName;
+  // String channelId;
+  // bool hasDialled;
+  // bool accepted;
+  // bool rejected;
 
   FirebaseRepository _repository = FirebaseRepository();
 
@@ -82,14 +90,7 @@ class _PickupScreenState extends State<PickupScreen> {
                     color: Colors.redAccent,
                     iconSize: 50,
                     onPressed: () async {
-                      // call.accepted = false;
-                      // call.rejected = true;
-                      //V = HASNOTDIALLED
-                      call_model.hasDialled = false;
-                      call_model.rejected = true;
-                      call_model.accepted = false;
-                      // Map<String, dynamic> hasNotDialledMap = call_model.toMap(call_model);
-                      _callMethods.makeCall(call: call_model);
+                      flagEndCall();
                       await callMethods.endCall(call: widget.call);
                       Fluttertoast.showToast(
                           msg: "Chamada encerrada!",
@@ -107,14 +108,7 @@ class _PickupScreenState extends State<PickupScreen> {
                       color: Colors.green,
                       onPressed: () async {
                         setState(() {}); // THE VOLUNTEER ANSWERED;
-                        // call.accepted = true;
-                        // call.rejected = false;
-                        //V = HASNOTDIALLED
-                        call_model.hasDialled = false;
-                        call_model.rejected = false;
-                        call_model.accepted = true;
-                        // Map<String, dynamic> hasNotDialledMap = call_model.toMap(call_model);
-                        _callMethods.makeCall(call: call_model);
+                        flagJoinCall();
                         addHelp(); //add help to volunteer join call
                         await Permissions
                                 .cameraAndMicrophonePermissionsGranted()
@@ -134,6 +128,46 @@ class _PickupScreenState extends State<PickupScreen> {
         ),
       ),
     );
+  }
+
+  void flagEndCall() {
+    _repository.getCurrentUser().then((FirebaseUser user) async {
+      //get current volunteer
+      if (user != null) {
+        //current volunteer is not null
+        Users volunteer = await _repository.getUserDetails(user.uid); // users map receive firebase user
+        // call.accepted = false;
+        // call.rejected = true;
+        //V = HASNOTDIALLED
+        call_model.receiverId = volunteer.uid;
+        call_model.receiverName = volunteer.nome;
+        //call_model.hasDialled = false;
+        call_model.rejected = true;
+        call_model.accepted = false;
+        // Map<String, dynamic> hasNotDialledMap = call_model.toMap(call_model);
+        _callMethods.makeCall(call: call_model);
+      }
+    });
+  }
+
+  void flagJoinCall() {
+    _repository.getCurrentUser().then((FirebaseUser user) async {
+      //get current volunteer
+      if (user != null) {
+        //current volunteer is not null
+        Users volunteer = await _repository.getUserDetails(user.uid); // users map receive firebase user
+        // call.accepted = true;
+        // call.rejected = false;
+        //V = HASNOTDIALLED
+        call_model.receiverId = volunteer.uid;
+        call_model.receiverName = volunteer.nome;
+        //call_model.hasDialled = false;
+        call_model.rejected = false;
+        call_model.accepted = true;
+        // Map<String, dynamic> hasNotDialledMap = call_model.toMap(call_model);
+        _callMethods.makeCall(call: call_model);
+      }
+    });
   }
 
   void addHelp() {

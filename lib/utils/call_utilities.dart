@@ -47,8 +47,9 @@ class CallUtils {
           MaterialPageRoute(
             builder: (context) => CallScreen(call: call),
           ));
-    } else {
-      // call.rejected = true;
-    }
+     }
+    // else {
+    //   // call.rejected = true;
+    // }
   }
 }

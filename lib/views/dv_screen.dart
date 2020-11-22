@@ -25,10 +25,13 @@ final CallMethods callMethods = CallMethods();
 //ProgressDialog pr;
 
 List<Users> volunteers;
+List<Users> volunteersAcceptedCall;
+List<Users> volunteersRejectedCall;
 Call call;
 Users oneVolunteer = Users();
 Users sender = Users();
 int tries = 0;
+int atendeu;
 
 //Add UserProvider to refresh users
 UserProvider userProvider;
@@ -47,6 +50,9 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      atendeu = 0; //start variable
+    });
     //Add UsersProviders refresh, using this to
     SchedulerBinding.instance.addPostFrameCallback((_) {
       userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -78,48 +84,162 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
     return volunteer;
   }
 
-  //METHOD FOR ENTERING A LOOP UNTIL A VOLUNTEER IS SELECTED
+  //flag volunteer join a call
+  // Users flagVolunteer(Users selectedVolunteer) {
+  //   selectingVolunteers(selectedVolunteer);
+  //   print("Voluntário selecionado: ");
+  //   print(selectedVolunteer.nome);
+  //   print(selectedVolunteer.ajuda);
+  //   _repository
+  //       .flagVolunteerJoinACall(selectedVolunteer)
+  //       .then((List<Users> list) {
+  //     volunteersAcceptedCall = list;
+  //   });
+  //   for (var i = 0; i <= volunteersAcceptedCall.length; i++) {
+  //     if (volunteersAcceptedCall[i].uid == selectedVolunteer.uid) {
+  //       //check if selected volunteer join a call
+  //       //selectedVolunteer = oneVolunteer;
+  //       setState(() {
+  //         atendeu = 1; //volunteer join a call
+  //         print("atendeu = ");
+  //         print(atendeu);
+  //       });
+  //       print("Accepted Call ");
+  //       print(volunteersAcceptedCall[i].nome);
+  //       print("Selected volunteer ");
+  //       print(selectedVolunteer.nome);
+  //       return selectedVolunteer;
+  //     } else {
+  //       _repository
+  //           .flagVolunteerLeaveACall(selectedVolunteer)
+  //           .then((List<Users> list) {
+  //         volunteersRejectedCall = list;
+  //       });
+  //       setState(() {
+  //         atendeu = 2; //volunteer rejected a call
+  //         print("atendeu = ");
+  //         print(atendeu);
+  //       });
+  //       print("Rejected Call ");
+  //       print(volunteersRejectedCall[i].nome);
+  //       print("Selected volunteer ");
+  //       print(selectedVolunteer.nome);
+  //       return selectedVolunteer;
+  //     }
+  //   }
+  // }
 
+  //flag volunteer join a call
+  Future<Users> flagVolunteer() async {
+    _repository.flagVolunteerJoinACall(oneVolunteer).then((List<Users> list) {
+      volunteersAcceptedCall = list;
+    });
+    for (var i = 0; i < volunteersAcceptedCall.length; i++) {
+      if (volunteersAcceptedCall[i].uid == oneVolunteer.uid) {
+        //check if selected volunteer join a call
+        setState(() {
+          atendeu = 1; //volunteer join a call
+          print("atendeu = ");
+          print(atendeu);
+        });
+        print("Accepted Call ");
+        print(volunteersAcceptedCall[i].nome);
+        print("Selected volunteer ");
+        print(oneVolunteer.nome);
+        return oneVolunteer;
+      } else {
+        _repository
+            .flagVolunteerLeaveACall(oneVolunteer)
+            .then((List<Users> list) {
+          volunteersRejectedCall = list;
+        });
+        setState(() {
+          atendeu = 2; //volunteer end call
+          print("atendeu = ");
+          print(atendeu);
+        });
+        print("Rejected Call ");
+        print(volunteersRejectedCall[i].nome);
+        print("Selected volunteer ");
+        print(oneVolunteer.nome);
+        return oneVolunteer;
+      }
+    }
+    print("Selected volunteer ");
+    print(oneVolunteer.nome);
+    return oneVolunteer;
+  }
+
+  //METHOD FOR ENTERING A LOOP UNTIL A VOLUNTEER IS SELECTED
   searchAlgorithm(context) async {
     Stopwatch _stopwatch = Stopwatch();
     do {
-      selectingVolunteers(oneVolunteer);
-      print(oneVolunteer.nome);
-      print(oneVolunteer.ajuda);
-      //CallUtils.dial(from: sender, to: oneVolunteer, context: context);
-      callVolunteer(context);
-      print('início do timer 10sec');
+      print("Entrou no DO WHILE");
       print('tentativa: $tries');
-      _stopwatch.start();
-      sleep(Duration(seconds: 10));
-      _stopwatch.stop();
-      callMethods.endCall(call: call);
+      print('atendeu = $atendeu');
+      selectingVolunteers(oneVolunteer);
+      print("oneVolunteer = ");
+      print(oneVolunteer.nome);
+      print("ajuda = ");
+      print(oneVolunteer.ajuda);
+      flagVolunteer();
+      CallUtils.dial(from: sender, to: oneVolunteer, context: context);
+      flagVolunteer();
+      if (atendeu != 1 && tries < 6) {
+        print("Entrou no IF");
+        print('tentativa: $tries');
+        print('atendeu = $atendeu');
+        print("Entrou no IF");
+        print('atendeu = $atendeu');
+        print('tentativa: $tries');
+        _stopwatch.start();
+        print('início do timer 10sec');
+        print('tentativa: $tries');
+        sleep(Duration(seconds: 10));
+        _stopwatch.stop();
+        callMethods.endCall(call: call);
+        searchAlgorithm(context);
+      }
       tries++;
     } while (tries < 6);
+    print("SAIU DO WHILE");
     tries = 0;
+    print('tentativa: $tries');
     Fluttertoast.showToast(
-        msg: "Não foi possível encontrar um voluntário",
+        msg: "Não foi possível encontrar um voluntário, tente novamente",
         toastLength: Toast.LENGTH_LONG,
         textColor: Colors.red[300],
         gravity: ToastGravity.CENTER);
+    print('tentativa: $tries');
   }
 
-  callVolunteer(context) {
-    try {
-      selectingVolunteers(oneVolunteer);
-      CallUtils.dial(from: sender, to: oneVolunteer, context: context);
-    } catch (error) {
-      Fluttertoast.showToast(
-          msg: "Não foi possível encontrar um voluntário $error",
-          toastLength: Toast.LENGTH_LONG,
-          textColor: Colors.red[300],
-          gravity: ToastGravity.CENTER);
-    }
-  }
+  // callVolunteer(context) {
+  //   try {
+  //     print("TRY CALL VOLUNTEER");
+  //     selectingVolunteers(oneVolunteer);
+  //     print("oneVolunteer = ");
+  //     print(oneVolunteer.nome);
+  //     print("ajuda = ");
+  //     print(oneVolunteer.ajuda);
+  //     CallUtils.dial(from: sender, to: oneVolunteer, context: context);
+  //     flagVolunteer();
+  //     print("flagged volunteer");
+  //     searchAlgorithm(context);
+  //   } catch (error) {
+  //     print("CALL VOLUNTEER CATCH");
+  //     flagVolunteer();
+  //     print("flagged volunteer");
+  //     // Fluttertoast.showToast(
+  //     //     msg: "Nenhum voluntário estava disponível $error",
+  //     //     toastLength: Toast.LENGTH_LONG,
+  //     //     textColor: Colors.red[300],
+  //     //     gravity: ToastGravity.CENTER);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
-   // pr = new ProgressDialog(context);
+    // pr = new ProgressDialog(context);
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -205,15 +325,15 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                   ],
                 ),
                 onPressed: () async {
-                 // pr = ProgressDialog(
-                 //   context,
-                 //   type: ProgressDialogType.Download,
-                 //   isDismissible: false,
-                 // );
-                 // pr.style(
-                 //   message: 'Chamando voluntário...',
-                 // );
-                 // await pr.show();
+                  // pr = ProgressDialog(
+                  //   context,
+                  //   type: ProgressDialogType.Download,
+                  //   isDismissible: false,
+                  // );
+                  // pr.style(
+                  //   message: 'Chamando voluntário...',
+                  // );
+                  // await pr.show();
                   await Permissions.cameraAndMicrophonePermissionsGranted()
                       ? searchAlgorithm(context)
                       //? callVolunteer(context)
@@ -228,5 +348,4 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
           )
         ])));
   }
-
 }

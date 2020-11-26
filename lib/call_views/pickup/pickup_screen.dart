@@ -10,6 +10,7 @@ import 'package:luzia/utils/firebase_methods.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/utils/permissions.dart';
 import 'package:luzia/views/dv_screen.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import '../call_screen.dart';
 
@@ -27,6 +28,10 @@ class PickupScreen extends StatefulWidget {
 
 class _PickupScreenState extends State<PickupScreen> {
   final CallMethods callMethods = CallMethods();
+  final StopWatchTimer _stopWatchTimer = StopWatchTimer(); // Create instance for timer
+  // var timeStrings = <String>[];
+  var time;
+  int atendeu;
   CallMethods _callMethods = CallMethods();
 
   Call call_model = Call();
@@ -42,6 +47,58 @@ class _PickupScreenState extends State<PickupScreen> {
   FirebaseRepository _repository = FirebaseRepository();
 
   var ajuda = 0;
+
+  @override
+  void dispose() async {
+    // TODO: implement dispose
+    super.dispose();
+    await _stopWatchTimer.dispose();  // for stopwatch timer
+    checkCallResponse();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    atendeu = 0;
+    print('init state atendeu = $atendeu');
+    _stopWatchTimer.onExecute.add(StopWatchExecute.start); // Start timer
+    _stopWatchTimer.rawTime.listen((value) {
+      time = StopWatchTimer.getDisplayTime(value);
+      // print('rawTime $value ${StopWatchTimer.getDisplayTime(value)}');
+      print('Time: $time');
+      // timeStrings.add(time);
+    });
+    print('Time: $time');
+    checkCallResponse();
+  }
+
+  void checkCallResponse(){
+    print("------------- CHECK CALL RESPONSE -------------");
+    // for(var i = 0; i < timeStrings.length; i++) {
+    // for(var i = 0; i < 10; i++) {
+    //   print("------------- time -------------");
+    //   // print(timeStrings[i]);
+    // }
+    // callMethods.endCall(call: widget.call);
+    // if(timeStrings.length >= 30){
+    //   callMethods.endCall(call: widget.call);
+    // }
+    if(atendeu == 2){
+      print('voluntário atendeu');
+    } else {
+      print('voluntário não atendeu');
+      print('Time: ${time.toString()}');
+      if(time.toString() == '00:00:10.00'){
+        Fluttertoast.showToast(
+            msg: "Nenhum voluntário estava disponível.",
+            //toastLength: Toast.LENGTH_LONG,
+            textColor: Colors.white,
+            gravity: ToastGravity.CENTER);
+        callMethods.endCall(call: widget.call);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +149,11 @@ class _PickupScreenState extends State<PickupScreen> {
                     iconSize: 50,
                     onPressed: () async {
                       flagEndCall();
+                      setState(() {
+                        atendeu = 2;
+                        print('set state atendeu = $atendeu');
+                      });
+                      print('Time: $time');
                       await callMethods.endCall(call: widget.call);
                       Fluttertoast.showToast(
                           msg: "Chamada encerrada!",
@@ -110,6 +172,10 @@ class _PickupScreenState extends State<PickupScreen> {
                       onPressed: () async {
                         setState(() {}); // THE VOLUNTEER ANSWERED;
                         flagJoinCall();
+                        setState(() {
+                          atendeu = 1;
+                          print('set state atendeu = $atendeu');
+                        });
                         addHelp(); //add help to volunteer join call
                         await Permissions
                                 .cameraAndMicrophonePermissionsGranted()
@@ -142,10 +208,8 @@ class _PickupScreenState extends State<PickupScreen> {
         //V = HASNOTDIALLED
         call_model.receiverId = volunteer.uid;
         call_model.receiverName = volunteer.nome;
-        //call_model.hasDialled = false;
         call_model.rejected = true;
         call_model.accepted = false;
-        // Map<String, dynamic> hasNotDialledMap = call_model.toMap(call_model);
         _callMethods.makeCall(call: call_model);
       }
     });
@@ -162,10 +226,8 @@ class _PickupScreenState extends State<PickupScreen> {
         //V = HASNOTDIALLED
         call_model.receiverId = volunteer.uid;
         call_model.receiverName = volunteer.nome;
-        //call_model.hasDialled = false;
         call_model.rejected = false;
         call_model.accepted = true;
-        // Map<String, dynamic> hasNotDialledMap = call_model.toMap(call_model);
         _callMethods.makeCall(call: call_model);
       }
     });

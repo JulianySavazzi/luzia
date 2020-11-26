@@ -147,7 +147,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
               onPressed: () async {
                 //vídeo
                 String url =
-                    'https://drive.google.com/open?id=1w8dBZjhbbs924mZKFcJoAl-DFAqBZqMH';
+                    'https://youtu.be/TtJXIVjzVTQ?t=465';
                 if (await canLaunch(url)) {
                   await launch(
                     url,

@@ -1,22 +1,34 @@
 import 'dart:async';
-
+import 'dart:io';
+import 'dart:math';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:luzia/model/call.dart';
+import 'package:luzia/model/users.dart';
 import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/call_methods.dart';
+import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/utils/settings.dart';
+import 'package:luzia/views/dv_screen.dart';
 import 'package:provider/provider.dart';
 //import 'package:torch_compat/torch_compat.dart';
 
 final FirebaseRepository _repository = FirebaseRepository();
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 final usersRef = Firestore.instance.collection('users');
+
+List<Users> volunteers;
+List<Users> volunteersAcceptedCall;
+List<Users> volunteersRejectedCall;
+int atendeu;
+Users oneVolunteer = Users();
 
 class CallScreen extends StatefulWidget {
   final Call call;
@@ -31,9 +43,10 @@ class CallScreen extends StatefulWidget {
 }
 
 class _CallScreenState extends State<CallScreen> {
-  //animações
+
   final CallMethods callMethods = CallMethods();
 
+  //send notification to selected volunteer
   getToken() async {
     FirebaseUser user = await _repository.getCurrentUser();
     _firebaseMessaging.getToken().then((token) {
@@ -46,8 +59,10 @@ class _CallScreenState extends State<CallScreen> {
   static final _users = <int>[];
   final _infoStrings = <String>[];
   bool muted = false;
-  bool flash = false; //try enable flash
   bool camera = false;
+  //bool flash = false; //try enable flash
+
+  Stopwatch _stopwatch = Stopwatch();
 
   @override
   void dispose() {
@@ -65,9 +80,33 @@ class _CallScreenState extends State<CallScreen> {
   @override
   void initState() {
     super.initState();
+    //Add UsersProviders refresh, using this to
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+      userProvider.refreshUser();
+    });
+    _repository.getCurrentUser().then((FirebaseUser currentUser) {
+      _repository.searchVolunteers().then((List<Users> list) {
+        setState(() {
+          sender = Users(
+            uid: currentUser.uid,
+            nome: currentUser.displayName,
+          );
+          print('sender: ${sender.nome}');
+          volunteers = list;
+        });
+      });
+    });
+    //get dispositive token
     getToken();
+    // _stopwatch.start(); // init timer
+    // print('timer: ${_stopwatch.toString()}');
+    setState(() {
+      atendeu = 0; //start variable
+    });
     addPostFrameCallBack(); // to disable all end call screens
     initializeAgora();
+    searchAlgorithm(context); //search volunteer algorithm
   }
 
   Future<void> initializeAgora() async {
@@ -108,6 +147,153 @@ class _CallScreenState extends State<CallScreen> {
       });
     });
   }
+
+  /////////////////// search volunteer algorithm methods ///////////////////////
+
+  //Select random volunteer, and save chosen volunteer
+  Users selectingVolunteers(Users volunteer) {
+    final random = new Random();
+    var i = random.nextInt(volunteers.length);
+    volunteer = Users(
+        uid: volunteers[i].uid,
+        nome: volunteers[i].nome,
+        ajuda: volunteers[i].ajuda,
+        tipo: volunteers[i].tipo);
+    oneVolunteer = volunteer;
+    print("receiver_name = ");
+    print(oneVolunteer.nome);
+    return volunteer;
+  }
+
+  //flag volunteer join a call
+  Future<Users> flagVolunteer() async {
+    // get user receiver and add in oneVolunter in init state
+    _repository.flagVolunteerJoinACall(oneVolunteer).then((List<Users> list) {
+      volunteersAcceptedCall = list;
+    });
+    for (var i = 0; i < volunteersAcceptedCall.length; i++) {
+      if (volunteersAcceptedCall[i].uid == oneVolunteer.uid) {
+        //check if selected volunteer join a call
+        setState(() {
+          atendeu = 1; //volunteer join a call
+          print('atendeu =  $atendeu');
+        });
+        print("Accepted Call ");
+        print(volunteersAcceptedCall[i].nome);
+        print("Selected volunteer ");
+        print(oneVolunteer.nome);
+        return oneVolunteer;
+      } else {
+        _repository
+            .flagVolunteerLeaveACall(oneVolunteer)
+            .then((List<Users> list) {
+          volunteersRejectedCall = list;
+        });
+        setState(() {
+          atendeu = 2; //volunteer end call
+          print('atendeu =  $atendeu');
+        });
+        print("Rejected Call ");
+        print(volunteersRejectedCall[i].nome);
+        print("Selected volunteer ");
+        print(oneVolunteer.nome);
+        return oneVolunteer;
+      }
+    }
+    print("Selected volunteer ");
+    print(oneVolunteer.nome);
+    return oneVolunteer;
+  }
+
+  callVolunteer(context) {
+    try {
+      print("TRY CALL VOLUNTEER");
+      selectingVolunteers(oneVolunteer);
+      print("oneVolunteer = ");
+      print(oneVolunteer.nome);
+      print("ajuda = ");
+      print(oneVolunteer.ajuda);
+      CallUtils.dial(from: sender, to: oneVolunteer, context: context);
+      flagVolunteer();
+      print("flagged volunteer");
+      searchAlgorithm(context);
+    } catch (error) {
+      print("CALL VOLUNTEER CATCH");
+      flagVolunteer();
+      print("flagged volunteer");
+      Fluttertoast.showToast(
+          msg: "Nenhum voluntário estava disponível, tente novamente mais tarde... $error",
+          toastLength: Toast.LENGTH_LONG,
+          textColor: Colors.red[300],
+          gravity: ToastGravity.CENTER);
+    }
+  }
+
+  //METHOD FOR ENTERING A LOOP UNTIL A VOLUNTEER IS SELECTED
+  searchAlgorithm(context) async {
+    print("Entrou no searchAlgorithm");
+    // do {
+    //   print("Entrou no DO WHILE");
+    tries = 0;
+    print('tentativa: $tries');
+    // print('timer start: $_stopwatch');
+    print('atendeu = $atendeu');
+    flagVolunteer();
+    if (atendeu != 1 && tries < 6) {
+      tries++;
+      // print("Entrou no IF");
+      // print('tentativa: $tries');
+      // print('atendeu = $atendeu');
+      // print('início do timer 10sec');
+      // print('tentativa: $tries');
+       callVolunteer(context);
+      // sleep(Duration(seconds: 10));
+      // selectingVolunteers(oneVolunteer);
+      // print("oneVolunteer = ");
+      // print(oneVolunteer.nome);
+      // print("ajuda = ");
+      // print(oneVolunteer.ajuda);
+      // CallUtils.dial(from: sender, to: oneVolunteer, context: context);
+      // flagVolunteer();
+      // _stopwatch.stop();
+      // searchAlgorithm(context);
+    }
+    else {
+      if(atendeu == 2){
+        print("Entrou no IF 2");
+        print('atendeu = $atendeu');
+      } else {
+        print("Entrou no ELSE");
+        print('tentativa: $tries');
+        Fluttertoast.showToast(
+            msg: "Não foi possível encontrar um voluntário, tente novamente",
+            toastLength: Toast.LENGTH_LONG,
+            textColor: Colors.red[300],
+            gravity: ToastGravity.CENTER);
+        print('tentativa: $tries');
+      }
+    }
+    print("SAIU DO IF");
+    // } while (tries < 6);
+    // print("SAIU DO WHILE");
+    // tries = 0;
+    // print('tentativa: $tries');
+    // Fluttertoast.showToast(
+    //     msg: "Não foi possível encontrar um voluntário, tente novamente",
+    //     toastLength: Toast.LENGTH_LONG,
+    //     textColor: Colors.red[300],
+    //     gravity: ToastGravity.CENTER);
+    // print('tentativa: $tries');
+  }
+
+  // void printDuration(){
+  //   setState(() {
+  //     final info = 'duração da chamada: $_stopwatch';
+  //     _infoStrings.add(info);
+  //   });
+  // }
+
+  /////////////////// close search volunteer algorithm methods ///////////////////////
 
   /// Add agora event handlers
   void _addAgoraEventHandlers() {
@@ -182,20 +368,6 @@ class _CallScreenState extends State<CallScreen> {
   void _onSwitchCamera() {
     AgoraRtcEngine.switchCamera();
   }
-
-  /*void _onFlashCamera() {
-    setState(() {
-      TorchCompat.turnOn();
-      flash = !flash;
-    });
-    TorchCompat.turnOff();
-  }*/
-
-//  @override
-//  void dispose() {
-//    super.dispose();
-//    callStreamSubscription.cancel();
-//  }
 
   /// Helper function to get list of native views
   List<Widget> _getRenderViews() {
@@ -303,19 +475,6 @@ class _CallScreenState extends State<CallScreen> {
             fillColor: Colors.white,
             padding: const EdgeInsets.all(12.0),
           ),
-          /*RawMaterialButton(
-            //flash button
-            onPressed: _onFlashCamera, // try enable flash camera
-            child: Icon(
-              flash ? Icons.flash_off : Icons.flash_on,
-              color: Colors.blueAccent,
-              size: 20.0,
-            ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: Colors.white,
-            padding: const EdgeInsets.all(12.0),
-          )*/
         ],
       ),
     );

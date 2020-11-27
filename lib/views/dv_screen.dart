@@ -38,9 +38,7 @@ UserProvider userProvider;
 
 class DefVisualScreen extends StatefulWidget {
   static const String id = 'dv_screen';
-  final Duration time;
-
-  DefVisualScreen({this.time});
+  //final Duration time;
 
   @override
   _DefVisualScreenState createState() => _DefVisualScreenState();
@@ -84,90 +82,6 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
     return volunteer;
   }
 
-  //flag volunteer join a call
-  // Future<Users> flagVolunteer() async { //move to call screen
-  //   _repository.flagVolunteerJoinACall(oneVolunteer).then((List<Users> list) {
-  //     volunteersAcceptedCall = list;
-  //   });
-  //   for (var i = 0; i < volunteersAcceptedCall.length; i++) {
-  //     if (volunteersAcceptedCall[i].uid == oneVolunteer.uid) {
-  //       //check if selected volunteer join a call
-  //       setState(() {
-  //         atendeu = 1; //volunteer join a call
-  //         print("atendeu = ");
-  //         print(atendeu);
-  //       });
-  //       print("Accepted Call ");
-  //       print(volunteersAcceptedCall[i].nome);
-  //       print("Selected volunteer ");
-  //       print(oneVolunteer.nome);
-  //       return oneVolunteer;
-  //     } else {
-  //       _repository
-  //           .flagVolunteerLeaveACall(oneVolunteer)
-  //           .then((List<Users> list) {
-  //         volunteersRejectedCall = list;
-  //       });
-  //       setState(() {
-  //         atendeu = 2; //volunteer end call
-  //         print("atendeu = ");
-  //         print(atendeu);
-  //       });
-  //       print("Rejected Call ");
-  //       print(volunteersRejectedCall[i].nome);
-  //       print("Selected volunteer ");
-  //       print(oneVolunteer.nome);
-  //       return oneVolunteer;
-  //     }
-  //   }
-  //   print("Selected volunteer ");
-  //   print(oneVolunteer.nome);
-  //   return oneVolunteer;
-  // }
-
-  //METHOD FOR ENTERING A LOOP UNTIL A VOLUNTEER IS SELECTED
-  // searchAlgorithm(context) async { // move to call screen
-  //   Stopwatch _stopwatch = Stopwatch();
-  //   do {
-  //     print("Entrou no DO WHILE");
-  //     print('tentativa: $tries');
-  //     print('atendeu = $atendeu');
-  //     selectingVolunteers(oneVolunteer);
-  //     print("oneVolunteer = ");
-  //     print(oneVolunteer.nome);
-  //     print("ajuda = ");
-  //     print(oneVolunteer.ajuda);
-  //     flagVolunteer();
-  //     CallUtils.dial(from: sender, to: oneVolunteer, context: context);
-  //     flagVolunteer();
-  //     if (atendeu != 1 && tries < 6) {
-  //       print("Entrou no IF");
-  //       print('tentativa: $tries');
-  //       print('atendeu = $atendeu');
-  //       print("Entrou no IF");
-  //       print('atendeu = $atendeu');
-  //       print('tentativa: $tries');
-  //       _stopwatch.start();
-  //       print('início do timer 10sec');
-  //       print('tentativa: $tries');
-  //       sleep(Duration(seconds: 10));
-  //       _stopwatch.stop();
-  //       callMethods.endCall(call: call);
-  //       searchAlgorithm(context);
-  //     }
-  //     tries++;
-  //   } while (tries < 6);
-  //   print("SAIU DO WHILE");
-  //   tries = 0;
-  //   print('tentativa: $tries');
-  //   Fluttertoast.showToast(
-  //       msg: "Não foi possível encontrar um voluntário, tente novamente",
-  //       toastLength: Toast.LENGTH_LONG,
-  //       textColor: Colors.red[300],
-  //       gravity: ToastGravity.CENTER);
-  //   print('tentativa: $tries');
-  // }
-
   callVolunteer(context) {
     try {
       print("TRY CALL VOLUNTEER");
@@ -177,13 +91,8 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
       print("ajuda = ");
       print(oneVolunteer.ajuda);
       CallUtils.dial(from: sender, to: oneVolunteer, context: context);
-      // flagVolunteer();
-      // print("flagged volunteer");
-      // searchAlgorithm(context);
     } catch (error) {
       print("CALL VOLUNTEER CATCH");
-      // flagVolunteer();
-      // print("flagged volunteer");
       Fluttertoast.showToast(
           msg: "Nenhum voluntário estava disponível, tente novamente $error",
           toastLength: Toast.LENGTH_LONG,
@@ -280,15 +189,6 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                   ],
                 ),
                 onPressed: () async {
-                  // pr = ProgressDialog(
-                  //   context,
-                  //   type: ProgressDialogType.Download,
-                  //   isDismissible: false,
-                  // );
-                  // pr.style(
-                  //   message: 'Chamando voluntário...',
-                  // );
-                  // await pr.show();
                   Fluttertoast.showToast(
                       msg: "Chamando voluntário...",
                       toastLength: Toast.LENGTH_LONG,
@@ -301,7 +201,6 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
 //                  selectingVolunteers(oneVolunteer);
 //                  print(sender.nome);
                       : Navigator.pop(context);
-                  // await pr.hide;
                 },
               ),
             )),

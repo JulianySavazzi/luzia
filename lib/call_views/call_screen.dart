@@ -33,18 +33,20 @@ Users oneVolunteer = Users();
 class CallScreen extends StatefulWidget {
   final Call call;
   final CallMethods callMethods = CallMethods();
+  //final bool isDv;
 
-  CallScreen({
-    @required this.call,
-  });
+  CallScreen({@required this.call});
 
   @override
   _CallScreenState createState() => _CallScreenState();
 }
 
 class _CallScreenState extends State<CallScreen> {
-
   final CallMethods callMethods = CallMethods();
+  final StopWatchTimer _stopWatchTimer =
+      StopWatchTimer(); // Create instance for timer
+  // var timeStrings = <String>[];
+  var time;
 
   //send notification to selected volunteer
   getToken() async {
@@ -65,13 +67,14 @@ class _CallScreenState extends State<CallScreen> {
   Stopwatch _stopwatch = Stopwatch();
 
   @override
-  void dispose() {
+  void dispose() async {
     // clear users
     _users.clear();
     // destroy sdk
     AgoraRtcEngine.leaveChannel();
     AgoraRtcEngine.destroy();
     super.dispose();
+    await _stopWatchTimer.dispose(); // for stopwatch timer
   }
 
   UserProvider userProvider;
@@ -103,6 +106,13 @@ class _CallScreenState extends State<CallScreen> {
     // print('timer: ${_stopwatch.toString()}');
     setState(() {
       atendeu = 0; //start variable
+    });
+    print('init state atendeu = $atendeu');
+    _stopWatchTimer.onExecute.add(StopWatchExecute.start); // Start timer
+    _stopWatchTimer.rawTime.listen((value) {
+      time = StopWatchTimer.getDisplayTime(value);
+      // print('rawTime $value ${StopWatchTimer.getDisplayTime(value)}');
+      print('Time: $time');
     });
     addPostFrameCallBack(); // to disable all end call screens
     initializeAgora();
@@ -222,7 +232,8 @@ class _CallScreenState extends State<CallScreen> {
       flagVolunteer();
       print("flagged volunteer");
       Fluttertoast.showToast(
-          msg: "Nenhum voluntário estava disponível, tente novamente mais tarde... $error",
+          msg:
+              "Nenhum voluntário estava disponível, tente novamente mais tarde... $error",
           toastLength: Toast.LENGTH_LONG,
           textColor: Colors.red[300],
           gravity: ToastGravity.CENTER);
@@ -246,7 +257,7 @@ class _CallScreenState extends State<CallScreen> {
       // print('atendeu = $atendeu');
       // print('início do timer 10sec');
       // print('tentativa: $tries');
-       callVolunteer(context);
+      callVolunteer(context);
       // sleep(Duration(seconds: 10));
       // selectingVolunteers(oneVolunteer);
       // print("oneVolunteer = ");
@@ -257,9 +268,8 @@ class _CallScreenState extends State<CallScreen> {
       // flagVolunteer();
       // _stopwatch.stop();
       // searchAlgorithm(context);
-    }
-    else {
-      if(atendeu == 2){
+    } else {
+      if (atendeu == 2) {
         print("Entrou no IF 2");
         print('atendeu = $atendeu');
       } else {
@@ -533,6 +543,7 @@ class _CallScreenState extends State<CallScreen> {
 
   @override
   Widget build(BuildContext context) {
+    tryCheckJoin();
     return SafeArea(
         child: Scaffold(
             backgroundColor: Colors.black,
@@ -544,5 +555,18 @@ class _CallScreenState extends State<CallScreen> {
                 _toolbar(),
               ],
             ))));
+  }
+
+  void tryCheckJoin() {
+    if (AgoraRtcEngine.onUserJoined == null) {
+      print('Time: $time');
+      print("onUserJoined: ");
+      print(AgoraRtcEngine.onUserJoined);
+      // Stop timer
+      //_stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+      print('Time: $time');
+    } else {
+      print("Voluntário atendeu!");
+    }
   }
 }

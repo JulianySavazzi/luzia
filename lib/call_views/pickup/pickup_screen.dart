@@ -28,7 +28,8 @@ class PickupScreen extends StatefulWidget {
 
 class _PickupScreenState extends State<PickupScreen> {
   final CallMethods callMethods = CallMethods();
-  final StopWatchTimer _stopWatchTimer = StopWatchTimer(); // Create instance for timer
+  final StopWatchTimer _stopWatchTimer =
+      StopWatchTimer(); // Create instance for timer
   // var timeStrings = <String>[];
   var time;
   int atendeu;
@@ -52,8 +53,7 @@ class _PickupScreenState extends State<PickupScreen> {
   void dispose() async {
     // TODO: implement dispose
     super.dispose();
-    await _stopWatchTimer.dispose();  // for stopwatch timer
-    checkCallResponse();
+    await _stopWatchTimer.dispose(); // for stopwatch timer
   }
 
   @override
@@ -70,39 +70,34 @@ class _PickupScreenState extends State<PickupScreen> {
       // timeStrings.add(time);
     });
     print('Time: $time');
-    checkCallResponse();
+    // checkCallResponse();
   }
 
-  void checkCallResponse(){
-    print("------------- CHECK CALL RESPONSE -------------");
-    // for(var i = 0; i < timeStrings.length; i++) {
-    // for(var i = 0; i < 10; i++) {
-    //   print("------------- time -------------");
-    //   // print(timeStrings[i]);
-    // }
-    // callMethods.endCall(call: widget.call);
-    // if(timeStrings.length >= 30){
-    //   callMethods.endCall(call: widget.call);
-    // }
-    if(atendeu == 2){
-      print('voluntário atendeu');
-    } else {
-      print('voluntário não atendeu');
-      print('Time: ${time.toString()}');
-      if(time.toString() == '00:00:10.00'){
-        Fluttertoast.showToast(
-            msg: "Nenhum voluntário estava disponível.",
-            //toastLength: Toast.LENGTH_LONG,
-            textColor: Colors.white,
-            gravity: ToastGravity.CENTER);
-        callMethods.endCall(call: widget.call);
-      }
-    }
-  }
+  // void checkCallResponse() {
+  //   print("------------- CHECK CALL RESPONSE -------------");
+  //   if (atendeu == 2) {
+  //     //if volunteer join a call
+  //     print('voluntário atendeu');
+  //   } else {
+  //     //volunteer rejected call or don't join a call
+  //     print('voluntário não atendeu');
+  //     print('Time: ${time.toString()}');
+  //     // 10 seconds to accept or reject call
+  //     if (time.toString() == '00:00:10.00') {
+  //       Fluttertoast.showToast(
+  //           msg: "Nenhum voluntário estava disponível.",
+  //           //toastLength: Toast.LENGTH_LONG,
+  //           textColor: Colors.white,
+  //           gravity: ToastGravity.CENTER);
+  //       callMethods.endCall(call: widget.call);
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     //_playRingtone(); //start ringtone
+    // checkCallResponse();
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.cyan.shade50,
@@ -202,7 +197,8 @@ class _PickupScreenState extends State<PickupScreen> {
       //get current volunteer
       if (user != null) {
         //current volunteer is not null
-        Users volunteer = await _repository.getUserDetails(user.uid); // users map receive firebase user
+        Users volunteer = await _repository
+            .getUserDetails(user.uid); // users map receive firebase user
         // call.accepted = false;
         // call.rejected = true;
         //V = HASNOTDIALLED
@@ -220,7 +216,8 @@ class _PickupScreenState extends State<PickupScreen> {
       //get current volunteer
       if (user != null) {
         //current volunteer is not null
-        Users volunteer = await _repository.getUserDetails(user.uid); // users map receive firebase user
+        Users volunteer = await _repository
+            .getUserDetails(user.uid); // users map receive firebase user
         // call.accepted = true;
         // call.rejected = false;
         //V = HASNOTDIALLED

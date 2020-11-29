@@ -164,8 +164,9 @@ class FirebaseMethods {
   }
 
   //Search volunteer join a call
-  Future<List<Users>> flagVolunteerJoinACall(Users v) async {
+  Future<List<Users>> flagVolunteerJoinACall() async {
     final callsRef = Firestore.instance.collection(CALL_COLLECTION);
+    print("/// FIREBASE METHODS - JOIN A CALL ///");
     //List<Users> usersList = List<Users>();
     List<Users> vAtendeuList = List<Users>();
     final QuerySnapshot querySnapshot = await callsRef
@@ -177,21 +178,23 @@ class FirebaseMethods {
           .documents[i].data)); //save users join a call in the list
       print(vAtendeuList[i].nome);
       print(vAtendeuList[i].tipo);
-      if (vAtendeuList[i].uid == v.uid) {
-        print(v.nome);
-        print(" atendeu a chamada!");
-        return vAtendeuList;
-      } else {
-        flagVolunteerLeaveACall(v);
-        print(v.nome);
-        print(" NÃO atendeu a chamada!");
-      }
+      // if (vAtendeuList[i].uid == v.uid) {
+      //   print(v.nome);
+      //   print(" atendeu a chamada!");
+      //   return vAtendeuList;
+      // } else {
+      //   flagVolunteerLeaveACall(v);
+      //   print(v.nome);
+      //   print(" NÃO atendeu a chamada!");
+      // }
     }
+    print("/// FIREBASE METHODS - SAINDO DO JOIN A CALL ///");
     return vAtendeuList;
   }
 
   //Search volunteer leave a call
-  Future<List<Users>> flagVolunteerLeaveACall(Users v) async {
+  Future<List<Users>> flagVolunteerLeaveACall() async {
+    print("/// FIREBASE METHODS - LEAVE A CALL ///");
     final callsRef = Firestore.instance.collection(CALL_COLLECTION);
     List<Users> vRejeitouList = List<Users>();
     final QuerySnapshot querySnapshot = await callsRef
@@ -199,12 +202,13 @@ class FirebaseMethods {
         .where("rejected", isEqualTo: "true")
         .getDocuments(); //get volunteer end call
     for (var i = 0; i < querySnapshot.documents.length; i++) {
-      vRejeitouList.add(Users.fromMap(querySnapshot
-          .documents[i].data)); //save users end call in the list
+      vRejeitouList.add(Users.fromMap(
+          querySnapshot.documents[i].data)); //save users end call in the list
       print(vRejeitouList[i].nome);
       print(vRejeitouList[i].tipo);
       return vRejeitouList;
     }
+    print("/// FIREBASE METHODS - SAINDO DO LEAVE A CALL ///");
     return vRejeitouList;
   }
 

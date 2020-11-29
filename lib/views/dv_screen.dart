@@ -31,7 +31,7 @@ Call call;
 Users oneVolunteer = Users();
 Users sender = Users();
 int tries = 0;
-int atendeu;
+// int atendeu;
 
 //Add UserProvider to refresh users
 UserProvider userProvider;
@@ -48,9 +48,9 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      atendeu = 0; //start variable
-    });
+    // setState(() {
+    //   atendeu = 0; //start variable
+    // });
     //Add UsersProviders refresh, using this to
     SchedulerBinding.instance.addPostFrameCallback((_) {
       userProvider = Provider.of<UserProvider>(context, listen: false);

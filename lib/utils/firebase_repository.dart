@@ -38,10 +38,9 @@ class FirebaseRepository {
 
   Future<List<Users>> getVolunteers() => _firebaseMethods.getVolunteers();
 
-  Future<List<Users>> flagVolunteerJoinACall(Users v) =>
-      _firebaseMethods.flagVolunteerJoinACall(v);
+  Future<List<Users>> flagVolunteerJoinACall() =>
+      _firebaseMethods.flagVolunteerJoinACall();
 
-  Future<List<Users>> flagVolunteerLeaveACall(Users v) =>
-      _firebaseMethods.flagVolunteerLeaveACall(v);
-
+  Future<List<Users>> flagVolunteerLeaveACall() =>
+      _firebaseMethods.flagVolunteerLeaveACall();
 }

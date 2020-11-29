@@ -27,7 +27,7 @@ final usersRef = Firestore.instance.collection('users');
 List<Users> volunteers;
 List<Users> volunteersAcceptedCall;
 List<Users> volunteersRejectedCall;
-// int atendeu;
+bool atendeu = false;
 Users oneVolunteer = Users();
 
 class CallScreen extends StatefulWidget {
@@ -96,7 +96,7 @@ class _CallScreenState extends State<CallScreen> {
             uid: currentUser.uid,
             nome: currentUser.displayName,
           );
-          print('sender: ${sender.nome}');
+          print(' /// call screen - sender: ${sender.nome} /// ');
           volunteers = list;
         });
       });
@@ -171,43 +171,40 @@ class _CallScreenState extends State<CallScreen> {
     return volunteer;
   }
 
-  // //flag volunteer join a call
+  //flag volunteer join a call
   // Future<Users> flagVolunteer() async {
+  //   print("////// Dentro do FLAG volunteer //////");
   //   // get user receiver and add in oneVolunter in init state
-  //   _repository.flagVolunteerJoinACall(oneVolunteer).then((List<Users> list) {
+  //   _repository.flagVolunteerJoinACall().then((List<Users> list) {
   //     volunteersAcceptedCall = list;
   //   });
   //   for (var i = 0; i < volunteersAcceptedCall.length; i++) {
   //     if (volunteersAcceptedCall[i].uid == oneVolunteer.uid) {
   //       //check if selected volunteer join a call
   //       setState(() {
-  //         atendeu = 1; //volunteer join a call
+  //         atendeu = true; //volunteer join a call
   //         print('atendeu =  $atendeu');
   //       });
-  //       print("Accepted Call ");
-  //       print(volunteersAcceptedCall[i].nome);
-  //       print("Selected volunteer ");
-  //       print(oneVolunteer.nome);
+  //       print('Accepted Call ${volunteersAcceptedCall[i].nome}');
+  //       print('Selected volunteer ${oneVolunteer.nome}');
   //       return oneVolunteer;
   //     } else {
   //       _repository
-  //           .flagVolunteerLeaveACall(oneVolunteer)
+  //           .flagVolunteerLeaveACall()
   //           .then((List<Users> list) {
   //         volunteersRejectedCall = list;
   //       });
-  //       setState(() {
-  //         atendeu = 2; //volunteer end call
-  //         print('atendeu =  $atendeu');
-  //       });
-  //       print("Rejected Call ");
-  //       print(volunteersRejectedCall[i].nome);
-  //       print("Selected volunteer ");
-  //       print(oneVolunteer.nome);
+  //       // setState(() {
+  //       //   atendeu = false; //volunteer end call
+  //       //   print('atendeu =  $atendeu');
+  //       // });
+  //       print('Rejected Call ${volunteersAcceptedCall[i].nome}');
+  //       print('Selected volunteer ${oneVolunteer.nome}');
   //       return oneVolunteer;
   //     }
   //   }
-  //   print("Selected volunteer ");
-  //   print(oneVolunteer.nome);
+  //   print('Selected volunteer ${oneVolunteer.nome}');
+  //   print("////// Saindo do FLAG volunteer //////");
   //   return oneVolunteer;
   // }
 
@@ -326,12 +323,20 @@ class _CallScreenState extends State<CallScreen> {
       });
     };
 
-    AgoraRtcEngine.onUserJoined = (int uid, int elapsed) {
+    AgoraRtcEngine.onUserJoined = (int uid, int elapsed) { // override static final method
       setState(() {
         final info = 'userJoined: $uid';
         _infoStrings.add(info);
         _users.add(uid);
       });
+      if(uid != null && elapsed != null){
+        setState(() {
+          atendeu = true;
+        });
+        return atendeu;
+      } else {
+        return atendeu;
+      }
     };
 
     AgoraRtcEngine.onUserOffline = (int uid, int reason) {
@@ -537,45 +542,7 @@ class _CallScreenState extends State<CallScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // _stopWatchTimer.rawTime.listen((value) { // count 10 seconds
-    //   time = StopWatchTimer.getDisplayTime(value);
-    //   print('TIME TO STRING: ${time.toString()}');
-    //   if (time.toString() == "00:00:10.00" ||
-    //       time.toString() == "00:00:10.01" ||
-    //       time.toString() == "00:00:10.02" ||
-    //       time.toString() == "00:00:10.03" ||
-    //       time.toString() == "00:00:10.04" ||
-    //       time.toString() == "00:00:10.05" ||
-    //       time.toString() == "00:00:10.06" ||
-    //       time.toString() == "00:00:10.07" ||
-    //       time.toString() == "00:00:10.08" ||
-    //       time.toString() == "00:00:10.09" ||
-    //       time.toString() == "00:00:10.10" ||
-    //       time.toString() == "00:00:10.11" ||
-    //       time.toString() == "00:00:10.12" ||
-    //       time.toString() == "00:00:10.13" ||
-    //       time.toString() == "00:00:10.14" ||
-    //       time.toString() == "00:00:10.15" ||
-    //       time.toString() == "00:00:10.16" ||
-    //       time.toString() == "00:00:10.17" ||
-    //       time.toString() == "00:00:10.18" ||
-    //       time.toString() == "00:00:10.19" ||
-    //       time.toString() == "00:00:10.20") {
-    //     _stopWatchTimer.onExecute.add(StopWatchExecute.stop); // Stop timer
-    //     print("////// ENTRANDO NO tryCheckJoin //////");
-    //     print("onUserJoined: ${AgoraRtcEngine.onUserJoined}");
-    //     if (AgoraRtcEngine.onUserJoined == null) {
-    //       print("Voluntário NÂO atendeu!");
-    //       // print("onUserJoined: ${AgoraRtcEngine.onUserJoined}");
-    //       // CallUtils.callMethods.endCall(call: widget.call);
-    //       // print("Encerra chamada");
-    //     }
-    //     //tryCheckJoin(); // check if user joined in a call
-    //     print("STOP TIMER! $time");
-    //     print("////// TIMER 10 SEGUNDOS! //////");
-    //   }
-    // });
-    // print("////// SAIU DO STOPWATCHTIMER //////");
+    print("BUILD CALL");
     tryCheckJoin();
     print("////// ENTRANDO NO RETURN //////");
     return SafeArea(
@@ -593,9 +560,16 @@ class _CallScreenState extends State<CallScreen> {
 
   void tryCheckJoin() {
     print("////// ENTRANDO NO tryCheckJoin //////");
-    if (AgoraRtcEngine.onUserJoined == null) {
-      print("//// entrou no IF ////");
-      _stopWatchTimer.rawTime.listen((value) { // count 10 seconds
+      if (atendeu == true) {
+      _stopWatchTimer.onExecute.add(StopWatchExecute.stop); // Stop timer
+      print("/// VOLUNTÁRIO ATENDEU ///");
+      print("onUserJoined: $atendeu");
+      print("/// VOLUNTÁRIO ATENDEU ///");
+    } else {
+      print("//// entrou no ELSE ////");
+      print("onUserJoined: $atendeu");
+      _stopWatchTimer.rawTime.listen((value) {
+        // count 10 seconds
         time = StopWatchTimer.getDisplayTime(value);
         print('TIME TO STRING: ${time.toString()}');
         if (time.toString() == "00:00:10.00" ||
@@ -636,8 +610,7 @@ class _CallScreenState extends State<CallScreen> {
         }
       });
       print("////// SAIU DO STOPWATCHTIMER //////");
-      // print('Time: $time');
       print("////////// fim / if //////////");
-    }
+    } // stopwatchetimer
   } // tryCheckJoin()
 }

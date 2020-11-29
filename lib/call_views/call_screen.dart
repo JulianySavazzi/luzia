@@ -537,45 +537,45 @@ class _CallScreenState extends State<CallScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _stopWatchTimer.rawTime.listen((value) { // count 10 seconds
-      time = StopWatchTimer.getDisplayTime(value);
-      print('TIME TO STRING: ${time.toString()}');
-      if (time.toString() == "00:00:10.00" ||
-          time.toString() == "00:00:10.01" ||
-          time.toString() == "00:00:10.02" ||
-          time.toString() == "00:00:10.03" ||
-          time.toString() == "00:00:10.04" ||
-          time.toString() == "00:00:10.05" ||
-          time.toString() == "00:00:10.06" ||
-          time.toString() == "00:00:10.07" ||
-          time.toString() == "00:00:10.08" ||
-          time.toString() == "00:00:10.09" ||
-          time.toString() == "00:00:10.10" ||
-          time.toString() == "00:00:10.11" ||
-          time.toString() == "00:00:10.12" ||
-          time.toString() == "00:00:10.13" ||
-          time.toString() == "00:00:10.14" ||
-          time.toString() == "00:00:10.15" ||
-          time.toString() == "00:00:10.16" ||
-          time.toString() == "00:00:10.17" ||
-          time.toString() == "00:00:10.18" ||
-          time.toString() == "00:00:10.19" ||
-          time.toString() == "00:00:10.20") {
-        _stopWatchTimer.onExecute.add(StopWatchExecute.stop); // Stop timer
-        print("////// ENTRANDO NO tryCheckJoin //////");
-        print("onUserJoined: ${AgoraRtcEngine.onUserJoined}");
-        if (AgoraRtcEngine.onUserJoined == null) {
-          print("Voluntário NÂO atendeu!");
-          // print("onUserJoined: ${AgoraRtcEngine.onUserJoined}");
-          // CallUtils.callMethods.endCall(call: widget.call);
-          // print("Encerra chamada");
-        }
-        //tryCheckJoin(); // check if user joined in a call
-        print("STOP TIMER! $time");
-        print("////// TIMER 10 SEGUNDOS! //////");
-      }
-    });
-    print("////// SAIU DO STOPWATCHTIMER //////");
+    // _stopWatchTimer.rawTime.listen((value) { // count 10 seconds
+    //   time = StopWatchTimer.getDisplayTime(value);
+    //   print('TIME TO STRING: ${time.toString()}');
+    //   if (time.toString() == "00:00:10.00" ||
+    //       time.toString() == "00:00:10.01" ||
+    //       time.toString() == "00:00:10.02" ||
+    //       time.toString() == "00:00:10.03" ||
+    //       time.toString() == "00:00:10.04" ||
+    //       time.toString() == "00:00:10.05" ||
+    //       time.toString() == "00:00:10.06" ||
+    //       time.toString() == "00:00:10.07" ||
+    //       time.toString() == "00:00:10.08" ||
+    //       time.toString() == "00:00:10.09" ||
+    //       time.toString() == "00:00:10.10" ||
+    //       time.toString() == "00:00:10.11" ||
+    //       time.toString() == "00:00:10.12" ||
+    //       time.toString() == "00:00:10.13" ||
+    //       time.toString() == "00:00:10.14" ||
+    //       time.toString() == "00:00:10.15" ||
+    //       time.toString() == "00:00:10.16" ||
+    //       time.toString() == "00:00:10.17" ||
+    //       time.toString() == "00:00:10.18" ||
+    //       time.toString() == "00:00:10.19" ||
+    //       time.toString() == "00:00:10.20") {
+    //     _stopWatchTimer.onExecute.add(StopWatchExecute.stop); // Stop timer
+    //     print("////// ENTRANDO NO tryCheckJoin //////");
+    //     print("onUserJoined: ${AgoraRtcEngine.onUserJoined}");
+    //     if (AgoraRtcEngine.onUserJoined == null) {
+    //       print("Voluntário NÂO atendeu!");
+    //       // print("onUserJoined: ${AgoraRtcEngine.onUserJoined}");
+    //       // CallUtils.callMethods.endCall(call: widget.call);
+    //       // print("Encerra chamada");
+    //     }
+    //     //tryCheckJoin(); // check if user joined in a call
+    //     print("STOP TIMER! $time");
+    //     print("////// TIMER 10 SEGUNDOS! //////");
+    //   }
+    // });
+    // print("////// SAIU DO STOPWATCHTIMER //////");
     tryCheckJoin();
     print("////// ENTRANDO NO RETURN //////");
     return SafeArea(
@@ -592,15 +592,52 @@ class _CallScreenState extends State<CallScreen> {
   }
 
   void tryCheckJoin() {
+    print("////// ENTRANDO NO tryCheckJoin //////");
     if (AgoraRtcEngine.onUserJoined == null) {
       print("//// entrou no IF ////");
+      _stopWatchTimer.rawTime.listen((value) { // count 10 seconds
+        time = StopWatchTimer.getDisplayTime(value);
+        print('TIME TO STRING: ${time.toString()}');
+        if (time.toString() == "00:00:10.00" ||
+            time.toString() == "00:00:10.01" ||
+            time.toString() == "00:00:10.02" ||
+            time.toString() == "00:00:10.03" ||
+            time.toString() == "00:00:10.04" ||
+            time.toString() == "00:00:10.05" ||
+            time.toString() == "00:00:10.06" ||
+            time.toString() == "00:00:10.07" ||
+            time.toString() == "00:00:10.08" ||
+            time.toString() == "00:00:10.09" ||
+            time.toString() == "00:00:10.10" ||
+            time.toString() == "00:00:10.11" ||
+            time.toString() == "00:00:10.12" ||
+            time.toString() == "00:00:10.13" ||
+            time.toString() == "00:00:10.14" ||
+            time.toString() == "00:00:10.15" ||
+            time.toString() == "00:00:10.16" ||
+            time.toString() == "00:00:10.17" ||
+            time.toString() == "00:00:10.18" ||
+            time.toString() == "00:00:10.19" ||
+            time.toString() == "00:00:10.20") {
+          _stopWatchTimer.onExecute.add(StopWatchExecute.stop); // Stop timer
+          print("onUserJoined: ${AgoraRtcEngine.onUserJoined}");
+          print("STOP TIMER! $time");
+          print("////// TIMER 10 SEGUNDOS! //////");
+          print("Voluntário NÂO atendeu!");
+          print("onUserJoined: ");
+          print(AgoraRtcEngine.onUserJoined);
+          CallUtils.callMethods.endCall(call: widget.call);
+          Fluttertoast.showToast(
+              msg: "O voluntário selecionado não estava disponível...",
+              toastLength: Toast.LENGTH_LONG,
+              textColor: Colors.red[300],
+              gravity: ToastGravity.CENTER);
+          print("Encerra chamada");
+        }
+      });
+      print("////// SAIU DO STOPWATCHTIMER //////");
       // print('Time: $time');
-      print("Voluntário NÂO atendeu!");
-      print("onUserJoined: ");
-      print(AgoraRtcEngine.onUserJoined);
-      CallUtils.callMethods.endCall(call: widget.call);
-      print("Encerra chamada");
       print("////////// fim / if //////////");
     }
-  }
+  } // tryCheckJoin()
 }

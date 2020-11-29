@@ -27,7 +27,7 @@ final usersRef = Firestore.instance.collection('users');
 List<Users> volunteers;
 List<Users> volunteersAcceptedCall;
 List<Users> volunteersRejectedCall;
-int atendeu;
+// int atendeu;
 Users oneVolunteer = Users();
 
 class CallScreen extends StatefulWidget {
@@ -83,6 +83,7 @@ class _CallScreenState extends State<CallScreen> {
   @override
   void initState() {
     super.initState();
+    print("/// INIT STATE CALL SCREEN ///");
     //Add UsersProviders refresh, using this to
     SchedulerBinding.instance.addPostFrameCallback((_) {
       userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -100,23 +101,18 @@ class _CallScreenState extends State<CallScreen> {
         });
       });
     });
-    //get dispositive token
-    getToken();
-    // _stopwatch.start(); // init timer
-    // print('timer: ${_stopwatch.toString()}');
-    setState(() {
-      atendeu = 0; //start variable
-    });
-    print('init state atendeu = $atendeu');
+    getToken(); //get dispositive token
+    // print('init state atendeu = $atendeu');
     _stopWatchTimer.onExecute.add(StopWatchExecute.start); // Start timer
     _stopWatchTimer.rawTime.listen((value) {
+      // print timer
       time = StopWatchTimer.getDisplayTime(value);
       // print('rawTime $value ${StopWatchTimer.getDisplayTime(value)}');
       print('Time: $time');
     });
     addPostFrameCallBack(); // to disable all end call screens
     initializeAgora();
-    searchAlgorithm(context); //search volunteer algorithm
+    // searchAlgorithm(context); //search volunteer algorithm
   }
 
   Future<void> initializeAgora() async {
@@ -175,45 +171,45 @@ class _CallScreenState extends State<CallScreen> {
     return volunteer;
   }
 
-  //flag volunteer join a call
-  Future<Users> flagVolunteer() async {
-    // get user receiver and add in oneVolunter in init state
-    _repository.flagVolunteerJoinACall(oneVolunteer).then((List<Users> list) {
-      volunteersAcceptedCall = list;
-    });
-    for (var i = 0; i < volunteersAcceptedCall.length; i++) {
-      if (volunteersAcceptedCall[i].uid == oneVolunteer.uid) {
-        //check if selected volunteer join a call
-        setState(() {
-          atendeu = 1; //volunteer join a call
-          print('atendeu =  $atendeu');
-        });
-        print("Accepted Call ");
-        print(volunteersAcceptedCall[i].nome);
-        print("Selected volunteer ");
-        print(oneVolunteer.nome);
-        return oneVolunteer;
-      } else {
-        _repository
-            .flagVolunteerLeaveACall(oneVolunteer)
-            .then((List<Users> list) {
-          volunteersRejectedCall = list;
-        });
-        setState(() {
-          atendeu = 2; //volunteer end call
-          print('atendeu =  $atendeu');
-        });
-        print("Rejected Call ");
-        print(volunteersRejectedCall[i].nome);
-        print("Selected volunteer ");
-        print(oneVolunteer.nome);
-        return oneVolunteer;
-      }
-    }
-    print("Selected volunteer ");
-    print(oneVolunteer.nome);
-    return oneVolunteer;
-  }
+  // //flag volunteer join a call
+  // Future<Users> flagVolunteer() async {
+  //   // get user receiver and add in oneVolunter in init state
+  //   _repository.flagVolunteerJoinACall(oneVolunteer).then((List<Users> list) {
+  //     volunteersAcceptedCall = list;
+  //   });
+  //   for (var i = 0; i < volunteersAcceptedCall.length; i++) {
+  //     if (volunteersAcceptedCall[i].uid == oneVolunteer.uid) {
+  //       //check if selected volunteer join a call
+  //       setState(() {
+  //         atendeu = 1; //volunteer join a call
+  //         print('atendeu =  $atendeu');
+  //       });
+  //       print("Accepted Call ");
+  //       print(volunteersAcceptedCall[i].nome);
+  //       print("Selected volunteer ");
+  //       print(oneVolunteer.nome);
+  //       return oneVolunteer;
+  //     } else {
+  //       _repository
+  //           .flagVolunteerLeaveACall(oneVolunteer)
+  //           .then((List<Users> list) {
+  //         volunteersRejectedCall = list;
+  //       });
+  //       setState(() {
+  //         atendeu = 2; //volunteer end call
+  //         print('atendeu =  $atendeu');
+  //       });
+  //       print("Rejected Call ");
+  //       print(volunteersRejectedCall[i].nome);
+  //       print("Selected volunteer ");
+  //       print(oneVolunteer.nome);
+  //       return oneVolunteer;
+  //     }
+  //   }
+  //   print("Selected volunteer ");
+  //   print(oneVolunteer.nome);
+  //   return oneVolunteer;
+  // }
 
   callVolunteer(context) {
     try {
@@ -224,16 +220,15 @@ class _CallScreenState extends State<CallScreen> {
       print("ajuda = ");
       print(oneVolunteer.ajuda);
       CallUtils.dial(from: sender, to: oneVolunteer, context: context);
-      flagVolunteer();
+      // flagVolunteer();
       print("flagged volunteer");
       searchAlgorithm(context);
     } catch (error) {
       print("CALL VOLUNTEER CATCH");
-      flagVolunteer();
+      // flagVolunteer();
       print("flagged volunteer");
       Fluttertoast.showToast(
-          msg:
-              "Nenhum voluntário estava disponível, tente novamente mais tarde... $error",
+          msg: "Nenhum voluntário estava disponível... $error",
           toastLength: Toast.LENGTH_LONG,
           textColor: Colors.red[300],
           gravity: ToastGravity.CENTER);
@@ -243,35 +238,32 @@ class _CallScreenState extends State<CallScreen> {
   //METHOD FOR ENTERING A LOOP UNTIL A VOLUNTEER IS SELECTED
   searchAlgorithm(context) async {
     print("Entrou no searchAlgorithm");
-    // do {
-    //   print("Entrou no DO WHILE");
-    tries = 0;
-    print('tentativa: $tries');
-    // print('timer start: $_stopwatch');
-    print('atendeu = $atendeu');
-    flagVolunteer();
-    if (atendeu != 1 && tries < 6) {
-      tries++;
-      // print("Entrou no IF");
-      // print('tentativa: $tries');
+    do {
+      print("Entrou no DO WHILE");
+      tries = 0;
+      print('tentativa: $tries');
+      print("onUserJoined: ");
+      print(AgoraRtcEngine.onUserJoined);
+      // print('timer start: $_stopwatch');
       // print('atendeu = $atendeu');
-      // print('início do timer 10sec');
-      // print('tentativa: $tries');
-      callVolunteer(context);
-      // sleep(Duration(seconds: 10));
-      // selectingVolunteers(oneVolunteer);
-      // print("oneVolunteer = ");
-      // print(oneVolunteer.nome);
-      // print("ajuda = ");
-      // print(oneVolunteer.ajuda);
-      // CallUtils.dial(from: sender, to: oneVolunteer, context: context);
       // flagVolunteer();
-      // _stopwatch.stop();
-      // searchAlgorithm(context);
-    } else {
-      if (atendeu == 2) {
-        print("Entrou no IF 2");
-        print('atendeu = $atendeu');
+      if (AgoraRtcEngine.onUserJoined == null) {
+        print("Entrou no IF");
+        print('tentativa: $tries');
+        // print('atendeu = $atendeu');
+        callVolunteer(context);
+        print('início do timer 10sec');
+        // print('tentativa: $tries');
+        // sleep(Duration(seconds: 10));
+        // selectingVolunteers(oneVolunteer);
+        // print("oneVolunteer = ");
+        // print(oneVolunteer.nome);
+        // print("ajuda = ");
+        // print(oneVolunteer.ajuda);
+        // CallUtils.dial(from: sender, to: oneVolunteer, context: context);
+        // flagVolunteer();
+        // _stopwatch.stop();
+        // searchAlgorithm(context);
       } else {
         print("Entrou no ELSE");
         print('tentativa: $tries');
@@ -282,18 +274,20 @@ class _CallScreenState extends State<CallScreen> {
             gravity: ToastGravity.CENTER);
         print('tentativa: $tries');
       }
-    }
-    print("SAIU DO IF");
-    // } while (tries < 6);
-    // print("SAIU DO WHILE");
-    // tries = 0;
-    // print('tentativa: $tries');
-    // Fluttertoast.showToast(
-    //     msg: "Não foi possível encontrar um voluntário, tente novamente",
-    //     toastLength: Toast.LENGTH_LONG,
-    //     textColor: Colors.red[300],
-    //     gravity: ToastGravity.CENTER);
-    // print('tentativa: $tries');
+      print("///////////////////////////////////////");
+      tries++;
+      print('tentativa: $tries');
+      print("SAIU DO IF");
+    } while (tries < 6);
+    print("SAIU DO WHILE");
+    tries = 0;
+    print('tentativa: $tries');
+    Fluttertoast.showToast(
+        msg: "Não foi possível encontrar um voluntário, tente novamente",
+        toastLength: Toast.LENGTH_LONG,
+        textColor: Colors.red[300],
+        gravity: ToastGravity.CENTER);
+    print('tentativa: $tries');
   }
 
   // void printDuration(){
@@ -543,7 +537,47 @@ class _CallScreenState extends State<CallScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _stopWatchTimer.rawTime.listen((value) { // count 10 seconds
+      time = StopWatchTimer.getDisplayTime(value);
+      print('TIME TO STRING: ${time.toString()}');
+      if (time.toString() == "00:00:10.00" ||
+          time.toString() == "00:00:10.01" ||
+          time.toString() == "00:00:10.02" ||
+          time.toString() == "00:00:10.03" ||
+          time.toString() == "00:00:10.04" ||
+          time.toString() == "00:00:10.05" ||
+          time.toString() == "00:00:10.06" ||
+          time.toString() == "00:00:10.07" ||
+          time.toString() == "00:00:10.08" ||
+          time.toString() == "00:00:10.09" ||
+          time.toString() == "00:00:10.10" ||
+          time.toString() == "00:00:10.11" ||
+          time.toString() == "00:00:10.12" ||
+          time.toString() == "00:00:10.13" ||
+          time.toString() == "00:00:10.14" ||
+          time.toString() == "00:00:10.15" ||
+          time.toString() == "00:00:10.16" ||
+          time.toString() == "00:00:10.17" ||
+          time.toString() == "00:00:10.18" ||
+          time.toString() == "00:00:10.19" ||
+          time.toString() == "00:00:10.20") {
+        _stopWatchTimer.onExecute.add(StopWatchExecute.stop); // Stop timer
+        print("////// ENTRANDO NO tryCheckJoin //////");
+        print("onUserJoined: ${AgoraRtcEngine.onUserJoined}");
+        if (AgoraRtcEngine.onUserJoined == null) {
+          print("Voluntário NÂO atendeu!");
+          // print("onUserJoined: ${AgoraRtcEngine.onUserJoined}");
+          // CallUtils.callMethods.endCall(call: widget.call);
+          // print("Encerra chamada");
+        }
+        //tryCheckJoin(); // check if user joined in a call
+        print("STOP TIMER! $time");
+        print("////// TIMER 10 SEGUNDOS! //////");
+      }
+    });
+    print("////// SAIU DO STOPWATCHTIMER //////");
     tryCheckJoin();
+    print("////// ENTRANDO NO RETURN //////");
     return SafeArea(
         child: Scaffold(
             backgroundColor: Colors.black,
@@ -559,14 +593,14 @@ class _CallScreenState extends State<CallScreen> {
 
   void tryCheckJoin() {
     if (AgoraRtcEngine.onUserJoined == null) {
-      print('Time: $time');
+      print("//// entrou no IF ////");
+      // print('Time: $time');
+      print("Voluntário NÂO atendeu!");
       print("onUserJoined: ");
       print(AgoraRtcEngine.onUserJoined);
-      // Stop timer
-      //_stopWatchTimer.onExecute.add(StopWatchExecute.stop);
-      print('Time: $time');
-    } else {
-      print("Voluntário atendeu!");
+      CallUtils.callMethods.endCall(call: widget.call);
+      print("Encerra chamada");
+      print("////////// fim / if //////////");
     }
   }
 }

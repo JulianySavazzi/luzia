@@ -33,7 +33,6 @@ Users oneVolunteer = Users();
 class CallScreen extends StatefulWidget {
   final Call call;
   final CallMethods callMethods = CallMethods();
-  //final bool isDv;
 
   CallScreen({@required this.call});
 
@@ -45,7 +44,6 @@ class _CallScreenState extends State<CallScreen> {
   final CallMethods callMethods = CallMethods();
   final StopWatchTimer _stopWatchTimer =
       StopWatchTimer(); // Create instance for timer
-  // var timeStrings = <String>[];
   var time;
 
   //send notification to selected volunteer
@@ -63,8 +61,6 @@ class _CallScreenState extends State<CallScreen> {
   bool muted = false;
   bool camera = false;
   //bool flash = false; //try enable flash
-
-  Stopwatch _stopwatch = Stopwatch();
 
   @override
   void dispose() async {
@@ -102,12 +98,10 @@ class _CallScreenState extends State<CallScreen> {
       });
     });
     getToken(); //get dispositive token
-    // print('init state atendeu = $atendeu');
     _stopWatchTimer.onExecute.add(StopWatchExecute.start); // Start timer
     _stopWatchTimer.rawTime.listen((value) {
       // print timer
       time = StopWatchTimer.getDisplayTime(value);
-      // print('rawTime $value ${StopWatchTimer.getDisplayTime(value)}');
       print('Time: $time');
     });
     addPostFrameCallBack(); // to disable all end call screens
@@ -286,13 +280,6 @@ class _CallScreenState extends State<CallScreen> {
         gravity: ToastGravity.CENTER);
     print('tentativa: $tries');
   }
-
-  // void printDuration(){
-  //   setState(() {
-  //     final info = 'duração da chamada: $_stopwatch';
-  //     _infoStrings.add(info);
-  //   });
-  // }
 
   /////////////////// close search volunteer algorithm methods ///////////////////////
 

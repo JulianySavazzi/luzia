@@ -154,13 +154,26 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                   )
                 ]),
               )),
+              FutureBuilder(
+                  future: _repository.getUser(),
+                  builder: (context, snapshot){
+                    return Container(
+                      child: Center(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text('tentativas de chamar voluntário = ${snapshot.data.tentativa}'),
+                        ),
+                      ),
+                    );
+                  }
+              ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             child: Container(
                 child: Align(
               alignment: Alignment.bottomCenter,
               child: RaisedButton(
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+                padding: EdgeInsets.symmetric(vertical: 65, horizontal: 0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),

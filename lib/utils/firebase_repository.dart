@@ -27,6 +27,10 @@ class FirebaseRepository {
           String token) =>
       _firebaseMethods.addType(user, tipo, ajuda, tentativa, token);
 
+  //Update variable tentativa
+  Future<void> addTries(FirebaseUser currentUser, int tentativa) =>
+      _firebaseMethods.addTries(currentUser, tentativa);
+
   Future<List<Users>> searchVolunteers() => _firebaseMethods.searchVolunteers();
 
   Future<Users> getUser() => _firebaseMethods.getUser();

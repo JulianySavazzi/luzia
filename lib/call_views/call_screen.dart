@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:luzia/utils/firebase_methods.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,6 +17,7 @@ import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/utils/settings.dart';
 import 'package:luzia/views/dv_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:luzia/constants/strings.dart';
 
 final FirebaseRepository _repository = FirebaseRepository();
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -26,6 +28,7 @@ List<Users> volunteersAcceptedCall;
 List<Users> volunteersRejectedCall;
 bool atendeu = false;
 Users oneVolunteer = Users();
+int tentativas = 0;
 
 class CallScreen extends StatefulWidget {
   final Call call;
@@ -392,6 +395,7 @@ class _CallScreenState extends State<CallScreen> {
   Widget build(BuildContext context) {
     print("BUILD CALL");
     tryCheckJoin();
+    incrementTries();
     print("////// ENTRANDO NO RETURN DO BUILD CALL //////");
     return SafeArea(
         child: Scaffold(
@@ -463,6 +467,55 @@ class _CallScreenState extends State<CallScreen> {
       print("////////// fim / if //////////");
     } // stopwatchetimer
   } // tryCheckJoin()
+
+  //Increment tries for user
+  void incrementTries() {
+    _repository.getCurrentUser().then((FirebaseUser user) async {
+      //get current volunteer
+      if (user != null) {
+        //current volunteer is not null
+        Users dv = await _repository
+            .getUserDetails(user.uid); // users map receive firebase user
+        tentativas = dv.tentativa;
+        saveTries(
+            user, tentativas); //incremented help for current volunteer in database
+      } else {
+        Fluttertoast.showToast(
+            msg: "Houve um erro",
+            toastLength: Toast.LENGTH_LONG,
+            textColor: Colors.red[300],
+            gravity: ToastGravity.BOTTOM);
+      }
+    });
+  }
+
+  saveTries(FirebaseUser currentUser, int tentativas){
+    if(atendeu == true){
+      Users user = Users(
+        uid: currentUser.uid,
+        nome: currentUser.displayName,
+        email: currentUser.email,
+        photo: currentUser.photoUrl,
+        tentativa: 0,
+      );
+      FirebaseMethods.firestore
+          .collection(USERS_COLLECTION)
+          .document(currentUser.uid)
+          .setData(user.toMap(user));
+    } else {
+      Users user = Users(
+        uid: currentUser.uid,
+        nome: currentUser.displayName,
+        email: currentUser.email,
+        photo: currentUser.photoUrl,
+        tentativa: tentativas + 1,
+      );
+      FirebaseMethods.firestore
+          .collection(USERS_COLLECTION)
+          .document(currentUser.uid)
+          .setData(user.toMap(user));
+    }
+  }
 
   ////// end methods for search volunteer algorithm //////
 

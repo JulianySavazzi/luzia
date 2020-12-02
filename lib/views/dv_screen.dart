@@ -1,8 +1,5 @@
-//import 'dart:io';
-import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +13,11 @@ import 'package:luzia/utils/call_methods.dart';
 import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/utils/permissions.dart';
-//import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
 Route previousRoute;
 FirebaseRepository _repository = FirebaseRepository();
 final CallMethods callMethods = CallMethods();
-//ProgressDialog pr;
 
 List<Users> volunteers;
 List<Users> volunteersAcceptedCall;
@@ -31,14 +26,12 @@ Call call;
 Users oneVolunteer = Users();
 Users sender = Users();
 int tries = 0;
-// int atendeu;
 
 //Add UserProvider to refresh users
 UserProvider userProvider;
 
 class DefVisualScreen extends StatefulWidget {
   static const String id = 'dv_screen';
-  //final Duration time;
 
   @override
   _DefVisualScreenState createState() => _DefVisualScreenState();
@@ -48,9 +41,6 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
   @override
   void initState() {
     super.initState();
-    // setState(() {
-    //   atendeu = 0; //start variable
-    // });
     //Add UsersProviders refresh, using this to
     SchedulerBinding.instance.addPostFrameCallback((_) {
       userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -196,10 +186,6 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                       gravity: ToastGravity.CENTER);
                   await Permissions.cameraAndMicrophonePermissionsGranted()
                       ? callVolunteer(context)
-                      //? callVolunteer(context)
-//                  print(volunteers);
-//                  selectingVolunteers(oneVolunteer);
-//                  print(sender.nome);
                       : Navigator.pop(context);
                 },
               ),

@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:math';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,7 +16,6 @@ import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/utils/settings.dart';
 import 'package:luzia/views/dv_screen.dart';
 import 'package:provider/provider.dart';
-//import 'package:torch_compat/torch_compat.dart';
 
 final FirebaseRepository _repository = FirebaseRepository();
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -53,7 +50,7 @@ class _CallScreenState extends State<CallScreen> {
       print("FCM Messaging token: $token\n");
       usersRef.document(user.uid).updateData({'token': token});
     });
-  }
+  } // getToken
 
   //AGORA VARIABLES
   static final _users = <int>[];
@@ -71,7 +68,7 @@ class _CallScreenState extends State<CallScreen> {
     AgoraRtcEngine.destroy();
     super.dispose();
     await _stopWatchTimer.dispose(); // for stopwatch timer
-  }
+  } // dispose
 
   UserProvider userProvider;
   StreamSubscription callStreamSubscription;
@@ -106,8 +103,7 @@ class _CallScreenState extends State<CallScreen> {
     });
     addPostFrameCallBack(); // to disable all end call screens
     initializeAgora();
-    // searchAlgorithm(context); //search volunteer algorithm
-  }
+  } //initState
 
   Future<void> initializeAgora() async {
     if (APP_ID.isEmpty) {
@@ -126,7 +122,7 @@ class _CallScreenState extends State<CallScreen> {
     await AgoraRtcEngine.setParameters(
         '''{\"che.video.lowBitRateStreamParameter\":{\"width\":320,\"height\":180,\"frameRate\":15,\"bitRate\":140}}''');
     await AgoraRtcEngine.joinChannel(null, widget.call.channelId, null, 0);
-  }
+  } // initializeAgora
 
   addPostFrameCallBack() {
     SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -146,142 +142,7 @@ class _CallScreenState extends State<CallScreen> {
         }
       });
     });
-  }
-
-  /////////////////// search volunteer algorithm methods ///////////////////////
-
-  //Select random volunteer, and save chosen volunteer
-  Users selectingVolunteers(Users volunteer) {
-    final random = new Random();
-    var i = random.nextInt(volunteers.length);
-    volunteer = Users(
-        uid: volunteers[i].uid,
-        nome: volunteers[i].nome,
-        ajuda: volunteers[i].ajuda,
-        tipo: volunteers[i].tipo);
-    oneVolunteer = volunteer;
-    print("receiver_name = ");
-    print(oneVolunteer.nome);
-    return volunteer;
-  }
-
-  //flag volunteer join a call
-  // Future<Users> flagVolunteer() async {
-  //   print("////// Dentro do FLAG volunteer //////");
-  //   // get user receiver and add in oneVolunter in init state
-  //   _repository.flagVolunteerJoinACall().then((List<Users> list) {
-  //     volunteersAcceptedCall = list;
-  //   });
-  //   for (var i = 0; i < volunteersAcceptedCall.length; i++) {
-  //     if (volunteersAcceptedCall[i].uid == oneVolunteer.uid) {
-  //       //check if selected volunteer join a call
-  //       setState(() {
-  //         atendeu = true; //volunteer join a call
-  //         print('atendeu =  $atendeu');
-  //       });
-  //       print('Accepted Call ${volunteersAcceptedCall[i].nome}');
-  //       print('Selected volunteer ${oneVolunteer.nome}');
-  //       return oneVolunteer;
-  //     } else {
-  //       _repository
-  //           .flagVolunteerLeaveACall()
-  //           .then((List<Users> list) {
-  //         volunteersRejectedCall = list;
-  //       });
-  //       // setState(() {
-  //       //   atendeu = false; //volunteer end call
-  //       //   print('atendeu =  $atendeu');
-  //       // });
-  //       print('Rejected Call ${volunteersAcceptedCall[i].nome}');
-  //       print('Selected volunteer ${oneVolunteer.nome}');
-  //       return oneVolunteer;
-  //     }
-  //   }
-  //   print('Selected volunteer ${oneVolunteer.nome}');
-  //   print("////// Saindo do FLAG volunteer //////");
-  //   return oneVolunteer;
-  // }
-
-  callVolunteer(context) {
-    try {
-      print("TRY CALL VOLUNTEER");
-      selectingVolunteers(oneVolunteer);
-      print("oneVolunteer = ");
-      print(oneVolunteer.nome);
-      print("ajuda = ");
-      print(oneVolunteer.ajuda);
-      CallUtils.dial(from: sender, to: oneVolunteer, context: context);
-      // flagVolunteer();
-      print("flagged volunteer");
-      searchAlgorithm(context);
-    } catch (error) {
-      print("CALL VOLUNTEER CATCH");
-      // flagVolunteer();
-      print("flagged volunteer");
-      Fluttertoast.showToast(
-          msg: "Nenhum voluntário estava disponível... $error",
-          toastLength: Toast.LENGTH_LONG,
-          textColor: Colors.red[300],
-          gravity: ToastGravity.CENTER);
-    }
-  }
-
-  //METHOD FOR ENTERING A LOOP UNTIL A VOLUNTEER IS SELECTED
-  searchAlgorithm(context) async {
-    print("Entrou no searchAlgorithm");
-    do {
-      print("Entrou no DO WHILE");
-      tries = 0;
-      print('tentativa: $tries');
-      print("onUserJoined: ");
-      print(AgoraRtcEngine.onUserJoined);
-      // print('timer start: $_stopwatch');
-      // print('atendeu = $atendeu');
-      // flagVolunteer();
-      if (AgoraRtcEngine.onUserJoined == null) {
-        print("Entrou no IF");
-        print('tentativa: $tries');
-        // print('atendeu = $atendeu');
-        callVolunteer(context);
-        print('início do timer 10sec');
-        // print('tentativa: $tries');
-        // sleep(Duration(seconds: 10));
-        // selectingVolunteers(oneVolunteer);
-        // print("oneVolunteer = ");
-        // print(oneVolunteer.nome);
-        // print("ajuda = ");
-        // print(oneVolunteer.ajuda);
-        // CallUtils.dial(from: sender, to: oneVolunteer, context: context);
-        // flagVolunteer();
-        // _stopwatch.stop();
-        // searchAlgorithm(context);
-      } else {
-        print("Entrou no ELSE");
-        print('tentativa: $tries');
-        Fluttertoast.showToast(
-            msg: "Não foi possível encontrar um voluntário, tente novamente",
-            toastLength: Toast.LENGTH_LONG,
-            textColor: Colors.red[300],
-            gravity: ToastGravity.CENTER);
-        print('tentativa: $tries');
-      }
-      print("///////////////////////////////////////");
-      tries++;
-      print('tentativa: $tries');
-      print("SAIU DO IF");
-    } while (tries < 6);
-    print("SAIU DO WHILE");
-    tries = 0;
-    print('tentativa: $tries');
-    Fluttertoast.showToast(
-        msg: "Não foi possível encontrar um voluntário, tente novamente",
-        toastLength: Toast.LENGTH_LONG,
-        textColor: Colors.red[300],
-        gravity: ToastGravity.CENTER);
-    print('tentativa: $tries');
-  }
-
-  /////////////////// close search volunteer algorithm methods ///////////////////////
+  } // addPostFrameCallBack
 
   /// Add agora event handlers
   void _addAgoraEventHandlers() {
@@ -346,24 +207,24 @@ class _CallScreenState extends State<CallScreen> {
         _infoStrings.add(info);
       });
     };
-  }
+  } // _addAgoraEventHandlers
 
   /// Create agora sdk instance and initialize
   Future<void> _initAgoraRtcEngine() async {
     await AgoraRtcEngine.create(APP_ID);
     await AgoraRtcEngine.enableVideo();
-  }
+  } // _initAgoraRtcEngine
 
   void _onToggleMute() {
     setState(() {
       muted = !muted;
     });
     AgoraRtcEngine.muteLocalAudioStream(muted);
-  }
+  } // _onToggleMute
 
   void _onSwitchCamera() {
     AgoraRtcEngine.switchCamera();
-  }
+  } // _onSwitchCamera
 
   /// Helper function to get list of native views
   List<Widget> _getRenderViews() {
@@ -372,12 +233,12 @@ class _CallScreenState extends State<CallScreen> {
     ];
     _users.forEach((int uid) => list.add(AgoraRenderWidget(uid)));
     return list;
-  }
+  } //_getRenderViews
 
   /// Video view wrapper
   Widget _videoView(view) {
     return Expanded(child: Container(child: view));
-  }
+  } //_videoView
 
   /// Video view row wrapper
   Widget _expandedVideoRow(List<Widget> views) {
@@ -387,7 +248,7 @@ class _CallScreenState extends State<CallScreen> {
         children: wrappedViews,
       ),
     );
-  }
+  } //_expandedVideoRow
 
   /// Video layout wrapper
   Widget _viewRows() {
@@ -425,7 +286,7 @@ class _CallScreenState extends State<CallScreen> {
       default:
     }
     return Container();
-  }
+  } // _viewRows
 
   /// Toolbar layout
   Widget _toolbar() {
@@ -474,7 +335,7 @@ class _CallScreenState extends State<CallScreen> {
         ],
       ),
     );
-  }
+  } // _toolbar
 
   /////////////////// REMOVE AFTER GENERATING APK //////////////////////
   /// Info panel to show logs
@@ -525,13 +386,13 @@ class _CallScreenState extends State<CallScreen> {
         ),
       ),
     );
-  }
+  } // _panel
 
   @override
   Widget build(BuildContext context) {
     print("BUILD CALL");
     tryCheckJoin();
-    print("////// ENTRANDO NO RETURN //////");
+    print("////// ENTRANDO NO RETURN DO BUILD CALL //////");
     return SafeArea(
         child: Scaffold(
             backgroundColor: Colors.black,
@@ -543,7 +404,9 @@ class _CallScreenState extends State<CallScreen> {
                 _toolbar(),
               ],
             ))));
-  }
+  } //build
+
+  //// for search volunteer algorithm ////
 
   void tryCheckJoin() {
     print("////// ENTRANDO NO tryCheckJoin //////");
@@ -590,8 +453,8 @@ class _CallScreenState extends State<CallScreen> {
           CallUtils.callMethods.endCall(call: widget.call);
           Fluttertoast.showToast(
               msg: "O voluntário selecionado não estava disponível...",
-              toastLength: Toast.LENGTH_LONG,
-              textColor: Colors.red[300],
+              toastLength: Toast.LENGTH_SHORT,
+              textColor: Colors.yellowAccent[100],
               gravity: ToastGravity.CENTER);
           print("Encerra chamada");
         }
@@ -600,4 +463,7 @@ class _CallScreenState extends State<CallScreen> {
       print("////////// fim / if //////////");
     } // stopwatchetimer
   } // tryCheckJoin()
-}
+
+  ////// end methods for search volunteer algorithm //////
+
+} // _CallScreenState

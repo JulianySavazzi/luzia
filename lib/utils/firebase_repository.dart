@@ -23,13 +23,11 @@ class FirebaseRepository {
       _firebaseMethods.addDataToDb(user);
 
   //Add type for user
-  Future<void> addType(
-          FirebaseUser user, String tipo, int ajuda, String token) =>
-      _firebaseMethods.addType(user, tipo, ajuda, token);
+  Future<void> addType(FirebaseUser user, String tipo, int ajuda, int tentativa,
+          String token) =>
+      _firebaseMethods.addType(user, tipo, ajuda, tentativa, token);
 
   Future<List<Users>> searchVolunteers() => _firebaseMethods.searchVolunteers();
-
-//  Future<List<Users>> getMaxHelp() => _firebaseMethods.getMaxHelp();
 
   Future<Users> getUser() => _firebaseMethods.getUser();
 
@@ -38,9 +36,13 @@ class FirebaseRepository {
 
   Future<List<Users>> getVolunteers() => _firebaseMethods.getVolunteers();
 
-  Future<List<Users>> flagVolunteerJoinACall() =>
-      _firebaseMethods.flagVolunteerJoinACall();
+  //don't use
 
-  Future<List<Users>> flagVolunteerLeaveACall() =>
-      _firebaseMethods.flagVolunteerLeaveACall();
+  //  Future<List<Users>> getMaxHelp() => _firebaseMethods.getMaxHelp();
+
+  // Future<List<Users>> flagVolunteerJoinACall() =>
+  //     _firebaseMethods.flagVolunteerJoinACall();
+
+  // Future<List<Users>> flagVolunteerLeaveACall() =>
+  //     _firebaseMethods.flagVolunteerLeaveACall();
 }

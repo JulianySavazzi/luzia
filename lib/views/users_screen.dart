@@ -15,6 +15,7 @@ bool voluntario = false;
 //vars for type and help number by users
 String tipo = "";
 int ajuda = 0;
+int tentativa = 0; // init 0, increment when volunteer decline call, and set 0 when volunteer join a call
 String _token = "";
 
 class UsersScreen extends StatefulWidget {
@@ -181,6 +182,7 @@ class _UsersScreenState extends State<UsersScreen> {
                               onPressed: () {
                                 tipo = "D";
                                 ajuda = null;
+                                tentativa = 0;
                                 _token = _token;
                                 //DV screen
                                 addType();
@@ -215,6 +217,7 @@ class _UsersScreenState extends State<UsersScreen> {
                               onPressed: () {
                                 tipo = "V";
                                 ajuda = 0;
+                                tentativa = 0;
                                 _token = _token;
                                 //V screen
                                 addType();
@@ -243,7 +246,7 @@ class _UsersScreenState extends State<UsersScreen> {
     });
     _repository.getCurrentUser().then((FirebaseUser user) {
       if (user != null) {
-        authenticateType(user, tipo, ajuda, _token);
+        authenticateType(user, tipo, ajuda, tentativa, _token);
       } else {
         Fluttertoast.showToast(
             msg: "Houve um erro",
@@ -256,13 +259,13 @@ class _UsersScreenState extends State<UsersScreen> {
 
   //Auth type for user
   void authenticateType(
-      FirebaseUser user, String tipo, int ajuda, String token) {
+      FirebaseUser user, String tipo, int ajuda, int tentativa, String token) {
     _repository.authenticateUser(user).then((isNewUser) {
       setState(() {
         isLoginPressed = true;
       });
       if (!isNewUser) {
-        _repository.addType(user, tipo, ajuda, token).then((value) {
+        _repository.addType(user, tipo, ajuda, tentativa, token).then((value) {
           if (ajuda == 0) {
             setState(() {
               voluntario = true;

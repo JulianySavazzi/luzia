@@ -5,6 +5,7 @@ class Users {
   String tipo;
   String photo;
   int ajuda;
+  int tentativa; //for count tries to call volunteer
   String token;
 
   Users(
@@ -14,6 +15,7 @@ class Users {
       this.tipo,
       this.photo,
       this.ajuda,
+        this.tentativa,
       this.token,});
 
   Map toMap(Users user) {
@@ -24,6 +26,7 @@ class Users {
     data['tipo'] = user.tipo;
     data['photo'] = user.photo;
     data['ajuda'] = user.ajuda;
+    data['tentativa'] = user.tentativa;
     data['token'] = user.token;
     return data;
   }
@@ -35,6 +38,7 @@ class Users {
     this.tipo = mapData['tipo'];
     this.photo = mapData['photo'];
     this.ajuda = mapData['ajuda'];
+    this.tentativa = mapData['tentativa'];
     this.token = mapData['token'];
   }
 }

@@ -18,23 +18,24 @@ import 'package:luzia/utils/settings.dart';
 import 'package:luzia/views/dv_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:luzia/constants/strings.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 final FirebaseRepository _repository = FirebaseRepository();
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 final usersRef = Firestore.instance.collection('users');
-
+Firestore db = Firestore.instance;
 List<Users> volunteers;
 List<Users> volunteersAcceptedCall;
 List<Users> volunteersRejectedCall;
 bool atendeu = false;
-Users oneVolunteer = Users();
 int tentativas = 0;
 
 class CallScreen extends StatefulWidget {
   final Call call;
   final CallMethods callMethods = CallMethods();
+  final Users oneVolunteer; //try get dv screen oneVolunteer
 
-  CallScreen({@required this.call});
+  CallScreen({@required this.call, @required this.oneVolunteer});
 
   @override
   _CallScreenState createState() => _CallScreenState();
@@ -397,6 +398,7 @@ class _CallScreenState extends State<CallScreen> {
     print("BUILD CALL");
     tryCheckJoin();
     incrementTries();
+    saveTriesVolunteer();
     print("////// ENTRANDO NO RETURN DO BUILD CALL //////");
     return SafeArea(
         child: Scaffold(
@@ -414,7 +416,8 @@ class _CallScreenState extends State<CallScreen> {
   //// for search volunteer algorithm ////
 
   void tryCheckJoin() {
-    print("////// ENTRANDO NO tryCheckJoin //////");
+    print(
+        "////// ENTRANDO NO tryCheckJoin ; oneVolunteer ${oneVolunteer.nome}; oneVolunteerID ${oneVolunteer.uid}; receiver ${widget.call.receiverName} ; receiverId ${widget.call.receiverId} //////");
     if (atendeu == true) {
       _stopWatchTimer.onExecute.add(StopWatchExecute.stop); // Stop timer
       print("/// VOLUNTÁRIO ATENDEU ///");
@@ -491,11 +494,13 @@ class _CallScreenState extends State<CallScreen> {
   }
 
   saveTries(FirebaseUser currentUser, int tentativas) {
+    print(
+        "////// ENTRANDO NO saveTries ; oneVolunter ${oneVolunteer.nome}; receiver ${widget.call.receiverName} ; receiverId ${widget.call.receiverId} ; caller ${widget.call.callerName} ; callerId ${widget.call.callerId} //////");
     if (atendeu == true) {
       //volunteer join a call
-      if(currentUser.uid == widget.call.receiverId){
+      if (currentUser.uid == widget.call.receiverId) {
         //volunteer
-      }else {
+      } else {
         //set dv tries to 0 -> tentativa = 0
         Users user = Users(
           uid: currentUser.uid,
@@ -513,26 +518,68 @@ class _CallScreenState extends State<CallScreen> {
       }
     } else {
       //volunteer decline call
-     if(currentUser.uid == widget.call.receiverId){
-       //volunteer
-     } else {
-       //increment dv tries -> tentativa = tentativas++
-       Users user = Users(
-         uid: currentUser.uid,
-         nome: currentUser.displayName,
-         email: currentUser.email,
-         photo: currentUser.photoUrl,
-         tipo: 'D',
-         ajuda: null,
-         tentativa: tentativas + 1,
-       );
-       FirebaseMethods.firestore
-           .collection(USERS_COLLECTION)
-           .document(currentUser.uid)
-           .setData(user.toMap(user));
-     }
+      // if (currentUser.uid == widget.call.receiverId) {
+      if (currentUser.uid == oneVolunteer.uid) {
+        //volunteer
+      } else {
+        //increment dv tries -> tentativa = tentativas++
+        Users user = Users(
+          uid: currentUser.uid,
+          nome: currentUser.displayName,
+          email: currentUser.email,
+          photo: currentUser.photoUrl,
+          tipo: 'D',
+          ajuda: null,
+          tentativa: tentativas + 1,
+        );
+        FirebaseMethods.firestore
+            .collection(USERS_COLLECTION)
+            .document(currentUser.uid)
+            .setData(user.toMap(user));
+      }
     }
+    print("/////////// SAINDO DO saveTriesVolunteer //////////");
   } //saveTries
+
+  saveTriesVolunteer() {
+    print(
+        "////// ENTRANDO NO saveTriesVolunteer ;  oneVolunter ${oneVolunteer.nome} ; id ${oneVolunteer.uid} //////");
+    String volunterId;
+    int ajuda;
+    volunterId = oneVolunteer.uid.toString();
+    ajuda = oneVolunteer.ajuda;
+    tentativas = oneVolunteer.tentativa;
+    print(
+        'volunerID = ${volunterId} ; volunteer.uid = ${oneVolunteer.uid} ; ajuda = ${ajuda}; nome = ${oneVolunteer.nome} ; email = ${oneVolunteer.email} ; photo = ${oneVolunteer.photo} ; tentativa = ${tentativas} ');
+    if (atendeu == true) {
+      // volunteer join a call
+      // v tentativa variable is update to value 0 -> tentativa = 0;
+      db.collection(USERS_COLLECTION).document(volunterId).setData({
+        //update document of the volunteer receiver call
+        'uid': oneVolunteer.uid,
+        'nome': oneVolunteer.nome,
+        'email': oneVolunteer.email,
+        'photo': oneVolunteer.photo,
+        'tipo': 'V',
+        'ajuda': ajuda,
+        'tentativa': 0,
+      });
+    } else {
+      // volunteer decline a call
+      // v tentativa variable is incremented -> tentativa = tentativa++;
+      db.collection(USERS_COLLECTION).document(volunterId).setData({
+        //update document of the volunteer receiver call
+        'uid': oneVolunteer.uid,
+        'nome': oneVolunteer.nome,
+        'email': oneVolunteer.email,
+        'photo': oneVolunteer.photo,
+        'tipo': 'V',
+        'ajuda': ajuda,
+        'tentativa': tentativas + 1,
+      });
+    }
+    print("/////////// SAINDO DO saveTriesVolunteer //////////");
+  } //saveTriesVolunteer
 
   ////// end methods for search volunteer algorithm //////
 

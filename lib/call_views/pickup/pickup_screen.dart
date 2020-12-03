@@ -15,10 +15,11 @@ import '../call_screen.dart';
 
 class PickupScreen extends StatefulWidget {
   final Call call;
+  final Users oneVolunteer;
   static const String id = 'pickup_screen';
 
   PickupScreen({
-    @required this.call,
+    @required this.call, @required this.oneVolunteer
   });
 
   @override

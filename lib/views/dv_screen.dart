@@ -75,47 +75,6 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
     return volunteer;
   }
 
-  // saveTriesV() {
-  //   if (atendeu == true) {
-  //     // volunteer join a call
-  //     // v tentativa variable is update to value 0 -> tentativa = 0;
-  //     Users volunteer;
-  //     String volunterId;
-  //     volunterId = widget.call.receiverId.toString();
-  //     volunteer.uid = widget.call.receiverId;
-  //     ajuda = volunteer.ajuda;
-  //     db.collection(USERS_COLLECTION).document(volunterId).setData({
-  //       //update document of the volunteer receiver call
-  //       'uid': volunteer.uid,
-  //       'nome': volunteer.nome,
-  //       'email': volunteer.email,
-  //       'photo': volunteer.photo,
-  //       'tipo': 'V',
-  //       'ajuda': ajuda,
-  //       'tentativa': 0,
-  //     });
-  //   } else {
-  //     // volunteer decline a call
-  //     // v tentativa variable is incremented -> tentativa = tentativa++;
-  //     Users volunteer = Users();
-  //     String volunterId;
-  //     volunterId = widget.call.receiverId.toString();
-  //     volunteer.uid = widget.call.receiverId;
-  //     tentativas = volunteer.tentativa;
-  //     ajuda = volunteer.ajuda;
-  //     db.collection(USERS_COLLECTION).document(volunterId).setData({
-  //       //update document of the volunteer receiver call
-  //       'uid': volunteer.uid,
-  //       'nome': volunteer.nome,
-  //       'email': volunteer.email,
-  //       'photo': volunteer.photo,
-  //       'tipo': 'V',
-  //       'ajuda': ajuda,
-  //       'tentativa': tentativas + 1,
-  //     });
-  //   }
-  // } //saveTriesV
-
   incrementTriesForVolunteer(){
     tentativa = oneVolunteer.tentativa;
     //increment selected volunteer tries in bd

@@ -174,13 +174,14 @@ class _CallScreenState extends State<CallScreen> {
       });
     };
 
-    AgoraRtcEngine.onUserJoined = (int uid, int elapsed) { // override static final method
+    AgoraRtcEngine.onUserJoined = (int uid, int elapsed) {
+      // override static final method
       setState(() {
         final info = 'userJoined: $uid';
         _infoStrings.add(info);
         _users.add(uid);
       });
-      if(uid != null && elapsed != null){
+      if (uid != null && elapsed != null) {
         setState(() {
           atendeu = true;
         });
@@ -414,7 +415,7 @@ class _CallScreenState extends State<CallScreen> {
 
   void tryCheckJoin() {
     print("////// ENTRANDO NO tryCheckJoin //////");
-      if (atendeu == true) {
+    if (atendeu == true) {
       _stopWatchTimer.onExecute.add(StopWatchExecute.stop); // Stop timer
       print("/// VOLUNTÁRIO ATENDEU ///");
       print("onUserJoined: $atendeu");
@@ -471,14 +472,14 @@ class _CallScreenState extends State<CallScreen> {
   //Increment tries for user
   void incrementTries() {
     _repository.getCurrentUser().then((FirebaseUser user) async {
-      //get current volunteer
+      //get current user
       if (user != null) {
-        //current volunteer is not null
-        Users dv = await _repository
+        //current user is not null
+        Users u = await _repository
             .getUserDetails(user.uid); // users map receive firebase user
-        tentativas = dv.tentativa;
-        saveTries(
-            user, tentativas); //incremented help for current volunteer in database
+        tentativas = u.tentativa;
+        saveTries(user,
+            tentativas); //incremented tries for current dv in database or set tries to 0
       } else {
         Fluttertoast.showToast(
             msg: "Houve um erro",
@@ -489,33 +490,49 @@ class _CallScreenState extends State<CallScreen> {
     });
   }
 
-  saveTries(FirebaseUser currentUser, int tentativas){
-    if(atendeu == true){
-      Users user = Users(
-        uid: currentUser.uid,
-        nome: currentUser.displayName,
-        email: currentUser.email,
-        photo: currentUser.photoUrl,
-        tentativa: 0,
-      );
-      FirebaseMethods.firestore
-          .collection(USERS_COLLECTION)
-          .document(currentUser.uid)
-          .setData(user.toMap(user));
+  saveTries(FirebaseUser currentUser, int tentativas) {
+    if (atendeu == true) {
+      //volunteer join a call
+      if(currentUser.uid == widget.call.receiverId){
+        //volunteer
+      }else {
+        //set dv tries to 0 -> tentativa = 0
+        Users user = Users(
+          uid: currentUser.uid,
+          nome: currentUser.displayName,
+          email: currentUser.email,
+          photo: currentUser.photoUrl,
+          tipo: 'D',
+          ajuda: null,
+          tentativa: 0,
+        );
+        FirebaseMethods.firestore
+            .collection(USERS_COLLECTION)
+            .document(currentUser.uid)
+            .setData(user.toMap(user));
+      }
     } else {
-      Users user = Users(
-        uid: currentUser.uid,
-        nome: currentUser.displayName,
-        email: currentUser.email,
-        photo: currentUser.photoUrl,
-        tentativa: tentativas + 1,
-      );
-      FirebaseMethods.firestore
-          .collection(USERS_COLLECTION)
-          .document(currentUser.uid)
-          .setData(user.toMap(user));
+      //volunteer decline call
+     if(currentUser.uid == widget.call.receiverId){
+       //volunteer
+     } else {
+       //increment dv tries -> tentativa = tentativas++
+       Users user = Users(
+         uid: currentUser.uid,
+         nome: currentUser.displayName,
+         email: currentUser.email,
+         photo: currentUser.photoUrl,
+         tipo: 'D',
+         ajuda: null,
+         tentativa: tentativas + 1,
+       );
+       FirebaseMethods.firestore
+           .collection(USERS_COLLECTION)
+           .document(currentUser.uid)
+           .setData(user.toMap(user));
+     }
     }
-  }
+  } //saveTries
 
   ////// end methods for search volunteer algorithm //////
 

@@ -14,18 +14,18 @@ import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/utils/permissions.dart';
 import 'package:provider/provider.dart';
+import 'package:luzia/constants/strings.dart';
+import 'package:luzia/utils/firebase_methods.dart';
 
 Route previousRoute;
 FirebaseRepository _repository = FirebaseRepository();
 final CallMethods callMethods = CallMethods();
 
 List<Users> volunteers;
-List<Users> volunteersAcceptedCall;
-List<Users> volunteersRejectedCall;
 Call call;
 Users oneVolunteer = Users();
 Users sender = Users();
-int tries = 0;
+int tentativa = 0;
 
 //Add UserProvider to refresh users
 UserProvider userProvider;
@@ -53,6 +53,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
             uid: currentUser.uid,
             nome: currentUser.displayName,
           );
+          print(' /// dv screen - sender: ${sender.nome} /// ');
           volunteers = list;
         });
       });
@@ -62,14 +63,76 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
   //Select random volunteer, and save chosen volunteer
   Users selectingVolunteers(Users volunteer) {
     final random = new Random();
-    var i = random.nextInt(volunteers.length);
+    var i = random.nextInt(volunteers.length); //use volunteers list
     volunteer = Users(
         uid: volunteers[i].uid,
         nome: volunteers[i].nome,
         ajuda: volunteers[i].ajuda,
+        tentativa: volunteers[i].tentativa,
         tipo: volunteers[i].tipo);
-    oneVolunteer = volunteer;
+    oneVolunteer = volunteer; //add selected volunteer in oneVolunteer variable
+    // incrementTriesForVolunteer();
     return volunteer;
+  }
+
+  // saveTriesV() {
+  //   if (atendeu == true) {
+  //     // volunteer join a call
+  //     // v tentativa variable is update to value 0 -> tentativa = 0;
+  //     Users volunteer;
+  //     String volunterId;
+  //     volunterId = widget.call.receiverId.toString();
+  //     volunteer.uid = widget.call.receiverId;
+  //     ajuda = volunteer.ajuda;
+  //     db.collection(USERS_COLLECTION).document(volunterId).setData({
+  //       //update document of the volunteer receiver call
+  //       'uid': volunteer.uid,
+  //       'nome': volunteer.nome,
+  //       'email': volunteer.email,
+  //       'photo': volunteer.photo,
+  //       'tipo': 'V',
+  //       'ajuda': ajuda,
+  //       'tentativa': 0,
+  //     });
+  //   } else {
+  //     // volunteer decline a call
+  //     // v tentativa variable is incremented -> tentativa = tentativa++;
+  //     Users volunteer = Users();
+  //     String volunterId;
+  //     volunterId = widget.call.receiverId.toString();
+  //     volunteer.uid = widget.call.receiverId;
+  //     tentativas = volunteer.tentativa;
+  //     ajuda = volunteer.ajuda;
+  //     db.collection(USERS_COLLECTION).document(volunterId).setData({
+  //       //update document of the volunteer receiver call
+  //       'uid': volunteer.uid,
+  //       'nome': volunteer.nome,
+  //       'email': volunteer.email,
+  //       'photo': volunteer.photo,
+  //       'tipo': 'V',
+  //       'ajuda': ajuda,
+  //       'tentativa': tentativas + 1,
+  //     });
+  //   }
+  // } //saveTriesV
+
+  incrementTriesForVolunteer(){
+    tentativa = oneVolunteer.tentativa;
+    //increment selected volunteer tries in bd
+    Users v = Users(
+      uid: oneVolunteer.uid,
+      nome: oneVolunteer.nome,
+      email: oneVolunteer.email,
+      tipo: 'V',
+      photo: oneVolunteer.photo,
+      ajuda: oneVolunteer.ajuda,
+      tentativa:  tentativa + 1,
+      token: '',
+    );
+    FirebaseMethods.firestore
+        .collection(USERS_COLLECTION)
+        .document(oneVolunteer.uid)
+        .setData(v.toMap(v));
   }
 
   callVolunteer(context) {
@@ -154,19 +217,19 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                   )
                 ]),
               )),
-              FutureBuilder(
-                  future: _repository.getUser(),
-                  builder: (context, snapshot){
-                    return Container(
-                      child: Center(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text('tentativas de chamar voluntário = ${snapshot.data.tentativa}'),
-                        ),
-                      ),
-                    );
-                  }
-              ),
+              // FutureBuilder(
+              //     future: _repository.getUser(),
+              //     builder: (context, snapshot){
+              //       return Container(
+              //         child: Center(
+              //           child: Align(
+              //             alignment: Alignment.center,
+              //             child: Text('tentativas de chamar voluntário = ${snapshot.data.tentativa}'),
+              //           ),
+              //         ),
+              //       );
+              //     }
+              // ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             child: Container(

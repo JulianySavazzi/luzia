@@ -28,7 +28,10 @@ List<Users> volunteers;
 List<Users> volunteersAcceptedCall;
 List<Users> volunteersRejectedCall;
 bool atendeu = false;
-int tentativas = 0;
+var tentativas = 0;
+String volunterId;
+String dvId;
+var ajuda;
 
 class CallScreen extends StatefulWidget {
   final Call call;
@@ -398,7 +401,6 @@ class _CallScreenState extends State<CallScreen> {
     print("BUILD CALL");
     tryCheckJoin();
     incrementTries();
-    saveTriesVolunteer();
     print("////// ENTRANDO NO RETURN DO BUILD CALL //////");
     return SafeArea(
         child: Scaffold(
@@ -460,11 +462,12 @@ class _CallScreenState extends State<CallScreen> {
           print(AgoraRtcEngine.onUserJoined);
           CallUtils.callMethods.endCall(call: widget.call);
           Fluttertoast.showToast(
-              msg: "O voluntário selecionado não estava disponível...",
+              msg: "O voluntário selecionado não estava disponível... Tente novamente!",
               toastLength: Toast.LENGTH_SHORT,
-              textColor: Colors.yellowAccent[100],
+              // textColor: Colors.yellowAccent[100],
               gravity: ToastGravity.CENTER);
           print("Encerra chamada");
+          dispose();
         }
       });
       print("////// SAIU DO STOPWATCHTIMER //////");
@@ -483,6 +486,7 @@ class _CallScreenState extends State<CallScreen> {
         tentativas = u.tentativa;
         saveTries(user,
             tentativas); //incremented tries for current dv in database or set tries to 0
+        saveTriesVolunteer();
       } else {
         Fluttertoast.showToast(
             msg: "Houve um erro",
@@ -496,25 +500,15 @@ class _CallScreenState extends State<CallScreen> {
   saveTries(FirebaseUser currentUser, int tentativas) {
     print(
         "////// ENTRANDO NO saveTries ; oneVolunter ${oneVolunteer.nome}; receiver ${widget.call.receiverName} ; receiverId ${widget.call.receiverId} ; caller ${widget.call.callerName} ; callerId ${widget.call.callerId} //////");
+    dvId = widget.call.callerId;
     if (atendeu == true) {
       //volunteer join a call
       if (currentUser.uid == widget.call.receiverId) {
         //volunteer
       } else {
-        //set dv tries to 0 -> tentativa = 0
-        Users user = Users(
-          uid: currentUser.uid,
-          nome: currentUser.displayName,
-          email: currentUser.email,
-          photo: currentUser.photoUrl,
-          tipo: 'D',
-          ajuda: null,
-          tentativa: 0,
-        );
-        FirebaseMethods.firestore
-            .collection(USERS_COLLECTION)
-            .document(currentUser.uid)
-            .setData(user.toMap(user));
+        db.collection(USERS_COLLECTION).document(dvId).updateData({
+          'tentativa':  0,
+        });
       }
     } else {
       //volunteer decline call
@@ -522,20 +516,9 @@ class _CallScreenState extends State<CallScreen> {
       if (currentUser.uid == oneVolunteer.uid) {
         //volunteer
       } else {
-        //increment dv tries -> tentativa = tentativas++
-        Users user = Users(
-          uid: currentUser.uid,
-          nome: currentUser.displayName,
-          email: currentUser.email,
-          photo: currentUser.photoUrl,
-          tipo: 'D',
-          ajuda: null,
-          tentativa: tentativas + 1,
-        );
-        FirebaseMethods.firestore
-            .collection(USERS_COLLECTION)
-            .document(currentUser.uid)
-            .setData(user.toMap(user));
+        db.collection(USERS_COLLECTION).document(dvId).updateData({
+          'tentativa':  tentativas + 1,
+        });
       }
     }
     print("/////////// SAINDO DO saveTriesVolunteer //////////");
@@ -544,8 +527,6 @@ class _CallScreenState extends State<CallScreen> {
   saveTriesVolunteer() {
     print(
         "////// ENTRANDO NO saveTriesVolunteer ;  oneVolunter ${oneVolunteer.nome} ; id ${oneVolunteer.uid} //////");
-    String volunterId;
-    int ajuda;
     volunterId = oneVolunteer.uid.toString();
     ajuda = oneVolunteer.ajuda;
     tentativas = oneVolunteer.tentativa;
@@ -554,28 +535,12 @@ class _CallScreenState extends State<CallScreen> {
     if (atendeu == true) {
       // volunteer join a call
       // v tentativa variable is update to value 0 -> tentativa = 0;
-      db.collection(USERS_COLLECTION).document(volunterId).setData({
-        //update document of the volunteer receiver call
-        'uid': oneVolunteer.uid,
-        'nome': oneVolunteer.nome,
-        'email': oneVolunteer.email,
-        'photo': oneVolunteer.photo,
-        'tipo': 'V',
-        'ajuda': ajuda,
-        'tentativa': 0,
+      db.collection(USERS_COLLECTION).document(volunterId).updateData({
+        'tentativa':  0,
       });
     } else {
-      // volunteer decline a call
-      // v tentativa variable is incremented -> tentativa = tentativa++;
-      db.collection(USERS_COLLECTION).document(volunterId).setData({
-        //update document of the volunteer receiver call
-        'uid': oneVolunteer.uid,
-        'nome': oneVolunteer.nome,
-        'email': oneVolunteer.email,
-        'photo': oneVolunteer.photo,
-        'tipo': 'V',
-        'ajuda': ajuda,
-        'tentativa': tentativas + 1,
+      db.collection(USERS_COLLECTION).document(volunterId).updateData({
+        'tentativa':  tentativas + 1,
       });
     }
     print("/////////// SAINDO DO saveTriesVolunteer //////////");

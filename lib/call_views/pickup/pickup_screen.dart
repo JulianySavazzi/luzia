@@ -1,13 +1,10 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:luzia/constants/strings.dart';
 import 'package:luzia/model/call.dart';
 import 'package:luzia/model/users.dart';
 import 'package:luzia/utils/call_methods.dart';
-import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/utils/permissions.dart';
 import '../call_screen.dart';
 
@@ -26,9 +23,7 @@ class PickupScreen extends StatefulWidget {
 
 class _PickupScreenState extends State<PickupScreen> {
   final CallMethods callMethods = CallMethods();
-  // FirebaseRepository _repository = FirebaseRepository();
   Firestore db = Firestore.instance;
-  // var ajuda = 0;
 
   @override
   void dispose() {
@@ -95,7 +90,7 @@ class _PickupScreenState extends State<PickupScreen> {
                           toastLength: Toast.LENGTH_LONG,
                           textColor: Colors.white,
                           gravity: ToastGravity.CENTER);
-                      // await callMethods.endCall(call: widget.call);
+                      await callMethods.endCall(call: widget.call);
                     },
                   ),
                   SizedBox(width: 25),
@@ -105,8 +100,6 @@ class _PickupScreenState extends State<PickupScreen> {
                       iconSize: 50,
                       color: Colors.green,
                       onPressed: () async {
-                        // setState(() {}); // THE VOLUNTEER ANSWERED;
-                        // addHelp(); //add help to volunteer join call
                         await Permissions
                                 .cameraAndMicrophonePermissionsGranted()
                             ? Navigator.push(
@@ -126,32 +119,4 @@ class _PickupScreenState extends State<PickupScreen> {
       ),
     );
   }
-
-  // void addHelp() {
-  //   _repository.getCurrentUser().then((FirebaseUser user) async {
-  //     //get current volunteer
-  //     if (user != null) {
-  //       //current volunteer is not null
-  //       Users volunteer = await _repository
-  //           .getUserDetails(user.uid); // users map receive firebase user
-  //       ajuda = volunteer.ajuda;
-  //       addHelpToVolunteer(
-  //           user, ajuda); //incremented help for current volunteer in database
-  //     } else {
-  //       Fluttertoast.showToast(
-  //           msg: "Houve um erro",
-  //           toastLength: Toast.LENGTH_LONG,
-  //           textColor: Colors.red[300],
-  //           gravity: ToastGravity.BOTTOM);
-  //     }
-  //   });
-  // }
-  //
-  // Future<void> addHelpToVolunteer(FirebaseUser currentUser, int ajuda) async { //update volunteer's ajuda attribute in db
-  //   String vId; // id for current volunteer
-  //   vId = currentUser.uid.toString();
-  //   db.collection(USERS_COLLECTION).document(vId).updateData({
-  //     'ajuda':  ajuda + 1,
-  //   });
-  // }
 }

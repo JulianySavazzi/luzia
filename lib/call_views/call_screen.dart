@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:luzia/utils/firebase_methods.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,7 +17,6 @@ import 'package:luzia/utils/settings.dart';
 import 'package:luzia/views/dv_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:luzia/constants/strings.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 final FirebaseRepository _repository = FirebaseRepository();
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -29,9 +27,9 @@ List<Users> volunteersAcceptedCall;
 List<Users> volunteersRejectedCall;
 bool atendeu = false;
 var tentativas = 0;
+var ajuda = 0;
 String volunterId;
 String dvId;
-var ajuda;
 
 class CallScreen extends StatefulWidget {
   final Call call;
@@ -75,6 +73,7 @@ class _CallScreenState extends State<CallScreen> {
     AgoraRtcEngine.destroy();
     super.dispose();
     await _stopWatchTimer.dispose(); // for stopwatch timer
+    Fluttertoast.cancel();
   } // dispose
 
   UserProvider userProvider;
@@ -398,6 +397,7 @@ class _CallScreenState extends State<CallScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //build call screen
     print("BUILD CALL");
     tryCheckJoin();
     incrementTries();
@@ -426,48 +426,50 @@ class _CallScreenState extends State<CallScreen> {
       print("onUserJoined: $atendeu");
       print("/// VOLUNTÁRIO ATENDEU ///");
     } else {
+      //volunter don't join
       print("//// entrou no ELSE ////");
       print("onUserJoined: $atendeu");
       _stopWatchTimer.rawTime.listen((value) {
-        // count 10 seconds
+        // count 15 seconds
         time = StopWatchTimer.getDisplayTime(value);
         print('TIME TO STRING: ${time.toString()}');
-        if (time.toString() == "00:00:10.00" ||
-            time.toString() == "00:00:10.01" ||
-            time.toString() == "00:00:10.02" ||
-            time.toString() == "00:00:10.03" ||
-            time.toString() == "00:00:10.04" ||
-            time.toString() == "00:00:10.05" ||
-            time.toString() == "00:00:10.06" ||
-            time.toString() == "00:00:10.07" ||
-            time.toString() == "00:00:10.08" ||
-            time.toString() == "00:00:10.09" ||
-            time.toString() == "00:00:10.10" ||
-            time.toString() == "00:00:10.11" ||
-            time.toString() == "00:00:10.12" ||
-            time.toString() == "00:00:10.13" ||
-            time.toString() == "00:00:10.14" ||
-            time.toString() == "00:00:10.15" ||
-            time.toString() == "00:00:10.16" ||
-            time.toString() == "00:00:10.17" ||
-            time.toString() == "00:00:10.18" ||
-            time.toString() == "00:00:10.19" ||
-            time.toString() == "00:00:10.20") {
+        if (time.toString() == "00:00:15.00" ||
+            time.toString() == "00:00:15.01" ||
+            time.toString() == "00:00:15.02" ||
+            time.toString() == "00:00:15.03" ||
+            time.toString() == "00:00:15.04" ||
+            time.toString() == "00:00:15.05" ||
+            time.toString() == "00:00:15.06" ||
+            time.toString() == "00:00:15.07" ||
+            time.toString() == "00:00:15.08" ||
+            time.toString() == "00:00:15.09" ||
+            time.toString() == "00:00:15.10" ||
+            time.toString() == "00:00:15.11" ||
+            time.toString() == "00:00:15.12" ||
+            time.toString() == "00:00:15.13" ||
+            time.toString() == "00:00:15.14" ||
+            time.toString() == "00:00:15.15" ||
+            time.toString() == "00:00:15.16" ||
+            time.toString() == "00:00:15.17" ||
+            time.toString() == "00:00:15.18" ||
+            time.toString() == "00:00:15.19" ||
+            time.toString() == "00:00:15.20") {
+          //if count 15 seconds and volunteer don't join a call
+          Fluttertoast.cancel();
           _stopWatchTimer.onExecute.add(StopWatchExecute.stop); // Stop timer
-          print("onUserJoined: ${AgoraRtcEngine.onUserJoined}");
+          print(
+              "onUserJoined: ${AgoraRtcEngine.onUserJoined} ; atendeu = ${atendeu}");
           print("STOP TIMER! $time");
-          print("////// TIMER 10 SEGUNDOS! //////");
+          print("////// TIMER 15 SEGUNDOS! //////");
           print("Voluntário NÂO atendeu!");
-          print("onUserJoined: ");
-          print(AgoraRtcEngine.onUserJoined);
-          CallUtils.callMethods.endCall(call: widget.call);
-          Fluttertoast.showToast(
-              msg: "O voluntário selecionado não estava disponível... Tente novamente!",
-              toastLength: Toast.LENGTH_SHORT,
-              // textColor: Colors.yellowAccent[100],
-              gravity: ToastGravity.CENTER);
+          CallUtils.callMethods.endCall(call: widget.call); // end call
           print("Encerra chamada");
-          dispose();
+          Fluttertoast.cancel();
+          Fluttertoast.showToast( // alert for DV make a new call
+            msg: "O voluntário selecionado não estava disponível... Tente novamente!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+          );
         }
       });
       print("////// SAIU DO STOPWATCHTIMER //////");
@@ -486,7 +488,7 @@ class _CallScreenState extends State<CallScreen> {
         tentativas = u.tentativa;
         saveTries(user,
             tentativas); //incremented tries for current dv in database or set tries to 0
-        saveTriesVolunteer();
+        saveTriesVolunteer(); //incremented tries for volunteer call receiver
       } else {
         Fluttertoast.showToast(
             msg: "Houve um erro",
@@ -504,20 +506,19 @@ class _CallScreenState extends State<CallScreen> {
     if (atendeu == true) {
       //volunteer join a call
       if (currentUser.uid == widget.call.receiverId) {
-        //volunteer
-      } else {
+        //volunteer is current user
+      } else { // dv set variable tentativa = 0;
         db.collection(USERS_COLLECTION).document(dvId).updateData({
-          'tentativa':  0,
+          'tentativa': 0,
         });
       }
     } else {
       //volunteer decline call
-      // if (currentUser.uid == widget.call.receiverId) {
-      if (currentUser.uid == oneVolunteer.uid) {
-        //volunteer
-      } else {
+      if (currentUser.uid == widget.call.receiverId) {
+        //volunteer is current user
+      } else { // dv increment variable tentativa = tentativa++;
         db.collection(USERS_COLLECTION).document(dvId).updateData({
-          'tentativa':  tentativas + 1,
+          'tentativa': tentativas + 1,
         });
       }
     }
@@ -525,6 +526,7 @@ class _CallScreenState extends State<CallScreen> {
   } //saveTries
 
   saveTriesVolunteer() {
+    // update variable tentativas and increment variable ajuda in volunteer
     print(
         "////// ENTRANDO NO saveTriesVolunteer ;  oneVolunter ${oneVolunteer.nome} ; id ${oneVolunteer.uid} //////");
     volunterId = oneVolunteer.uid.toString();
@@ -536,11 +538,17 @@ class _CallScreenState extends State<CallScreen> {
       // volunteer join a call
       // v tentativa variable is update to value 0 -> tentativa = 0;
       db.collection(USERS_COLLECTION).document(volunterId).updateData({
-        'tentativa':  0,
+        'tentativa': 0,
+      });
+      // increment number of help -> ajuda = ajuda++
+      db.collection(USERS_COLLECTION).document(volunterId).updateData({
+        'ajuda': ajuda + 1,
       });
     } else {
+      // volunteer decline a call
+      // v tentativa variable is incremented -> tentativa = tentativa ++;
       db.collection(USERS_COLLECTION).document(volunterId).updateData({
-        'tentativa':  tentativas + 1,
+        'tentativa': tentativas + 1,
       });
     }
     print("/////////// SAINDO DO saveTriesVolunteer //////////");

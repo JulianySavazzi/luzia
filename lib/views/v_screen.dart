@@ -17,15 +17,13 @@ class VoluntarioScreen extends StatefulWidget {
 class _VoluntarioScreenState extends State<VoluntarioScreen> {
   int _selectedIndex = 0; //item index
 
-  //static const List<Widget> _widgetOptions = <Widget>[ //required for BottomNavigationBarItem
-  List<Widget> _widgetOptions = <Widget>[
+  List<Widget> _widgetOptions = <Widget>[ //required for BottomNavigationBarItem
     //required for BottomNavigationBarItem
     //Items list for ButtomNavigatorBar
     //item 1
     FutureBuilder(
         future: _repository.getVolunteers(),
         builder: (context, snapshot) {
-          //if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasData) {
             //Error loading volunteer page return circular progressIndicator
@@ -107,6 +105,20 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
                       fontSize: 20.0,
                     ),
                   ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Text(
+                    'Chamadas perdidas: ${snapshot.data.tentativa}',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontFamily: 'Montserrat',
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                 ],
               ),
             ));
@@ -124,6 +136,9 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
+            SizedBox(
+              height: 50.0,
+            ),
             RaisedButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
@@ -146,8 +161,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
               ),
               onPressed: () async {
                 //vídeo
-                String url =
-                    'https://youtu.be/TtJXIVjzVTQ?t=465';
+                String url = 'https://youtu.be/TtJXIVjzVTQ?t=465';
                 if (await canLaunch(url)) {
                   await launch(
                     url,
@@ -274,7 +288,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
                       children: <Widget>[
                         Positioned(
                             child: Hero(
-                          //Hero indica a transição de página dando foco no elemento com a tag
+                          //Hero use a tag for transition
                           tag: 'logo',
                           child: Container(
                             decoration: BoxDecoration(

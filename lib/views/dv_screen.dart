@@ -14,8 +14,6 @@ import 'package:luzia/utils/call_utilities.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:luzia/utils/permissions.dart';
 import 'package:provider/provider.dart';
-import 'package:luzia/constants/strings.dart';
-import 'package:luzia/utils/firebase_methods.dart';
 
 Route previousRoute;
 FirebaseRepository _repository = FirebaseRepository();
@@ -25,7 +23,6 @@ List<Users> volunteers;
 Call call;
 Users oneVolunteer = Users();
 Users sender = Users();
-int tentativa = 0;
 
 //Add UserProvider to refresh users
 UserProvider userProvider;
@@ -55,6 +52,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
           );
           print(' /// dv screen - sender: ${sender.nome} /// ');
           volunteers = list;
+          print(' /// dv screen - volunteers list length: ${volunteers.length} /// ');
         });
       });
     });
@@ -71,40 +69,17 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
         tentativa: volunteers[i].tentativa,
         tipo: volunteers[i].tipo);
     oneVolunteer = volunteer; //add selected volunteer in oneVolunteer variable
-    // incrementTriesForVolunteer();
     return volunteer;
-  }
-
-  incrementTriesForVolunteer(){
-    tentativa = oneVolunteer.tentativa;
-    //increment selected volunteer tries in bd
-    Users v = Users(
-      uid: oneVolunteer.uid,
-      nome: oneVolunteer.nome,
-      email: oneVolunteer.email,
-      tipo: 'V',
-      photo: oneVolunteer.photo,
-      ajuda: oneVolunteer.ajuda,
-      tentativa:  tentativa + 1,
-      token: '',
-    );
-    FirebaseMethods.firestore
-        .collection(USERS_COLLECTION)
-        .document(oneVolunteer.uid)
-        .setData(v.toMap(v));
   }
 
   callVolunteer(context) {
     try {
-      print("TRY CALL VOLUNTEER");
+      print("DV SCREEN TRY CALL VOLUNTEER");
       selectingVolunteers(oneVolunteer);
-      print("oneVolunteer = ");
-      print(oneVolunteer.nome);
-      print("ajuda = ");
-      print(oneVolunteer.ajuda);
+      print("oneVolunteer.nome = ${oneVolunteer.nome} ; oneVolunteer.ajuda = ${oneVolunteer.ajuda}");
       CallUtils.dial(from: sender, to: oneVolunteer, context: context);
     } catch (error) {
-      print("CALL VOLUNTEER CATCH");
+      print("DV SCREEN CALL VOLUNTEER CATCH");
       Fluttertoast.showToast(
           msg: "Nenhum voluntário estava disponível, tente novamente $error",
           toastLength: Toast.LENGTH_LONG,
@@ -176,19 +151,6 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                   )
                 ]),
               )),
-              // FutureBuilder(
-              //     future: _repository.getUser(),
-              //     builder: (context, snapshot){
-              //       return Container(
-              //         child: Center(
-              //           child: Align(
-              //             alignment: Alignment.center,
-              //             child: Text('tentativas de chamar voluntário = ${snapshot.data.tentativa}'),
-              //           ),
-              //         ),
-              //       );
-              //     }
-              // ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             child: Container(

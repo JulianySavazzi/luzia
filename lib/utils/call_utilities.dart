@@ -41,15 +41,11 @@ class CallUtils {
     call.hasDialled = true;
 
     if (callMade) {
-      // call.accepted = true;
       Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => CallScreen(call: call),
           ));
      }
-    // else {
-    //   // call.rejected = true;
-    // }
   }
 }

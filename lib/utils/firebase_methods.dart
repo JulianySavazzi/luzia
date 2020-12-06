@@ -155,31 +155,85 @@ class FirebaseMethods {
     return voluntario;
   }
 
+  // //Search Volunteers
+  // Future<List<Users>> searchVolunteers() async {
+  //   final usersRef = Firestore.instance.collection(USERS_COLLECTION);
+  //   List<Users> volunteerList = List<Users>();
+  //   // populate volunteer list for priorize volunteers who don't helped
+  //   final QuerySnapshot querySnapshot = await usersRef
+  //       .where("tipo", isEqualTo: "V")
+  //       .where("ajuda", isLessThan: 1)
+  //       .getDocuments(); // if volunteers with variable ajuda = 0 and variable tentativa < 3, add in volunteer list
+  //   //priorize volunteer who never help
+  //   for (var i = 0; i < querySnapshot.documents.length; i++) {
+  //     volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
+  //   }
+  //   //if volunteer's list is null
+  //   if (volunteerList.length == 0) {
+  //     // if don't volunteers with variable ajuda = 0
+  //     final QuerySnapshot querySnapshot = await usersRef
+  //         .where("tipo", isEqualTo: "V")
+  //         .getDocuments(); // get all volunteers
+  //     for (var i = 0; i < querySnapshot.documents.length; i++) {
+  //       volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
+  //     }
+  //     return volunteerList;
+  //   }
+  //   return volunteerList; // return volunteer list
+  // } // searchVolunteers
+
   //Search Volunteers
   Future<List<Users>> searchVolunteers() async {
     final usersRef = Firestore.instance.collection(USERS_COLLECTION);
     List<Users> volunteerList = List<Users>();
-
+    // populate volunteer list for priorize volunteers who don't helped
     final QuerySnapshot querySnapshot = await usersRef
         .where("tipo", isEqualTo: "V")
-        .where("ajuda", isLessThan: 1)
-        .getDocuments(); // if volunteers with variable ajuda = 0, add in volunteer list
-
+        .where("ajuda", isEqualTo: 0)
+        .where("tentativa", isLessThan: 2)
+        .getDocuments(); // get volunteers with variable ajuda = 0 and variable tentativa < 2
+    //priorize volunteer who never help
     for (var i = 0; i < querySnapshot.documents.length; i++) {
+      // add volunteer in list
       volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
     }
+    //if volunteer's list is null
     if (volunteerList.length == 0) {
-      // if don't volunteers with variable ajuda = 0, get all volunteers and add in volunteer list
-      final QuerySnapshot querySnapshot =
-          await usersRef.where("tipo", isEqualTo: "V").getDocuments();
-
+      // if don't volunteers with variable ajuda = 0 and variable tentativa < 3
+      final QuerySnapshot querySnapshot = await usersRef
+          .where("tipo", isEqualTo: "V")
+          .where("tentativa", isLessThan: 2)
+          .getDocuments(); // get all volunteers with variable tentativa < 2 and add in volunteer list
       for (var i = 0; i < querySnapshot.documents.length; i++) {
         volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
+      }
+      //if volunteer's list is null
+      if (volunteerList.length == 0) {
+        final QuerySnapshot querySnapshot = await usersRef
+            .where("tipo", isEqualTo: "V")
+            .where("ajuda", isLessThan: 1)
+            .getDocuments(); // get all volunteers with variable ajuda = 0, add in volunteer list
+        //priorize volunteer who never help
+        for (var i = 0; i < querySnapshot.documents.length; i++) {
+          volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
+        }
+        //if volunteer's list is null
+        if (volunteerList.length == 0) {
+          final QuerySnapshot querySnapshot = await usersRef
+              .where("tipo", isEqualTo: "V")
+              .getDocuments(); // get all volunteers, add in volunteer list
+          //priorize volunteer who never help
+          for (var i = 0; i < querySnapshot.documents.length; i++) {
+            volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
+          }
+          return volunteerList;
+        }
+        return volunteerList;
       }
       return volunteerList;
     }
     return volunteerList; // return volunteer list
-  }
+  } // searchVolunteers
 
   Future<List<Users>> getVolunteers() async {
     // get all volunteers

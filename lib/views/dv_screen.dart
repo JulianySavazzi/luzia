@@ -52,7 +52,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
           );
           print(' /// dv screen - sender: ${sender.nome} /// ');
           volunteers = list;
-          print(' /// dv screen - volunteers list length: ${volunteers.length} /// ');
+          print(' /// dv screen - volunteers list length: ${volunteers.length} ; ${volunteers.toList()} /// ');
         });
       });
     });
@@ -76,7 +76,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
     try {
       print("DV SCREEN TRY CALL VOLUNTEER");
       selectingVolunteers(oneVolunteer);
-      print("oneVolunteer.nome = ${oneVolunteer.nome} ; oneVolunteer.ajuda = ${oneVolunteer.ajuda}");
+      print("oneVolunteer.nome = ${oneVolunteer.nome} ; oneVolunteer.ajuda = ${oneVolunteer.ajuda} ; oneVolunteer.tentativa = ${oneVolunteer.tentativa}");
       CallUtils.dial(from: sender, to: oneVolunteer, context: context);
     } catch (error) {
       print("DV SCREEN CALL VOLUNTEER CATCH");

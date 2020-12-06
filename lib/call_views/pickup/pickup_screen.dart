@@ -90,7 +90,7 @@ class _PickupScreenState extends State<PickupScreen> {
                           toastLength: Toast.LENGTH_LONG,
                           textColor: Colors.white,
                           gravity: ToastGravity.CENTER);
-                      await callMethods.endCall(call: widget.call);
+                      // await callMethods.endCall(call: widget.call);
                     },
                   ),
                   SizedBox(width: 25),

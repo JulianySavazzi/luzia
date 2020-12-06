@@ -399,8 +399,9 @@ class _CallScreenState extends State<CallScreen> {
   Widget build(BuildContext context) {
     //build call screen
     print("BUILD CALL");
-    tryCheckJoin();
-    incrementTries();
+    // incrementTries(); //update value of tentativa atribute
+    tryCheckJoin(); // manage time: count 15 seconds and if volunteer don't join a call, end call
+    incrementTries(); //update value of tentativa atribute
     print("////// ENTRANDO NO RETURN DO BUILD CALL //////");
     return SafeArea(
         child: Scaffold(
@@ -488,7 +489,7 @@ class _CallScreenState extends State<CallScreen> {
         tentativas = u.tentativa;
         saveTries(user,
             tentativas); //incremented tries for current dv in database or set tries to 0
-        saveTriesVolunteer(); //incremented tries for volunteer call receiver
+        saveTriesVolunteer(); //incremented tries for volunteer call receiver or set tries to 0
       } else {
         Fluttertoast.showToast(
             msg: "Houve um erro",
@@ -506,8 +507,8 @@ class _CallScreenState extends State<CallScreen> {
     if (atendeu == true) {
       //volunteer join a call
       if (currentUser.uid == widget.call.receiverId) {
-        //volunteer is current user
-      } else { // dv set variable tentativa = 0;
+        //volunteer is current user, don't make nothing
+      } else { // dv set variable tentativa = 0; dv is current user;
         db.collection(USERS_COLLECTION).document(dvId).updateData({
           'tentativa': 0,
         });
@@ -515,8 +516,8 @@ class _CallScreenState extends State<CallScreen> {
     } else {
       //volunteer decline call
       if (currentUser.uid == widget.call.receiverId) {
-        //volunteer is current user
-      } else { // dv increment variable tentativa = tentativa++;
+        //volunteer is current user, don't make nothing
+      } else { // dv increment variable tentativa = tentativa++; dv is current user;
         db.collection(USERS_COLLECTION).document(dvId).updateData({
           'tentativa': tentativas + 1,
         });

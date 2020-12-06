@@ -216,6 +216,8 @@ class _CallScreenState extends State<CallScreen> {
     };
   } // _addAgoraEventHandlers
 
+  //////////// LAYOUT AND ENABLE AUDIO AND VIDEO ////////////
+
   /// Create agora sdk instance and initialize
   Future<void> _initAgoraRtcEngine() async {
     await AgoraRtcEngine.create(APP_ID);
@@ -294,6 +296,8 @@ class _CallScreenState extends State<CallScreen> {
     }
     return Container();
   } // _viewRows
+
+  /////////// CALL SCREEN ICONS ///////////
 
   /// Toolbar layout
   Widget _toolbar() {
@@ -395,6 +399,7 @@ class _CallScreenState extends State<CallScreen> {
     );
   } // _panel
 
+  /////////////////////// BUILD CALL SCREEN ////////////////////////
   @override
   Widget build(BuildContext context) {
     //build call screen
@@ -416,7 +421,7 @@ class _CallScreenState extends State<CallScreen> {
             ))));
   } //build
 
-  //// for search volunteer algorithm ////
+  //////////// for search volunteer algorithm //////////
 
   void tryCheckJoin() {
     print(

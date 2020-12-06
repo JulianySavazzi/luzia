@@ -186,43 +186,43 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        Container(
-                          width: 250.0,
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: RaisedButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              color: Colors.lightGreenAccent[100],
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  CircleAvatar(
-                                    backgroundColor:
-                                        Colors.lightGreenAccent.shade100,
-                                    backgroundImage:
-                                        AssetImage("images/facebook.png"),
-                                    radius: 10.0,
-                                  ),
-                                  SizedBox(width: 10.0),
-                                  Text(
-                                    'Entrar com o Facebook',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 15.0),
-                                  )
-                                ],
-                              ),
-                              onPressed: () {
-                                //alert dialog
-                                //facebook login
-                                facebookDialog(context);
-                              },
-                            ),
-                          ),
-                        )
+                        // Container(
+                        //   width: 250.0,
+                        //   child: Align(
+                        //     alignment: Alignment.bottomCenter,
+                        //     child: RaisedButton(
+                        //       shape: RoundedRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(30.0),
+                        //       ),
+                        //       color: Colors.lightGreenAccent[100],
+                        //       child: Row(
+                        //         mainAxisAlignment: MainAxisAlignment.center,
+                        //         children: <Widget>[
+                        //           CircleAvatar(
+                        //             backgroundColor:
+                        //                 Colors.lightGreenAccent.shade100,
+                        //             backgroundImage:
+                        //                 AssetImage("images/facebook.png"),
+                        //             radius: 10.0,
+                        //           ),
+                        //           SizedBox(width: 10.0),
+                        //           Text(
+                        //             'Entrar com o Facebook',
+                        //             style: TextStyle(
+                        //                 color: Colors.black,
+                        //                 fontFamily: 'Montserrat',
+                        //                 fontSize: 15.0),
+                        //           )
+                        //         ],
+                        //       ),
+                        //       onPressed: () {
+                        //         //alert dialog
+                        //         //facebook login
+                        //         facebookDialog(context);
+                        //       },
+                        //     ),
+                        //   ),
+                        // )
                       ],
                     ),
                     isLinkPressed
@@ -252,7 +252,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       //link for site
                                       'Termos de uso e Política de Privacidade',
                                       style: TextStyle(
-                                        fontSize: 12,
+                                        fontSize: 14,
                                         fontFamily: 'Montserrat',
                                         fontStyle: FontStyle.italic,
                                         decoration: TextDecoration.underline,

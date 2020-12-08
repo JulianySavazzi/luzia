@@ -1,11 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:luzia/call_views/pickup/pickup_layout.dart';
+import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/firebase_repository.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final FirebaseRepository _repository = FirebaseRepository();
+
+//Add UserProvider to refresh users
+UserProvider userProvider;
 
 class VoluntarioScreen extends StatefulWidget {
   static const String id = 'v_screen';
@@ -15,6 +21,23 @@ class VoluntarioScreen extends StatefulWidget {
 }
 
 class _VoluntarioScreenState extends State<VoluntarioScreen> {
+  @override
+  void dispose(){
+    userProvider.refreshUser();
+    super.dispose();
+    userProvider.dispose();
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    //Add UsersProviders refresh, using this to
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+      userProvider.refreshUser();
+    });
+  }
+
   int _selectedIndex = 0; //item index
 
   List<Widget> _widgetOptions = <Widget>[ //required for BottomNavigationBarItem

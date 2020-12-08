@@ -36,6 +36,13 @@ class DefVisualScreen extends StatefulWidget {
 
 class _DefVisualScreenState extends State<DefVisualScreen> {
   @override
+  void dispose() {
+    userProvider.refreshUser();
+    super.dispose();
+    userProvider.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     //Add UsersProviders refresh, using this to
@@ -52,7 +59,8 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
           );
           print(' /// dv screen - sender: ${sender.nome} /// ');
           volunteers = list;
-          print(' /// dv screen - volunteers list length: ${volunteers.length} ; ${volunteers.toList()} /// ');
+          print(
+              ' /// dv screen - volunteers list length: ${volunteers.length} ; ${volunteers.toList()} /// ');
         });
       });
     });
@@ -76,7 +84,8 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
     try {
       print("DV SCREEN TRY CALL VOLUNTEER");
       selectingVolunteers(oneVolunteer);
-      print("oneVolunteer.nome = ${oneVolunteer.nome} ; oneVolunteer.ajuda = ${oneVolunteer.ajuda} ; oneVolunteer.tentativa = ${oneVolunteer.tentativa}");
+      print(
+          "oneVolunteer.nome = ${oneVolunteer.nome} ; oneVolunteer.ajuda = ${oneVolunteer.ajuda} ; oneVolunteer.tentativa = ${oneVolunteer.tentativa}");
       CallUtils.dial(from: sender, to: oneVolunteer, context: context);
     } catch (error) {
       print("DV SCREEN CALL VOLUNTEER CATCH");
@@ -189,5 +198,6 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
             )),
           )
         ])));
-  }
-}
+  } //build
+
+} //dv_screen

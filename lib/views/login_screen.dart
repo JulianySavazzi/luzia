@@ -236,12 +236,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 10.0,
                           ),
                     Container(
-                      width: 250,
+                      width: 300,
                       child: Align(
                         alignment: Alignment.bottomCenter,
                         child: Padding(
                           padding:
-                              EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                              EdgeInsets.symmetric(horizontal: 1, vertical: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[

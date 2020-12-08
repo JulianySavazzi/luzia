@@ -71,9 +71,11 @@ class _CallScreenState extends State<CallScreen> {
     // destroy sdk
     AgoraRtcEngine.leaveChannel();
     AgoraRtcEngine.destroy();
+    userProvider.refreshUser();
     super.dispose();
     await _stopWatchTimer.dispose(); // for stopwatch timer
     Fluttertoast.cancel();
+    userProvider.dispose();
   } // dispose
 
   UserProvider userProvider;
@@ -415,7 +417,7 @@ class _CallScreenState extends State<CallScreen> {
                 child: Stack(
               children: <Widget>[
                 _viewRows(),
-                _panel(),
+                // _panel(),
                 _toolbar(),
               ],
             ))));
@@ -470,7 +472,6 @@ class _CallScreenState extends State<CallScreen> {
           print("Voluntário NÂO atendeu!");
           CallUtils.callMethods.endCall(call: widget.call); // end call
           print("Encerra chamada");
-          Fluttertoast.cancel();
           Fluttertoast.showToast( // alert for DV make a new call
             msg: "O voluntário selecionado não estava disponível... Tente novamente!",
             toastLength: Toast.LENGTH_SHORT,

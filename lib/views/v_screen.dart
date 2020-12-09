@@ -7,6 +7,7 @@ import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 final FirebaseRepository _repository = FirebaseRepository();
 
@@ -38,6 +39,8 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
     });
   }
 
+  /////////// FOOTER ITEMS //////////////
+
   int _selectedIndex = 0; //item index
 
   List<Widget> _widgetOptions = <Widget>[
@@ -52,26 +55,26 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
               snapshot.hasData) {
             return Center(
                 child: Container(
-                  height: 300,
-                  width: 400,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                        'Somos ${snapshot.data.length} voluntários!',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Montserrat',
-                          fontSize: 25.0,
-                        ),
-                      ),
-                      Image(
-                        image: AssetImage('images/vhome.jpg'),
-                        semanticLabel: 'Várias pessoas voluntárias',
-                      ),
-                    ],
+              height: 300,
+              width: 400,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    'Somos ${snapshot.data.length} voluntários!',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Montserrat',
+                      fontSize: 25.0,
+                    ),
                   ),
-                ));
+                  Image(
+                    image: AssetImage('images/vhome.jpg'),
+                    semanticLabel: 'Várias pessoas voluntárias',
+                  ),
+                ],
+              ),
+            ));
           } //if
           else {
             return CircularProgressIndicator();
@@ -84,63 +87,63 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
           if (snapshot.connectionState == ConnectionState.done) {
             return Center(
                 child: Container(
-                  height: 310,
-                  width: 400,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      CircleAvatar(
-                        radius: 50.0,
-                        backgroundImage:
+              height: 310,
+              width: 400,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  CircleAvatar(
+                    radius: 50.0,
+                    backgroundImage:
                         CachedNetworkImageProvider(snapshot.data.photo),
-                      ),
-                      Text(
-                        '${snapshot.data.nome}',
-                        style: TextStyle(
-                            fontFamily: 'LiuJianMaoCao',
-                            fontSize: 32.0,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.5),
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Text(
-                        'VOLUNTÁRIO(A)',
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 24.0,
-                          letterSpacing: 2.0,
-                        ),
-                      ),
-                      Divider(
-                        color: Colors.black26,
-                      ),
-                      Text(
-                        'Já ajudei ${snapshot.data.ajuda} vezes!',
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontFamily: 'Montserrat',
-                          fontSize: 20.0,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Text(
-                        'Chamadas perdidas: ${snapshot.data.tentativa}',
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontFamily: 'Montserrat',
-                          fontSize: 20.0,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20.0,
-                      ),
-                    ],
                   ),
-                ));
+                  Text(
+                    '${snapshot.data.nome}',
+                    style: TextStyle(
+                        fontFamily: 'LiuJianMaoCao',
+                        fontSize: 32.0,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.5),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Text(
+                    'VOLUNTÁRIO(A)',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 24.0,
+                      letterSpacing: 2.0,
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.black26,
+                  ),
+                  Text(
+                    'Já ajudei ${snapshot.data.ajuda} vezes!',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontFamily: 'Montserrat',
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Text(
+                    'Chamadas perdidas: ${snapshot.data.tentativa}',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontFamily: 'Montserrat',
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                ],
+              ),
+            ));
           } else {
             return CircularProgressIndicator();
           }
@@ -257,25 +260,56 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
     });
   }
 
+  //////////////// PULL TO REFRESH /////////////////
+
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
+  void _onRefresh() async {
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async {
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    _widgetOptions.add(widget);
+    _widgetOptions.addAll(_widgetOptions);
+    //_widgetOptions.elementAt(_selectedIndex);
+    if (mounted) setState(() {});
+    _refreshController.loadComplete();
+  }
+
+  //////////////// BUILD SCREEN /////////////////
+
   @override
   Widget build(BuildContext context) {
     return PickupLayout(
         scaffold: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            backgroundColor: Colors.transparent,
-            elevation: 0.0,
-            title: Text(
-              'Luzia',
-              style: TextStyle(
-                fontFamily: 'LiuJianMaoCao',
-                color: Colors.black,
-                fontSize: 50.0,
-              ),
-            ),
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        title: Text(
+          'Luzia',
+          style: TextStyle(
+            fontFamily: 'LiuJianMaoCao',
+            color: Colors.black,
+            fontSize: 50.0,
           ),
-          backgroundColor: Colors.cyan.shade200,
-          body: SafeArea(
+        ),
+      ),
+      backgroundColor: Colors.cyan.shade200,
+      body: SmartRefresher(
+          enableTwoLevel: true,
+          enablePullDown: true,
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          onLoading: _onLoading,
+          child: SafeArea(
             child: Stack(children: <Widget>[
               Positioned(
                 top: 85.0,
@@ -304,17 +338,17 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
                           children: <Widget>[
                             Positioned(
                                 child: Hero(
-                                  //Hero use a tag for transition
-                                  tag: 'logo',
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: AssetImage("images/logo.png"),
-                                      ),
-                                    ),
+                              //Hero use a tag for transition
+                              tag: 'logo',
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage("images/logo.png"),
                                   ),
-                                ))
+                                ),
+                              ),
+                            ))
                           ],
                         ),
                       )
@@ -340,31 +374,31 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
                 ),
               ),
             ]),
+          )),
+      bottomNavigationBar: BottomNavigationBar(
+        //Footer
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            title: Text('Início'),
+            backgroundColor: Colors.black,
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            //Footer
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                title: Text('Início'),
-                backgroundColor: Colors.black,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                title: Text('Perfil'),
-                backgroundColor: Colors.black,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.help),
-                title: Text('Ajuda'),
-                backgroundColor: Colors.black,
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: Colors.lightGreenAccent.shade700,
-            onTap: _onItemTapped,
-            backgroundColor: Colors.cyan.shade100,
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            title: Text('Perfil'),
+            backgroundColor: Colors.black,
           ),
-        ));
+          BottomNavigationBarItem(
+            icon: Icon(Icons.help),
+            title: Text('Ajuda'),
+            backgroundColor: Colors.black,
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.lightGreenAccent.shade700,
+        onTap: _onItemTapped,
+        backgroundColor: Colors.cyan.shade100,
+      ),
+    ));
   }
 }

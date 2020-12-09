@@ -130,21 +130,6 @@ class FirebaseMethods {
         .setData(user.toMap(user));
   }
 
-  // //Update variable tentativa
-  // Future<void> addTries(FirebaseUser currentUser, int tentativa) async {
-  //   user = Users(
-  //     uid: currentUser.uid,
-  //     nome: currentUser.displayName,
-  //     email: currentUser.email,
-  //     photo: currentUser.photoUrl,
-  //     tentativa: tentativa,
-  //   );
-  //   firestore
-  //       .collection(USERS_COLLECTION)
-  //       .document(currentUser.uid)
-  //       .setData(user.toMap(user));
-  // }
-
   //Pegar ajuda do voluntário logado (currentUser)
   Future<Users> getHelpCurrentUser(Users voluntario) async {
     //Users currentUser = await getUser();

@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:luzia/locator.dart';
 import 'package:luzia/model/users.dart';
 import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/firebase_repository.dart';
@@ -15,10 +13,7 @@ import 'package:luzia/views/users_screen.dart';
 import 'package:luzia/views/v_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'lifecycle_manager.dart';
-
 void main() {
-  setupLocator();
   runApp(LuziaApp());
 }
 
@@ -30,7 +25,6 @@ class LuziaApp extends StatefulWidget {
 class _MyAppState extends State<LuziaApp> {
   FirebaseRepository _repository = FirebaseRepository();
   FirebaseMessaging _fcm = FirebaseMessaging();
-  //final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   Users user;
   Firestore firestore;
   //resultado do voluntario
@@ -69,8 +63,7 @@ class _MyAppState extends State<LuziaApp> {
 
   @override
   Widget build(BuildContext context) {
-    return LifeCycleManager(
-        child: ChangeNotifierProvider<UserProvider>(
+    return ChangeNotifierProvider<UserProvider>(
             create: (_) => UserProvider(),
             child: MaterialApp(
               title: 'Luzia',
@@ -99,6 +92,6 @@ class _MyAppState extends State<LuziaApp> {
                 DefVisualScreen.id: (context) => DefVisualScreen(),
                 VoluntarioScreen.id: (context) => VoluntarioScreen(),
               },
-            )));
+            ));
   }
 }

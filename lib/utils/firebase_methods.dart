@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:luzia/constants/strings.dart';
 import 'package:luzia/model/users.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 class FirebaseMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -65,21 +65,21 @@ class FirebaseMethods {
     return null;
   }
 
-  //Facebook Sig-in
-  Future<FirebaseUser> loginWithFacebook() async {
-    var facebookLogin = FacebookLogin();
-    var result = await facebookLogin.logIn([EMAIL_FIELD]);
+  // //Facebook Sig-in
+  // Future<FirebaseUser> loginWithFacebook() async {
+  //   var facebookLogin = FacebookLogin();
+  //   var result = await facebookLogin.logIn([EMAIL_FIELD]);
 
-    debugPrint(result.status.toString()); //ver status do login
+  //   debugPrint(result.status.toString()); //ver status do login
 
-    if (result.status == FacebookLoginStatus.loggedIn) {
-      final AuthCredential credential = FacebookAuthProvider.getCredential(
-          accessToken: result.accessToken.token);
-      FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
-      return user;
-    }
-    return null;
-  }
+  //   if (result.status == FacebookLoginStatus.loggedIn) {
+  //     final AuthCredential credential = FacebookAuthProvider.getCredential(
+  //         accessToken: result.accessToken.token);
+  //     FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+  //     return user;
+  //   }
+  //   return null;
+  // }
 
   //Autenticação de usuário
   Future<bool> authenticateUser(FirebaseUser user) async {
@@ -130,20 +130,20 @@ class FirebaseMethods {
         .setData(user.toMap(user));
   }
 
-  //Update variable tentativa
-  Future<void> addTries(FirebaseUser currentUser, int tentativa) async {
-    user = Users(
-      uid: currentUser.uid,
-      nome: currentUser.displayName,
-      email: currentUser.email,
-      photo: currentUser.photoUrl,
-      tentativa: tentativa,
-    );
-    firestore
-        .collection(USERS_COLLECTION)
-        .document(currentUser.uid)
-        .setData(user.toMap(user));
-  }
+  // //Update variable tentativa
+  // Future<void> addTries(FirebaseUser currentUser, int tentativa) async {
+  //   user = Users(
+  //     uid: currentUser.uid,
+  //     nome: currentUser.displayName,
+  //     email: currentUser.email,
+  //     photo: currentUser.photoUrl,
+  //     tentativa: tentativa,
+  //   );
+  //   firestore
+  //       .collection(USERS_COLLECTION)
+  //       .document(currentUser.uid)
+  //       .setData(user.toMap(user));
+  // }
 
   //Pegar ajuda do voluntário logado (currentUser)
   Future<Users> getHelpCurrentUser(Users voluntario) async {
@@ -155,39 +155,12 @@ class FirebaseMethods {
     return voluntario;
   }
 
-  // //Search Volunteers
-  // Future<List<Users>> searchVolunteers() async {
-  //   final usersRef = Firestore.instance.collection(USERS_COLLECTION);
-  //   List<Users> volunteerList = List<Users>();
-  //   // populate volunteer list for priorize volunteers who don't helped
-  //   final QuerySnapshot querySnapshot = await usersRef
-  //       .where("tipo", isEqualTo: "V")
-  //       .where("ajuda", isLessThan: 1)
-  //       .getDocuments(); // if volunteers with variable ajuda = 0 and variable tentativa < 3, add in volunteer list
-  //   //priorize volunteer who never help
-  //   for (var i = 0; i < querySnapshot.documents.length; i++) {
-  //     volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
-  //   }
-  //   //if volunteer's list is null
-  //   if (volunteerList.length == 0) {
-  //     // if don't volunteers with variable ajuda = 0
-  //     final QuerySnapshot querySnapshot = await usersRef
-  //         .where("tipo", isEqualTo: "V")
-  //         .getDocuments(); // get all volunteers
-  //     for (var i = 0; i < querySnapshot.documents.length; i++) {
-  //       volunteerList.add(Users.fromMap(querySnapshot.documents[i].data));
-  //     }
-  //     return volunteerList;
-  //   }
-  //   return volunteerList; // return volunteer list
-  // } // searchVolunteers
-
   //Search Volunteers
   Future<List<Users>> searchVolunteers() async {
-    final usersRef = Firestore.instance.collection(USERS_COLLECTION);
+    // final usersRef = Firestore.instance.collection(USERS_COLLECTION);
     List<Users> volunteerList = List<Users>();
     // populate volunteer list for priorize volunteers who don't helped
-    final QuerySnapshot querySnapshot = await usersRef
+    QuerySnapshot querySnapshot = await usersRef
         .where("tipo", isEqualTo: "V")
         .where("ajuda", isEqualTo: 0)
         .where("tentativa", isLessThan: 2)
@@ -200,7 +173,7 @@ class FirebaseMethods {
     //if volunteer's list is null
     if (volunteerList.length == 0) {
       // if don't volunteers with variable ajuda = 0 and variable tentativa < 3
-      final QuerySnapshot querySnapshot = await usersRef
+      QuerySnapshot querySnapshot = await usersRef
           .where("tipo", isEqualTo: "V")
           .where("tentativa", isLessThan: 2)
           .getDocuments(); // get all volunteers with variable tentativa < 2 and add in volunteer list
@@ -209,7 +182,7 @@ class FirebaseMethods {
       }
       //if volunteer's list is null
       if (volunteerList.length == 0) {
-        final QuerySnapshot querySnapshot = await usersRef
+        QuerySnapshot querySnapshot = await usersRef
             .where("tipo", isEqualTo: "V")
             .where("ajuda", isLessThan: 1)
             .getDocuments(); // get all volunteers with variable ajuda = 0, add in volunteer list
@@ -219,7 +192,7 @@ class FirebaseMethods {
         }
         //if volunteer's list is null
         if (volunteerList.length == 0) {
-          final QuerySnapshot querySnapshot = await usersRef
+          QuerySnapshot querySnapshot = await usersRef
               .where("tipo", isEqualTo: "V")
               .getDocuments(); // get all volunteers, add in volunteer list
           //priorize volunteer who never help
@@ -237,7 +210,7 @@ class FirebaseMethods {
 
   Future<List<Users>> getVolunteers() async {
     // get all volunteers
-    final usersRef = Firestore.instance.collection(USERS_COLLECTION);
+    // final usersRef = Firestore.instance.collection(USERS_COLLECTION);
     List<Users> volunteerList = List<Users>();
 
     final QuerySnapshot querySnapshot =
@@ -248,54 +221,4 @@ class FirebaseMethods {
     }
     return volunteerList;
   }
-
-  //   //Search volunteer join a call
-  // Future<List<Users>> flagVolunteerJoinACall() async {
-  //   final callsRef = Firestore.instance.collection(CALL_COLLECTION);
-  //   print("/// FIREBASE METHODS - JOIN A CALL ///");
-  //   //List<Users> usersList = List<Users>();
-  //   List<Users> vAtendeuList = List<Users>();
-  //   final QuerySnapshot querySnapshot = await callsRef
-  //       .where("accepted", isEqualTo: "true")
-  //       .where("rejected", isEqualTo: "false")
-  //       .getDocuments(); //get volunteer join a call
-  //   for (var i = 0; i < querySnapshot.documents.length; i++) {
-  //     vAtendeuList.add(Users.fromMap(querySnapshot
-  //         .documents[i].data)); //save users join a call in the list
-  //     print(vAtendeuList[i].nome);
-  //     print(vAtendeuList[i].tipo);
-  //     // if (vAtendeuList[i].uid == v.uid) {
-  //     //   print(v.nome);
-  //     //   print(" atendeu a chamada!");
-  //     //   return vAtendeuList;
-  //     // } else {
-  //     //   flagVolunteerLeaveACall(v);
-  //     //   print(v.nome);
-  //     //   print(" NÃO atendeu a chamada!");
-  //     // }
-  //   }
-  //   print("/// FIREBASE METHODS - SAINDO DO JOIN A CALL ///");
-  //   return vAtendeuList;
-  // }
-
-  // //Search volunteer leave a call
-  // Future<List<Users>> flagVolunteerLeaveACall() async {
-  //   print("/// FIREBASE METHODS - LEAVE A CALL ///");
-  //   final callsRef = Firestore.instance.collection(CALL_COLLECTION);
-  //   List<Users> vRejeitouList = List<Users>();
-  //   final QuerySnapshot querySnapshot = await callsRef
-  //       .where("accepted", isEqualTo: "false")
-  //       .where("rejected", isEqualTo: "true")
-  //       .getDocuments(); //get volunteer end call
-  //   for (var i = 0; i < querySnapshot.documents.length; i++) {
-  //     vRejeitouList.add(Users.fromMap(
-  //         querySnapshot.documents[i].data)); //save users end call in the list
-  //     print(vRejeitouList[i].nome);
-  //     print(vRejeitouList[i].tipo);
-  //     return vRejeitouList;
-  //   }
-  //   print("/// FIREBASE METHODS - SAINDO DO LEAVE A CALL ///");
-  //   return vRejeitouList;
-  // }
-
 }

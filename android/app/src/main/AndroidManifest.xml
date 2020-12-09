@@ -19,7 +19,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="luzia"
+        android:label="Luzia"
         android:icon="@mipmap/luziaapp">
         <activity
             android:name=".MainActivity"

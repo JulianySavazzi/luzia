@@ -231,10 +231,18 @@ class _CallScreenState extends State<CallScreen> {
       muted = !muted;
     });
     AgoraRtcEngine.muteLocalAudioStream(muted);
+    Fluttertoast.showToast(
+        msg: "Mutar microfone",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER);
   } // _onToggleMute
 
   void _onSwitchCamera() {
     AgoraRtcEngine.switchCamera();
+    Fluttertoast.showToast(
+        msg: "Virar câmera",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER);
   } // _onSwitchCamera
 
   /// Helper function to get list of native views
@@ -425,7 +433,7 @@ class _CallScreenState extends State<CallScreen> {
 
   //////////// for search volunteer algorithm //////////
 
-  void tryCheckJoin() {
+  void tryCheckJoin() async {
     print(
         "////// ENTRANDO NO tryCheckJoin ; oneVolunteer ${oneVolunteer.nome}; oneVolunteerID ${oneVolunteer.uid}; receiver ${widget.call.receiverName} ; receiverId ${widget.call.receiverId} //////");
     if (atendeu == true) {
@@ -506,7 +514,7 @@ class _CallScreenState extends State<CallScreen> {
     });
   }
 
-  saveTries(FirebaseUser currentUser, int tentativas) {
+  saveTries(FirebaseUser currentUser, int tentativas) async { // async for firebase query's
     print(
         "////// ENTRANDO NO saveTries ; oneVolunter ${oneVolunteer.nome}; receiver ${widget.call.receiverName} ; receiverId ${widget.call.receiverId} ; caller ${widget.call.callerName} ; callerId ${widget.call.callerId} //////");
     dvId = widget.call.callerId;
@@ -532,7 +540,7 @@ class _CallScreenState extends State<CallScreen> {
     print("/////////// SAINDO DO saveTriesVolunteer //////////");
   } //saveTries
 
-  saveTriesVolunteer() {
+  saveTriesVolunteer() async { // async for firebase query's
     // update variable tentativas and increment variable ajuda in volunteer
     print(
         "////// ENTRANDO NO saveTriesVolunteer ;  oneVolunter ${oneVolunteer.nome} ; id ${oneVolunteer.uid} //////");

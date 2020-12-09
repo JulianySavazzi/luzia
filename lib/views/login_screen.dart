@@ -11,18 +11,12 @@ import 'users_screen.dart';
 //Tela de login/sig in por autenticação do google e facebook pelo firebase
 
 class LoginScreen extends StatefulWidget {
-  //String usada para dar nome á rota que leva a essa tela do app
-  //Static const é para criarmos uma constante da classe, assim podemos referenciar a classe e não um objeto da classe
+  //String rout name for this screen
   static const String id = 'login_screen';
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
-//Esse State é pra você poder setar um status para os botões, não sei se vamos usar mas já fiz pensando nisso
 }
-
-//OBS: o app não está muito responsivo, fui testar ele com a tela virada no celular e não deu pra navegar, mas no modo retrato funcionou
-//tentei deixar o app responsivo fazendo o que eu vi em um tutorial mas não tive muito sucesso,
-//o link do tutorial está no fichamento
 
 class _LoginScreenState extends State<LoginScreen> {
   //FIREBASE FUNCTIONS
@@ -261,7 +255,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ],
                                 ),
-                                url: "https://luziaapp.z13.web.core.windows.net/politica.html",
+                                url: "https://luziaapp.digital/politica.html",
                               ),
                             ],
                           ),
@@ -311,7 +305,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   //Login with Google
-  void performLogin() {
+  void performLogin() async {
     setState(() {
       isLoginPressed = true;
     });
@@ -333,7 +327,7 @@ class _LoginScreenState extends State<LoginScreen> {
   //Se o usuário é novo, passa para tela tipo de usuario,
   //caso contrário para sua respectiva tela. Pois o usuário pode
   //desinstalar o app etc.
-  void authenticateUser(FirebaseUser user) {
+  void authenticateUser(FirebaseUser user) async {
     _repository.authenticateUser(user).then((isNewUser) {
       setState(() {
         isLoginPressed = true;
@@ -353,52 +347,53 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   //**************** Facebook Login *******************
-
   //Alert dialog for Facebook Sig in
-  facebookDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Atenção"),
-            content:
-                Text("Você aceita os termos de política de uso e privacidade?"),
-            actions: <Widget>[
-              FlatButton(
-                child: Text("Não aceito"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              FlatButton(
-                  child: Text("Aceito"),
-                  //onPressed: () => logIn(), //login with facebook
-                  onPressed: () {
-                    logIn(); //login with facebook
-                    Navigator.of(context).pop();
-                  }),
-            ],
-            elevation: 24.0,
-          );
-        });
-  }
-
-  //login with facebook
-  void logIn() {
-    setState(() {
-      isLoginPressed = true;
-    });
-    _repository.loginWithFacebook().then((response) {
-      if (response != null) {
-        myUser = response;
-        authenticateUser(myUser); //firebase user auth
-      } else {
-        Fluttertoast.showToast(
-            msg: "Houve um erro ao efetuar o log-in",
-            toastLength: Toast.LENGTH_LONG,
-            textColor: Colors.red[300],
-            gravity: ToastGravity.BOTTOM);
-      }
-    });
-  }
+  // facebookDialog(BuildContext context) {
+  //   return showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return AlertDialog(
+  //           title: Text("Atenção"),
+  //           content:
+  //               Text("Você aceita os termos de política de uso e privacidade?"),
+  //           actions: <Widget>[
+  //             FlatButton(
+  //               child: Text("Não aceito"),
+  //               onPressed: () {
+  //                 Navigator.of(context).pop();
+  //               },
+  //             ),
+  //             FlatButton(
+  //                 child: Text("Aceito"),
+  //                 //onPressed: () => logIn(), //login with facebook
+  //                 onPressed: () {
+  //                   logIn(); //login with facebook
+  //                   Navigator.of(context).pop();
+  //                 }),
+  //           ],
+  //           elevation: 24.0,
+  //         );
+  //       });
+  // }
+  //
+  // //login with facebook
+  // void logIn() async {
+  //   setState(() {
+  //     isLoginPressed = true;
+  //   });
+  //   _repository.loginWithFacebook().then((response) {
+  //     if (response != null) {
+  //       myUser = response;
+  //       authenticateUser(myUser); //firebase user auth
+  //     } else {
+  //       Fluttertoast.showToast(
+  //           msg: "Houve um erro ao efetuar o log-in",
+  //           toastLength: Toast.LENGTH_LONG,
+  //           textColor: Colors.red[300],
+  //           gravity: ToastGravity.BOTTOM);
+  //     }
+  //   });
+  // }
+  //
+//**************** End Facebook Login *******************
 }

@@ -240,7 +240,7 @@ class _UsersScreenState extends State<UsersScreen> {
   // ***************************************************************** //
 
 //Add type for user
-  void addType() {
+  void addType() async {
     setState(() {
       isLoginPressed = true;
     });
@@ -259,7 +259,7 @@ class _UsersScreenState extends State<UsersScreen> {
 
   //Auth type for user
   void authenticateType(
-      FirebaseUser user, String tipo, int ajuda, int tentativa, String token) {
+      FirebaseUser user, String tipo, int ajuda, int tentativa, String token) async {
     _repository.authenticateUser(user).then((isNewUser) {
       setState(() {
         isLoginPressed = true;

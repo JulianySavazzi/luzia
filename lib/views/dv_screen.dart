@@ -166,7 +166,7 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
                 child: Align(
               alignment: Alignment.bottomCenter,
               child: RaisedButton(
-                padding: EdgeInsets.symmetric(vertical: 65, horizontal: 0),
+                padding: EdgeInsets.symmetric(vertical: 85, horizontal: 0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),

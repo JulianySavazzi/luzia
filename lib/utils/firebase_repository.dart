@@ -9,8 +9,8 @@ class FirebaseRepository {
 
   Future<FirebaseUser> signIn() => _firebaseMethods.signIn();
 
-  Future<FirebaseUser> loginWithFacebook() =>
-      _firebaseMethods.loginWithFacebook();
+  // Future<FirebaseUser> loginWithFacebook() =>
+  //     _firebaseMethods.loginWithFacebook();
 
   // adding the same method in firebase repository as well
   Future<Users> getUserDetails(String uid) =>
@@ -27,9 +27,9 @@ class FirebaseRepository {
           String token) =>
       _firebaseMethods.addType(user, tipo, ajuda, tentativa, token);
 
-  //Update variable tentativa
-  Future<void> addTries(FirebaseUser currentUser, int tentativa) =>
-      _firebaseMethods.addTries(currentUser, tentativa);
+  // //Update variable tentativa
+  // Future<void> addTries(FirebaseUser currentUser, int tentativa) =>
+  //     _firebaseMethods.addTries(currentUser, tentativa);
 
   Future<List<Users>> searchVolunteers() => _firebaseMethods.searchVolunteers();
 
@@ -39,14 +39,4 @@ class FirebaseRepository {
       _firebaseMethods.getHelpCurrentUser(voluntario);
 
   Future<List<Users>> getVolunteers() => _firebaseMethods.getVolunteers();
-
-  //don't use
-
-  //  Future<List<Users>> getMaxHelp() => _firebaseMethods.getMaxHelp();
-
-  // Future<List<Users>> flagVolunteerJoinACall() =>
-  //     _firebaseMethods.flagVolunteerJoinACall();
-
-  // Future<List<Users>> flagVolunteerLeaveACall() =>
-  //     _firebaseMethods.flagVolunteerLeaveACall();
 }

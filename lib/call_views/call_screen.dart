@@ -414,7 +414,6 @@ class _CallScreenState extends State<CallScreen> {
   Widget build(BuildContext context) {
     //build call screen
     print("BUILD CALL");
-    // incrementTries(); //update value of tentativa atribute
     tryCheckJoin(); // manage time: count 15 seconds and if volunteer don't join a call, end call
     incrementTries(); //update value of tentativa atribute
     print("////// ENTRANDO NO RETURN DO BUILD CALL //////");
@@ -433,7 +432,7 @@ class _CallScreenState extends State<CallScreen> {
 
   //////////// for search volunteer algorithm //////////
 
-  void tryCheckJoin() async {
+  void tryCheckJoin() {
     print(
         "////// ENTRANDO NO tryCheckJoin ; oneVolunteer ${oneVolunteer.nome}; oneVolunteerID ${oneVolunteer.uid}; receiver ${widget.call.receiverName} ; receiverId ${widget.call.receiverId} //////");
     if (atendeu == true) {
@@ -471,17 +470,18 @@ class _CallScreenState extends State<CallScreen> {
             time.toString() == "00:00:15.19" ||
             time.toString() == "00:00:15.20") {
           //if count 15 seconds and volunteer don't join a call
-          Fluttertoast.cancel();
           _stopWatchTimer.onExecute.add(StopWatchExecute.stop); // Stop timer
           print(
-              "onUserJoined: ${AgoraRtcEngine.onUserJoined} ; atendeu = ${atendeu}");
+              "onUserJoined: ${AgoraRtcEngine.onUserJoined} ; atendeu = $atendeu");
           print("STOP TIMER! $time");
           print("////// TIMER 15 SEGUNDOS! //////");
           print("Voluntário NÂO atendeu!");
           CallUtils.callMethods.endCall(call: widget.call); // end call
           print("Encerra chamada");
-          Fluttertoast.showToast( // alert for DV make a new call
-            msg: "O voluntário selecionado não estava disponível... Tente novamente!",
+          Fluttertoast.showToast(
+            // alert for DV make a new call
+            msg:
+            "O voluntário selecionado não estava disponível... Tente novamente!",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.CENTER,
           );
@@ -491,6 +491,7 @@ class _CallScreenState extends State<CallScreen> {
       print("////////// fim / if //////////");
     } // stopwatchetimer
   } // tryCheckJoin()
+
 
   //Increment tries for user
   void incrementTries() {
@@ -506,7 +507,7 @@ class _CallScreenState extends State<CallScreen> {
         saveTriesVolunteer(); //incremented tries for volunteer call receiver or set tries to 0
       } else {
         Fluttertoast.showToast(
-            msg: "Houve um erro",
+            msg: "Houve um erro ao incrementar as tentativas do usuário",
             toastLength: Toast.LENGTH_LONG,
             textColor: Colors.red[300],
             gravity: ToastGravity.BOTTOM);
@@ -514,7 +515,7 @@ class _CallScreenState extends State<CallScreen> {
     });
   }
 
-  saveTries(FirebaseUser currentUser, int tentativas) async { // async for firebase query's
+  saveTries(FirebaseUser currentUser, int tentativas) async {
     print(
         "////// ENTRANDO NO saveTries ; oneVolunter ${oneVolunteer.nome}; receiver ${widget.call.receiverName} ; receiverId ${widget.call.receiverId} ; caller ${widget.call.callerName} ; callerId ${widget.call.callerId} //////");
     dvId = widget.call.callerId;
@@ -522,8 +523,9 @@ class _CallScreenState extends State<CallScreen> {
       //volunteer join a call
       if (currentUser.uid == widget.call.receiverId) {
         //volunteer is current user, don't make nothing
-      } else { // dv set variable tentativa = 0; dv is current user;
-        db.collection(USERS_COLLECTION).document(dvId).updateData({
+      } else {
+        // dv set variable tentativa = 0; dv is current user;
+        await db.collection(USERS_COLLECTION).document(dvId).updateData({
           'tentativa': 0,
         });
       }
@@ -531,8 +533,9 @@ class _CallScreenState extends State<CallScreen> {
       //volunteer decline call
       if (currentUser.uid == widget.call.receiverId) {
         //volunteer is current user, don't make nothing
-      } else { // dv increment variable tentativa = tentativa++; dv is current user;
-        db.collection(USERS_COLLECTION).document(dvId).updateData({
+      } else {
+        // dv increment variable tentativa = tentativa++; dv is current user;
+        await db.collection(USERS_COLLECTION).document(dvId).updateData({
           'tentativa': tentativas + 1,
         });
       }
@@ -540,7 +543,7 @@ class _CallScreenState extends State<CallScreen> {
     print("/////////// SAINDO DO saveTriesVolunteer //////////");
   } //saveTries
 
-  saveTriesVolunteer() async { // async for firebase query's
+  saveTriesVolunteer() async {
     // update variable tentativas and increment variable ajuda in volunteer
     print(
         "////// ENTRANDO NO saveTriesVolunteer ;  oneVolunter ${oneVolunteer.nome} ; id ${oneVolunteer.uid} //////");
@@ -548,21 +551,21 @@ class _CallScreenState extends State<CallScreen> {
     ajuda = oneVolunteer.ajuda;
     tentativas = oneVolunteer.tentativa;
     print(
-        'volunerID = ${volunterId} ; volunteer.uid = ${oneVolunteer.uid} ; ajuda = ${ajuda}; nome = ${oneVolunteer.nome} ; email = ${oneVolunteer.email} ; photo = ${oneVolunteer.photo} ; tentativa = ${tentativas} ');
+        'volunerID = $volunterId ; volunteer.uid = ${oneVolunteer.uid} ; ajuda = $ajuda; nome = ${oneVolunteer.nome} ; email = ${oneVolunteer.email} ; photo = ${oneVolunteer.photo} ; tentativa = $tentativas ');
     if (atendeu == true) {
       // volunteer join a call
       // v tentativa variable is update to value 0 -> tentativa = 0;
-      db.collection(USERS_COLLECTION).document(volunterId).updateData({
+      await db.collection(USERS_COLLECTION).document(volunterId).updateData({
         'tentativa': 0,
       });
       // increment number of help -> ajuda = ajuda++
-      db.collection(USERS_COLLECTION).document(volunterId).updateData({
+      await db.collection(USERS_COLLECTION).document(volunterId).updateData({
         'ajuda': ajuda + 1,
       });
     } else {
       // volunteer decline a call
       // v tentativa variable is incremented -> tentativa = tentativa ++;
-      db.collection(USERS_COLLECTION).document(volunterId).updateData({
+      await db.collection(USERS_COLLECTION).document(volunterId).updateData({
         'tentativa': tentativas + 1,
       });
     }

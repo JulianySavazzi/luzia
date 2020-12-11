@@ -494,15 +494,15 @@ class _CallScreenState extends State<CallScreen> {
 
 
   //Increment tries for user
-  void incrementTries() {
-    _repository.getCurrentUser().then((FirebaseUser user) async {
+  Future<void> incrementTries() async {
+    await _repository.getCurrentUser().then((FirebaseUser user) async {
       //get current user
       if (user != null) {
         //current user is not null
         Users u = await _repository
             .getUserDetails(user.uid); // users map receive firebase user
         tentativas = u.tentativa;
-        saveTries(user,
+        saveTriesDv(user,
             tentativas); //incremented tries for current dv in database or set tries to 0
         saveTriesVolunteer(); //incremented tries for volunteer call receiver or set tries to 0
       } else {
@@ -515,7 +515,7 @@ class _CallScreenState extends State<CallScreen> {
     });
   }
 
-  saveTries(FirebaseUser currentUser, int tentativas) async {
+  Future<FirebaseUser> saveTriesDv(FirebaseUser currentUser, int tentativas) async {
     print(
         "////// ENTRANDO NO saveTries ; oneVolunter ${oneVolunteer.nome}; receiver ${widget.call.receiverName} ; receiverId ${widget.call.receiverId} ; caller ${widget.call.callerName} ; callerId ${widget.call.callerId} //////");
     dvId = widget.call.callerId;
@@ -541,9 +541,10 @@ class _CallScreenState extends State<CallScreen> {
       }
     }
     print("/////////// SAINDO DO saveTriesVolunteer //////////");
+    return currentUser;
   } //saveTries
 
-  saveTriesVolunteer() async {
+  Future<Users> saveTriesVolunteer() async {
     // update variable tentativas and increment variable ajuda in volunteer
     print(
         "////// ENTRANDO NO saveTriesVolunteer ;  oneVolunter ${oneVolunteer.nome} ; id ${oneVolunteer.uid} //////");
@@ -570,6 +571,7 @@ class _CallScreenState extends State<CallScreen> {
       });
     }
     print("/////////// SAINDO DO saveTriesVolunteer //////////");
+    return oneVolunteer;
   } //saveTriesVolunteer
 
   ////// end methods for search volunteer algorithm //////

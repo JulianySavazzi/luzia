@@ -37,8 +37,8 @@ class DefVisualScreen extends StatefulWidget {
 class _DefVisualScreenState extends State<DefVisualScreen> {
   @override
   void dispose() {
-    userProvider.refreshUser();
     super.dispose();
+    userProvider.refreshUser();
     userProvider.dispose();
   }
 
@@ -50,8 +50,8 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
       userProvider = Provider.of<UserProvider>(context, listen: false);
       userProvider.refreshUser();
     });
-    _repository.getCurrentUser().then((FirebaseUser currentUser) {
-      _repository.searchVolunteers().then((List<Users> list) {
+    _repository.getCurrentUser().then((FirebaseUser currentUser) async {
+      await _repository.searchVolunteers().then((List<Users> list) {
         setState(() {
           sender = Users(
             uid: currentUser.uid,

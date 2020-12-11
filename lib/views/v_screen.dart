@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
@@ -24,8 +25,8 @@ class VoluntarioScreen extends StatefulWidget {
 class _VoluntarioScreenState extends State<VoluntarioScreen> {
   @override
   void dispose() {
-    userProvider.refreshUser();
     super.dispose();
+    userProvider.refreshUser();
     userProvider.dispose();
   }
 
@@ -36,6 +37,9 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       userProvider = Provider.of<UserProvider>(context, listen: false);
       userProvider.refreshUser();
+    });
+    _repository.getCurrentUser().then((FirebaseUser currentUser) async {
+      await _repository.getUser();
     });
   }
 
@@ -263,7 +267,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
   //////////////// PULL TO REFRESH /////////////////
 
   RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: true);
 
   void _onRefresh() async {
     // monitor network fetch
@@ -304,7 +308,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
       ),
       backgroundColor: Colors.cyan.shade200,
       body: SmartRefresher(
-          enableTwoLevel: true,
+          // enableTwoLevel: true,
           enablePullDown: true,
           controller: _refreshController,
           onRefresh: _onRefresh,

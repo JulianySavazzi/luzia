@@ -1,11 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:luzia/constants/strings.dart';
 import 'package:luzia/model/call.dart';
 
 class CallMethods {
   final CollectionReference callCollection =
-      Firestore.instance.collection(CALL_COLLECTION);
+  Firestore.instance.collection(CALL_COLLECTION);
 
   Stream<DocumentSnapshot> callStream({String uid}) =>
       callCollection.document(uid).snapshots();
@@ -13,11 +13,11 @@ class CallMethods {
   //Função para realizar a ligação, aqui deve ser inserido o algoritmo
   Future<bool> makeCall({Call call}) async {
     try {
-      //DV = HASDIALLED
+      //DV
       call.hasDialled = true;
       Map<String, dynamic> hasDialledMap = call.toMap(call);
 
-      //V = HASNOTDIALLED
+      //V
       call.hasDialled = false;
       Map<String, dynamic> hasNotDialledMap = call.toMap(call);
 

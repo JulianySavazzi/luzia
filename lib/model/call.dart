@@ -5,9 +5,6 @@ class Call {
   String receiverName;
   String channelId;
   bool hasDialled;
-  bool accepted;
-  bool rejected;
-
 
   Call({
     this.callerId,
@@ -16,8 +13,6 @@ class Call {
     this.receiverName,
     this.channelId,
     this.hasDialled,
-    this.accepted,
-    this.rejected,
   });
 
   //to Map
@@ -29,8 +24,6 @@ class Call {
     callMap["receiver_name"] = call.receiverName;
     callMap["channel_id"] = call.channelId;
     callMap["has_dialled"] = call.hasDialled;
-    callMap["accepted"] = call.accepted;
-    callMap["rejected"] = call.rejected;
     return callMap;
   }
 
@@ -42,7 +35,5 @@ class Call {
     this.receiverName = callMap["receiver_name"];
     this.channelId = callMap["channel_id"];
     this.hasDialled = callMap["has_dialled"];
-    this.hasDialled = callMap["accepted"];
-    this.hasDialled = callMap["rejected"];
   }
 }

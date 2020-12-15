@@ -414,7 +414,7 @@ class _CallScreenState extends State<CallScreen> {
   Widget build(BuildContext context) {
     //build call screen
     print("BUILD CALL");
-    tryCheckJoin(); // manage time: count 15 seconds and if volunteer don't join a call, end call
+    tryCheckJoin(); // manage time: count 30 seconds and if volunteer don't join a call, end call
     incrementTries(); //update value of tentativa atribute
     print("////// ENTRANDO NO RETURN DO BUILD CALL //////");
     return SafeArea(
@@ -445,36 +445,46 @@ class _CallScreenState extends State<CallScreen> {
       print("//// entrou no ELSE ////");
       print("onUserJoined: $atendeu");
       _stopWatchTimer.rawTime.listen((value) {
-        // count 15 seconds
+        // count 30 seconds
         time = StopWatchTimer.getDisplayTime(value);
         print('TIME TO STRING: ${time.toString()}');
-        if (time.toString() == "00:00:15.00" ||
-            time.toString() == "00:00:15.01" ||
-            time.toString() == "00:00:15.02" ||
-            time.toString() == "00:00:15.03" ||
-            time.toString() == "00:00:15.04" ||
-            time.toString() == "00:00:15.05" ||
-            time.toString() == "00:00:15.06" ||
-            time.toString() == "00:00:15.07" ||
-            time.toString() == "00:00:15.08" ||
-            time.toString() == "00:00:15.09" ||
-            time.toString() == "00:00:15.10" ||
-            time.toString() == "00:00:15.11" ||
-            time.toString() == "00:00:15.12" ||
-            time.toString() == "00:00:15.13" ||
-            time.toString() == "00:00:15.14" ||
-            time.toString() == "00:00:15.15" ||
-            time.toString() == "00:00:15.16" ||
-            time.toString() == "00:00:15.17" ||
-            time.toString() == "00:00:15.18" ||
-            time.toString() == "00:00:15.19" ||
-            time.toString() == "00:00:15.20") {
+        if (time.toString() == "00:00:30.00" ||
+            time.toString() == "00:00:30.01" ||
+            time.toString() == "00:00:30.02" ||
+            time.toString() == "00:00:30.03" ||
+            time.toString() == "00:00:30.04" ||
+            time.toString() == "00:00:30.05" ||
+            time.toString() == "00:00:30.06" ||
+            time.toString() == "00:00:30.07" ||
+            time.toString() == "00:00:30.08" ||
+            time.toString() == "00:00:30.09" ||
+            time.toString() == "00:00:30.10" ||
+            time.toString() == "00:00:30.11" ||
+            time.toString() == "00:00:30.12" ||
+            time.toString() == "00:00:30.13" ||
+            time.toString() == "00:00:30.14" ||
+            time.toString() == "00:00:30.15" ||
+            time.toString() == "00:00:30.16" ||
+            time.toString() == "00:00:30.17" ||
+            time.toString() == "00:00:30.18" ||
+            time.toString() == "00:00:30.19" ||
+            time.toString() == "00:00:30.20" ||
+            time.toString() == "00:00:30.21" ||
+            time.toString() == "00:00:30.22" ||
+            time.toString() == "00:00:30.23" ||
+            time.toString() == "00:00:30.24" ||
+            time.toString() == "00:00:30.25" ||
+            time.toString() == "00:00:30.26" ||
+            time.toString() == "00:00:30.27" ||
+            time.toString() == "00:00:30.28" ||
+            time.toString() == "00:00:30.29" ||
+            time.toString() == "00:00:30.30") {
           //if count 15 seconds and volunteer don't join a call
           _stopWatchTimer.onExecute.add(StopWatchExecute.stop); // Stop timer
           print(
               "onUserJoined: ${AgoraRtcEngine.onUserJoined} ; atendeu = $atendeu");
           print("STOP TIMER! $time");
-          print("////// TIMER 15 SEGUNDOS! //////");
+          print("////// TIMER 30 SEGUNDOS! //////");
           print("Voluntário NÂO atendeu!");
           CallUtils.callMethods.endCall(call: widget.call); // end call
           print("Encerra chamada");
@@ -515,7 +525,7 @@ class _CallScreenState extends State<CallScreen> {
     });
   }
 
-  Future<FirebaseUser> saveTriesDv(FirebaseUser currentUser, int tentativas) async {
+  Future<void> saveTriesDv(FirebaseUser currentUser, int tentativas) async {
     print(
         "////// ENTRANDO NO saveTries ; oneVolunter ${oneVolunteer.nome}; receiver ${widget.call.receiverName} ; receiverId ${widget.call.receiverId} ; caller ${widget.call.callerName} ; callerId ${widget.call.callerId} //////");
     dvId = widget.call.callerId;
@@ -541,10 +551,9 @@ class _CallScreenState extends State<CallScreen> {
       }
     }
     print("/////////// SAINDO DO saveTriesVolunteer //////////");
-    return currentUser;
   } //saveTries
 
-  Future<Users> saveTriesVolunteer() async {
+  Future<void> saveTriesVolunteer() async {
     // update variable tentativas and increment variable ajuda in volunteer
     print(
         "////// ENTRANDO NO saveTriesVolunteer ;  oneVolunter ${oneVolunteer.nome} ; id ${oneVolunteer.uid} //////");
@@ -571,7 +580,6 @@ class _CallScreenState extends State<CallScreen> {
       });
     }
     print("/////////// SAINDO DO saveTriesVolunteer //////////");
-    return oneVolunteer;
   } //saveTriesVolunteer
 
   ////// end methods for search volunteer algorithm //////

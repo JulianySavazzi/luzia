@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -66,6 +67,8 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
     });
   }
 
+  ///// for call to volunteer /////
+
   //Select random volunteer, and save chosen volunteer
   Users selectingVolunteers(Users volunteer) {
     final random = new Random();
@@ -96,6 +99,8 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
           gravity: ToastGravity.CENTER);
     }
   }
+
+  ///// build dv screen /////
 
   @override
   Widget build(BuildContext context) {
@@ -165,36 +170,51 @@ class _DefVisualScreenState extends State<DefVisualScreen> {
             child: Container(
                 child: Align(
               alignment: Alignment.bottomCenter,
-              child: RaisedButton(
-                padding: EdgeInsets.symmetric(vertical: 85, horizontal: 0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                color: Colors.lightGreenAccent[100],
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    //SizedBox(width: 10.0),
-                    Text(
-                      'Ligar para voluntário',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Montserrat',
-                          fontSize: 20.0),
-                    )
-                  ],
-                ),
-                onPressed: () async {
-                  Fluttertoast.showToast(
-                      msg: "Chamando voluntário...",
-                      toastLength: Toast.LENGTH_LONG,
-                      textColor: Colors.white,
-                      gravity: ToastGravity.CENTER);
-                  await Permissions.cameraAndMicrophonePermissionsGranted()
-                      ? callVolunteer(context)
-                      : Navigator.pop(context);
-                },
-              ),
+              child: StreamBuilder<QuerySnapshot>(
+                  stream: Firestore.instance
+                      .collection('users')
+                      .where("tipo", isEqualTo: oneVolunteer.tipo)
+                      .orderBy('ajuda', descending: false)
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      print("Connection State DONE");
+                    }
+                    return RaisedButton(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 85, horizontal: 0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      color: Colors.lightGreenAccent[100],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+//SizedBox(width: 10.0),
+                          Text(
+                            'Ligar para voluntário',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Montserrat',
+                                fontSize: 20.0),
+                          )
+                        ],
+                      ),
+                      onPressed: () async {
+                        Fluttertoast.showToast(
+                            msg: "Chamando voluntário...",
+                            toastLength: Toast.LENGTH_LONG,
+                            textColor: Colors.white,
+                            gravity: ToastGravity.CENTER);
+                        snapshot.data.documents;
+                        await Permissions
+                                .cameraAndMicrophonePermissionsGranted()
+                            ? callVolunteer(context)
+                            : Navigator.pop(context);
+                      },
+                    );
+                  }),
             )),
           )
         ])));

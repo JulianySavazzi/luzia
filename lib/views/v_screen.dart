@@ -8,7 +8,6 @@ import 'package:luzia/provider/user_provider.dart';
 import 'package:luzia/utils/firebase_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 final FirebaseRepository _repository = FirebaseRepository();
 
@@ -264,29 +263,6 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
     });
   }
 
-  //////////////// PULL TO REFRESH /////////////////
-
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
-
-  void _onRefresh() async {
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use refreshFailed()
-    _refreshController.refreshCompleted();
-  }
-
-  void _onLoading() async {
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use loadFailed(),if no data return,use LoadNodata()
-    _widgetOptions.add(widget);
-    _widgetOptions.addAll(_widgetOptions);
-    //_widgetOptions.elementAt(_selectedIndex);
-    if (mounted) setState(() {});
-    _refreshController.loadComplete();
-  }
-
   //////////////// BUILD SCREEN /////////////////
 
   @override
@@ -307,13 +283,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
         ),
       ),
       backgroundColor: Colors.cyan.shade200,
-      body: SmartRefresher(
-          // enableTwoLevel: true,
-          enablePullDown: true,
-          controller: _refreshController,
-          onRefresh: _onRefresh,
-          onLoading: _onLoading,
-          child: SafeArea(
+      body:  SafeArea(
             child: Stack(children: <Widget>[
               Positioned(
                 top: 85.0,
@@ -378,7 +348,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
                 ),
               ),
             ]),
-          )),
+          ),
       bottomNavigationBar: BottomNavigationBar(
         //Footer
         items: const <BottomNavigationBarItem>[

@@ -123,7 +123,7 @@ class _VoluntarioScreenState extends State<VoluntarioScreen> {
                     color: Colors.black26,
                   ),
                   Text(
-                    'Já ajudei ${snapshot.data.ajuda} vezes!',
+                    'Quantas vezes ajudei: ${snapshot.data.ajuda} ',
                     style: TextStyle(
                       color: Colors.black54,
                       fontFamily: 'Montserrat',

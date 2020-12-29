@@ -546,7 +546,7 @@ class _CallScreenState extends State<CallScreen> {
       } else {
         // dv increment variable tentativa = tentativa++; dv is current user;
         await db.collection(USERS_COLLECTION).document(dvId).updateData({
-          'tentativa': tentativas + 1,
+          'tentativa': 1,
         });
       }
     }

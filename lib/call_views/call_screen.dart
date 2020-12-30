@@ -488,13 +488,13 @@ class _CallScreenState extends State<CallScreen> {
           print("Voluntário NÂO atendeu!");
           CallUtils.callMethods.endCall(call: widget.call); // end call
           print("Encerra chamada");
-          Fluttertoast.showToast(
-            // alert for DV make a new call
-            msg:
-            "O voluntário selecionado não estava disponível... Tente novamente!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-          );
+          // Fluttertoast.showToast(
+          //   // alert for DV make a new call
+          //   msg:
+          //   "O voluntário selecionado não estava disponível... Tente novamente!",
+          //   toastLength: Toast.LENGTH_SHORT,
+          //   gravity: ToastGravity.CENTER,
+          // );
         }
       });
       print("////// SAIU DO STOPWATCHTIMER //////");

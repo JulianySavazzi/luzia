@@ -1,4 +1,3 @@
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:luzia/constants/strings.dart';
 import 'package:luzia/model/call.dart';
@@ -37,10 +36,10 @@ class CallMethods {
   //Função para deletar os documentos daquela ligação;
   Future<bool> endCall({Call call}) async {
     try {
-      Fluttertoast.showToast(
-          msg: "Chamada encerrada!",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER);
+      // Fluttertoast.showToast(
+      //     msg: "Chamada encerrada!",
+      //     toastLength: Toast.LENGTH_LONG,
+      //     gravity: ToastGravity.CENTER);
       await callCollection.document(call.callerId).delete();
       await callCollection.document(call.receiverId).delete();
       return true;
